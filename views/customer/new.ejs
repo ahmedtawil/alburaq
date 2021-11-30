@@ -1,0 +1,190 @@
+<!--begin::Toolbar-->
+<div class="toolbar py-2" id="kt_toolbar">
+    <!--begin::Container-->
+    <div id="kt_toolbar_container" class="container-fluid d-flex align-items-center">
+        <!--begin::Page title-->
+        <div class="flex-grow-1 flex-shrink-0 me-5">
+            <!--begin::Page title-->
+            <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Title-->
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">لوحة التحكم
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <!--end::Separator-->
+                    <!--begin::Description-->
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">الرئيسية</small>
+                    <!--end::Description-->
+                </h1>
+                <!--end::Title-->
+            </div>
+            <!--end::Page title-->
+        </div>
+        <!--end::Page title-->
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Toolbar-->
+
+<!--begin::Content-->
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+
+    <!--begin::Container-->
+    <div id="kt_content_container" class="container-xxl">
+
+        <!--begin::Card-->
+        <div class="card">
+            <!--begin::Card body-->
+            <div class="card-body p-0">
+                <!--begin::Wrapper-->
+                <div class="card-px text-center py-20 my-10">
+                    <!--begin::Title-->
+                    <h2 class="fs-2x fw-bolder mb-10">مرحبا!</h2>
+                    <!--end::Title-->
+
+                    <!--begin::Action-->
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#kt_modal_add_customer">إضافة
+                        زبون</a>
+                    <!--end::Action-->
+                </div>
+                <!--end::Wrapper-->
+                <!--begin::Illustration-->
+                <div class="text-center px-4 mb-5">
+                    <img class="mw-100 mh-300px" alt="" src="/assets/media/illustrations/sketchy-1/2.png" />
+                </div>
+                <!--end::Illustration-->
+            </div>
+            <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+        <!--begin::Modal - Customers - Add-->
+        <div class="modal fade" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
+
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-450px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Form-->
+                    <form class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#"
+                        id="kt_modal_add_customer_form" data-kt-redirect="/customer/new" autocomplete="off">
+                        <!--begin::Modal header-->
+                        <div class="modal-header" id="kt_modal_add_customer_header">
+                            <!--begin::Modal title-->
+                            <h2 class="fw-bolder">زبون جديد</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div id="kt_modal_add_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
+                                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                            transform="rotate(-45 6 17.3137)" fill="black"></rect>
+                                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                            transform="rotate(45 7.41422 6)" fill="black"></rect>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-10 px-lg-17">
+                            <!--begin::Scroll-->
+                            <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true"
+                                data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
+                                data-kt-scroll-dependencies="#kt_modal_add_customer_header"
+                                data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px"
+                                style="max-height: 647px;">
+                                <!--begin::Input group-->
+                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">اسم الزبون</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder=""
+                                        name="name">
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+                                <div id="select1" class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">نوع الزبون</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="type" aria-label="اختار البرنامج" data-control="select2"
+                                        data-placeholder="نوع الزبون" data-hide-search="true"
+                                        class="form-select form-select-solid fw-bolder">
+                                        <option value="regular">عادي</option>
+                                        <option value="wholesaler">زبون جملة</option>
+                                    </select>
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">رقم الهوية</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder=""
+                                        name="formalID" maxlength="10">
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">رقم الجوال</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder=""
+                                        name="phoneNumber" maxlength="10">
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">العنوان</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder=""
+                                        name="address">
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+
+                            </div>
+                            <!--end::Scroll-->
+                        </div>
+                        <!--end::Modal body-->
+                        <!--begin::Modal footer-->
+                        <div class="modal-footer flex-center">
+                            <!--begin::Button-->
+                            <button type="reset" id="kt_modal_add_customer_cancel"
+                                class="btn btn-light me-3">إلغاء</button>
+                            <!--end::Button-->
+                            <!--begin::Button-->
+                            <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
+                                <span class="indicator-label">حفظ</span>
+                                <span class="indicator-progress">الرجاء الإنتظار...
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                            </button>
+                            <!--end::Button-->
+                        </div>
+                        <!--end::Modal footer-->
+                        <div></div>
+                    </form>
+                    <!--end::Form-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--begin::Global Javascript Bundle(used by all pages)-->
+<script src="/assets/plugins/global/plugins.bundle.js"></script>
+<script src="/assets/js/scripts.bundle.js"></script>
+<!--end::Global Javascript Bundle-->
+
+<script src="/assets/js/myScripts/customer/new.js"></script>
