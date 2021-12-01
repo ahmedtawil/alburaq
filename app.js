@@ -9,7 +9,7 @@ const expressLayouts = require('express-ejs-layouts');
 
 
 const customerRoute = require('./components/customer/route')
-//const supplierRoute = require('./components/supplier/route')
+const supplierRoute = require('./components/supplier/route')
 const unit = require('./components/unit/route')
 
 const productCategory = require('./components/productCategory/route')
@@ -29,7 +29,7 @@ app.get('/', (req,res)=>{
 })
 
 app.use('/', customerRoute)
-//app.use('/', supplierRoute)
+app.use('/', supplierRoute)
 app.use('/', unit)
 app.use('/', productCategory)
 

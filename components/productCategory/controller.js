@@ -15,6 +15,7 @@ exports.getProductCategoriesPage = catchAsyncErrors(async (req, res) => {
 })
 
 exports.getProductCategoriesData = catchAsyncErrors(async (req, res) => {
+  console.log('--------------');
   const query = req.query
 
   const queryValue = (req.query.search.value == '') ? {} : JSON.parse(query.search.value)
@@ -40,7 +41,7 @@ exports.getProductCategoriesData = catchAsyncErrors(async (req, res) => {
 
   const productCategoriesCount = await ProductCategory.estimatedDocumentCount()
   const productCategoriesFillterCount = await ProductCategory.find(queryObj).countDocuments()
-  const productCategories = await ProductCategory.find(queryObj).limit(parseInt(query.length)).skip(parseInt(query.start))
+  const productCategories = await ProductCategory.find(queryObj).limit(parseInt(query.length)).skip(parseInt(query.start)).populate({path:'unit'}).populate({path:'supplier' , select:{name:1}})
 
   return res.json({
     recordsTotal: productCategoriesCount,

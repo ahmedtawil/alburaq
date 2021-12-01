@@ -6,11 +6,7 @@ const productCategorySchema = new Schema({
         required: [true, 'اسم الصنف مطلوب'],
         trim: true
     },
-    unit: {
-        type: String,
-        required: [true, 'وحدة قياس المنتج مطلوبة.'],
-        
-    },
+    unit:{ type: Schema.Types.ObjectId, ref: 'Unit', required: [true , 'وحدة قياس المنتج مطلوبة.'] },
     costPrice: {
         type: Number,
         required: [true, 'سعر التكلفة مطلوب.'],

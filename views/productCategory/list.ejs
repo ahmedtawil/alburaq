@@ -16,7 +16,7 @@
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">الوحدات</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">الأصناف</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -59,7 +59,7 @@
                             </span>
                             <!--end::Svg Icon-->
                             <input type="text" data-kt-productCategory-table-filter="search"
-                                class="form-control form-control-solid w-250px ps-15" placeholder="البحث عن وحدة" />
+                                class="form-control form-control-solid w-250px ps-15" placeholder="البخث عن صنف.." />
                         </div>
                         <!--end::Search-->
                     </div>
@@ -231,7 +231,7 @@
                                         <label class="required fs-6 fw-bold mb-2">وحدة الصنف</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <select id="type" class="form-select form-select-solid fw-bolder"
+                                        <select name="unit" class="form-select form-select-solid fw-bolder"
                                             data-kt-select2="true" data-placeholder="أختر..." data-hide-search="true">
                                             <% units.forEach(unit => { %>
                                                 <option value="<%= unit._id %>"><%= unit.title %></option>
@@ -245,21 +245,38 @@
                                     </div>
                                     <div class="fv-row mb-7 fv-plugins-icon-container">
                                         <!--begin::Label-->
-                                        <label class="required fs-6 fw-bold mb-2">رقم الجوال</label>
+                                        <label class="required fs-6 fw-bold mb-2">سعر التكلفة للوحدة الواحدة</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" placeholder=""
-                                            name="phoneNumber" maxlength="10">
+                                        <input type="number"  class="form-control form-control-solid" placeholder=""
+                                            name="costPrice" min="0">
                                         <!--end::Input-->
                                         <div class="fv-plugins-message-container invalid-feedback"></div>
                                     </div>
                                     <div class="fv-row mb-7 fv-plugins-icon-container">
                                         <!--begin::Label-->
-                                        <label class="required fs-6 fw-bold mb-2">العنوان</label>
+                                        <label class="required fs-6 fw-bold mb-2">سعر البيع للوحدة الواحدة</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" placeholder=""
-                                            name="address">
+                                        <input type="number" class="form-control form-control-solid" placeholder=""
+                                            name="sellingPrice" min="0"> 
+                                        <!--end::Input-->
+                                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="fv-row mb-7 fv-plugins-icon-container">
+                                        <!--begin::Label-->
+                                        <label class="required fs-6 fw-bold mb-2">المزود</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select name="supplier" class="form-select form-select-solid fw-bolder"
+                                            data-kt-select2="true" data-placeholder="أختر..." >
+                                            <% suppliers.forEach(supplier => { %>
+                                                <option value="<%= supplier._id %>"><%= supplier.name %></option>
+                                             
+                                            <% }) %>
+                                           
+                                        </select>
                                         <!--end::Input-->
                                         <div class="fv-plugins-message-container invalid-feedback"></div>
                                     </div>

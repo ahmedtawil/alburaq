@@ -34,7 +34,7 @@ var KTproductCategorysList = function () {
 
 
             "ajax": {
-                url: "productCategories/data/get",
+                url: "/productCategories/data/get",
                 "dataSrc": 'productCategories',
                 "dataFilter": function (res) {
                     dataRes = JSON.parse(res)
@@ -45,8 +45,11 @@ var KTproductCategorysList = function () {
 
             columns: [
                 { data: 'name' },
-                {
-                    data: 'unit',
+                { 
+                     data: 'unit',
+                     render:function (data, type, doc) {
+                         return `<span class="badge badge-light fw-bolder my-2">${data.title}</span>`
+                     }
                 },
                 {
                     data: 'costPrice',
@@ -56,6 +59,10 @@ var KTproductCategorysList = function () {
                 },
                 {
                     data: 'supplier',
+
+                     render:function (data, type, doc) {
+                         return `<span class="badge badge-light-success fw-bolder my-2">${data.name}</span>`
+                     }
                 },
 
                 

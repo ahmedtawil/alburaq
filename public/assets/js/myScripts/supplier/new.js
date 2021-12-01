@@ -1,6 +1,6 @@
 "use strict";
 // Class definition
-var KTModalUnitAdd = function () {
+var KTModalSupplierAdd = function () {
     var submitButton;
     var cancelButton;
     var closeButton;
@@ -12,24 +12,59 @@ var KTModalUnitAdd = function () {
     var handleForm = function () {
         // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
 
+        FormValidation.validators.checkValidPhoneNumber = checkValidPhoneNumber;
+        FormValidation.validators.checkIfFormalIDExist = checkIfFormalIDExist;
+        FormValidation.validators.checkValidFormalID = checkValidFormalID;
 
 
         validator = FormValidation.formValidation(
             form,
             {
                 fields: {
-                    'title': {
+                    'name': {
                         validators: {
                             notEmpty: {
-                                message: 'اسم الوحدة مطلوب.'
+                                message: 'اسم المورد مطلوب.'
                             }
                         }
                     },
 
-                    'weight': {
+                    'formalID': {
                         validators: {
                             notEmpty: {
-                                message: 'القيمة الوزنية للوحدة مطلوبة.'
+                                message: 'رقم الهوية مطلوب'
+                            }, checkValidFormalID: {
+                                message: 'رقم الهوية غير صالح'
+
+                            },
+                            checkIfFormalIDExist: {
+                                message: 'رقم الهوية موجود مسبقاً.'
+
+                            }
+
+                        }
+                    },
+
+                    'phoneNumber': {
+                        validators: {
+                            notEmpty: {
+                                message: 'رقم الجوال مطلوب'
+                            },
+                            stringLength: {
+                                min: 10,
+                                max: 10,
+                                message: 'رقم الجوال يجب أن يحتوي على 10 أرقام.'
+                            },
+                            checkValidPhoneNumber: {
+                                message: 'رقم الجوال غير صالح'
+                            }
+                        }
+                    },
+
+                    'address': {
+                        validators: {
+                            notEmpty: {
+                                message: 'عنوان المورد مطلوب'
                             }
 
                         }
@@ -67,11 +102,13 @@ var KTModalUnitAdd = function () {
                         // Disable submit button whilst loading
                         submitButton.disabled = true;
                         const payload = {
-                            title: $("input[name=title]").val(),
-                            weight: $("input[name=weight]").val(),
+                            name: $("input[name=name]").val(),
+                            formalID: $("input[name=formalID]").val(),
+                            phoneNumber: $("input[name=phoneNumber]").val(),
+                            address: $("input[name=address]").val(),
                         }
 
-                        $.post('/unit/new', payload).then(recipientID => {
+                        $.post('/supplier/new', payload).then(recipientID => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
@@ -89,7 +126,7 @@ var KTModalUnitAdd = function () {
 
                                     // Enable submit button after loading
                                     submitButton.disabled = false;
-                                    window.location = '/unit/page/get'
+                                    window.location = '/suppliers/page/get'
 
                                 }
                             })
@@ -143,7 +180,7 @@ var KTModalUnitAdd = function () {
                 if (result.value) {
                     form.reset(); // Reset form	
                     modal.hide(); // Hide modal	
-                    window.location = `/unit/page/get`
+                    window.location = `/suppliers/page/get`
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "لم يتم إلغاء نموذج الإضافة!",
@@ -176,7 +213,7 @@ var KTModalUnitAdd = function () {
                 if (result.value) {
                     form.reset(); // Reset form	
                     modal.hide(); // Hide modal	
-                    window.location = `/unit/page/get`
+                    window.location = `/suppliers/page/get`
 
 
                 } else if (result.dismiss === 'cancel') {
@@ -198,12 +235,12 @@ var KTModalUnitAdd = function () {
         // Public functions
         init: function () {
             // Elements
-            modal = new bootstrap.Modal(document.querySelector('#kt_modal_add_unit'));
+            modal = new bootstrap.Modal(document.querySelector('#kt_modal_add_supplier'));
 
-            form = document.querySelector('#kt_modal_add_unit_form');
-            submitButton = form.querySelector('#kt_modal_add_unit_submit');
-            cancelButton = form.querySelector('#kt_modal_add_unit_cancel');
-            closeButton = form.querySelector('#kt_modal_add_unit_close');
+            form = document.querySelector('#kt_modal_add_supplier_form');
+            submitButton = form.querySelector('#kt_modal_add_supplier_submit');
+            cancelButton = form.querySelector('#kt_modal_add_supplier_cancel');
+            closeButton = form.querySelector('#kt_modal_add_supplier_close');
 
 
 
@@ -211,6 +248,53 @@ var KTModalUnitAdd = function () {
         }
     };
 }();
+const checkIfFormalIDExist = function () {
+    return {
+        validate: function (input) {
+            const value = input.value;
+            if (value.length == 9) {
+                return $.get(`/supplier/checkID/${value}`).then((data, statusCode) => {
+
+                    if (data.isExisted) {
+                        return {
+                            valid: false,
+                        };
+                    } else {
+                        return {
+                            valid: true,
+                        };
+                    }
+
+                }).catch(console.log)
+            }
+
+        },
+    };
+};
+
+
+const checkValidFormalID = function () {
+    return {
+        validate: function (input) {
+            const value = input.value;
+            if (value.length > 0) {
+
+                if (!isNaN(Number(value)) && value.length == 9 && value.indexOf('0') !== 0) {
+                    return {
+                        valid: true,
+                    };
+
+
+                }
+                return {
+                    valid: false,
+                };
+            }
+
+        },
+    };
+};
+
 
 const checkValidPhoneNumber = function () {
     return {
@@ -236,11 +320,11 @@ const checkValidPhoneNumber = function () {
 
 
 
-  
+
 
 // On document ready
 KTUtil.onDOMContentLoaded(function () {
-   
-    KTModalUnitAdd.init();
+
+    KTModalSupplierAdd.init();
 });
 

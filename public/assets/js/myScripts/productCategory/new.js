@@ -91,15 +91,19 @@ var KTModalProductCategoryAdd = function () {
                         // Disable submit button whilst loading
                         submitButton.disabled = true;
                         const payload = {
-                            title: $("input[name=title]").val(),
-                            weight: $("input[name=weight]").val(),
+                            name: $("input[name=name]").val(),
+                            unit: $("select[name=unit]").val(),
+                            costPrice: $("input[name=costPrice]").val(),
+                            sellingPrice: $("input[name=sellingPrice]").val(),
+                            supplier: $("select[name=supplier]").val(),
+
                         }
 
                         $.post('/productCategory/new', payload).then(recipientID => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
-                                text: "تم إضافة المورد بنجاح!",
+                                text: "تم إضافة الصنف بنجاح!",
                                 icon: "success",
                                 buttonsStyling: false,
                                 confirmButtonText: "حسنا",

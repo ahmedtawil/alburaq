@@ -11,12 +11,12 @@
             <!--begin::Page title-->
             <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">الأصناف
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">الموردين
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">الأصناف</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">مورد جديد</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -58,9 +58,9 @@
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
-                            <input type="text" data-kt-productCategory-table-filter="search"
+                            <input type="text" data-kt-supplier-table-filter="search"
                                 class="form-control form-control-solid w-250px ps-15"
-                                placeholder="البحث عن صنف" />
+                                placeholder="البحث عن مورد" />
                         </div>
                         <!--end::Search-->
                     </div>
@@ -68,7 +68,7 @@
                      <!--begin::Card toolbar-->
                      <div class="card-toolbar">
                         <!--begin::Toolbar-->
-                        <div class="d-flex justify-content-end" data-kt-productCategory-table-toolbar="base">
+                        <div class="d-flex justify-content-end" data-kt-supplier-table-toolbar="base">
 
                             <!--begin::Filter-->
                             <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
@@ -96,7 +96,7 @@
                                 <div class="separator border-gray-200"></div>
                                 <!--end::Separator-->
                                 <!--begin::Content-->
-                                <div class="px-7 py-5" data-kt-productCategory-table-filter="form">
+                                <div class="px-7 py-5" data-kt-supplier-table-filter="form">
                                     <!--begin::Input group-->
                                     <div class="mb-6">
                                         <label class="form-label fs-6 fw-bold">التاريخ</label>
@@ -120,10 +120,10 @@
                                         <button type="reset"
                                             class="btn btn-light btn-active-light-primary fw-bold me-2 px-6"
                                             data-kt-menu-dismiss="true"
-                                            data-kt-productCategory-table-filter="reset">مسح</button>
+                                            data-kt-supplier-table-filter="reset">مسح</button>
                                         <button type="submit" class="btn btn-primary fw-bold px-6"
                                             data-kt-menu-dismiss="true"
-                                            data-kt-productCategory-table-filter="filter">تطبيق</button>
+                                            data-kt-supplier-table-filter="filter">تطبيق</button>
                                     </div>
                                     <!--end::Actions-->
                                 </div>
@@ -133,9 +133,10 @@
                             <!--end::Filter-->
                           
 
-                            <!--begin::Add productCategory-->
-                            <a type="button" class="btn btn-primary" href="#">صنف جديد</a>
-                            <!--end::Add productCategory-->
+                            <!--begin::Add supplier-->
+                            <a type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_add_supplier">مورد جديد</a>
+                            <!--end::Add supplier-->
                         </div>
                         <!--end::Toolbar-->
                  
@@ -146,15 +147,15 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
                     <!--begin::Table-->
-                    <table class="text-center table align-middle table-row-dashed fs-6 gy-5" id="kt_productCategories_table">
+                    <table class="text-center table align-middle table-row-dashed fs-6 gy-5" id="kt_suppliers_table">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th>الاسم</th>
-                                <th>الوحدة</th>
-                                <th>سعر التكلفة</th>
-                                <th>سعر البيع</th>
+                                <th>رقم الهوية</th>
+                                <th>رقم الجوال</th>
+                                <th>العنوان</th>
                                 <th>خيارات</th>
                             </tr>
                             <!--end::Table row-->
@@ -171,7 +172,7 @@
 
 
              <!--begin::Modal - Customers - Add-->
-        <div class="modal fade" id="kt_modal_add_productCategory" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="kt_modal_add_supplier" tabindex="-1" aria-hidden="true">
 
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-450px">
@@ -179,14 +180,14 @@
                 <div class="modal-content">
                     <!--begin::Form-->
                     <form class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#"
-                        id="kt_modal_add_productCategory_form" data-kt-redirect="/productCategory/new" autocomplete="off">
+                        id="kt_modal_add_supplier_form" data-kt-redirect="/supplier/new" autocomplete="off">
                         <!--begin::Modal header-->
-                        <div class="modal-header" id="kt_modal_add_productCategory_header">
+                        <div class="modal-header" id="kt_modal_add_supplier_header">
                             <!--begin::Modal title-->
-                            <h2 class="fw-bolder">صنف جديد</h2>
+                            <h2 class="fw-bolder">مورد جديد</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
-                            <div id="kt_modal_add_productCategory_close" class="btn btn-icon btn-sm btn-active-icon-primary">
+                            <div id="kt_modal_add_supplier_close" class="btn btn-icon btn-sm btn-active-icon-primary">
                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                                 <span class="svg-icon svg-icon-1">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -205,10 +206,10 @@
                         <!--begin::Modal body-->
                         <div class="modal-body py-10 px-lg-17">
                             <!--begin::Scroll-->
-                            <div class="scroll-y me-n7 pe-7" id="kt_modal_add_productCategory_scroll" data-kt-scroll="true"
+                            <div class="scroll-y me-n7 pe-7" id="kt_modal_add_supplier_scroll" data-kt-scroll="true"
                                 data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
-                                data-kt-scroll-dependencies="#kt_modal_add_productCategory_header"
-                                data-kt-scroll-wrappers="#kt_modal_add_productCategory_scroll" data-kt-scroll-offset="300px"
+                                data-kt-scroll-dependencies="#kt_modal_add_supplier_header"
+                                data-kt-scroll-wrappers="#kt_modal_add_supplier_scroll" data-kt-scroll-offset="300px"
                                 style="max-height: 647px;">
                                 <!--begin::Input group-->
                                 <div class="fv-row mb-7 fv-plugins-icon-container">
@@ -260,11 +261,11 @@
                         <!--begin::Modal footer-->
                         <div class="modal-footer flex-center">
                             <!--begin::Button-->
-                            <button type="reset" id="kt_modal_add_productCategory_cancel"
+                            <button type="reset" id="kt_modal_add_supplier_cancel"
                                 class="btn btn-light me-3">إلغاء</button>
                             <!--end::Button-->
                             <!--begin::Button-->
-                            <button type="submit" id="kt_modal_add_productCategory_submit" class="btn btn-primary">
+                            <button type="submit" id="kt_modal_add_supplier_submit" class="btn btn-primary">
                                 <span class="indicator-label">حفظ</span>
                                 <span class="indicator-progress">الرجاء الإنتظار...
                                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
@@ -300,8 +301,8 @@
 <!--end::Page Vendors Javascript-->
 
 <!--begin::Page Custom Javascript(used by this page)-->
-<script src="/assets/js/myScripts/productCategory/list.js"></script>
-<script src="/assets/js/myScripts/productCategory/new.js"></script>
+<script src="/assets/js/myScripts/supplier/list.js"></script>
+<script src="/assets/js/myScripts/supplier/new.js"></script>
 
 
 <!--end::Page Custom Javascript-->
