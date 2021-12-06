@@ -8,10 +8,93 @@ var KTModalProductCategoryAdd = function () {
     var form;
     var modal;
 
+    let isWeightUnit = false
+    let internalProductCategorySerialNumber = false
+    let internalProductSerialNumber = false
+    let addProduct = false
+
+
     // Init form inputs
     var handleForm = function () {
         // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
+        const checkIfProductCategorySerialNumberRequired = function () {
+            return {
+                validate: function (input) {
+                    const value = input.value;
 
+                    if (internalProductCategorySerialNumber) {
+                        return {
+                            valid: true,
+                        };
+                    } else if (value.length > 0){
+                        return {
+                            valid: true,
+                        };
+                    }else{
+                        return {
+                            valid: false,
+                        };
+                    }
+
+                },
+            };
+        };
+
+        const checkIfProductSerialNumberRequired = function () {
+            return {
+                validate: function (input) {
+                    const value = input.value;
+                    console.log(addProduct);
+                    if(!addProduct){
+                        return {
+                            valid: true,
+                        };
+                    }else if (internalProductSerialNumber) {
+                        return {
+                            valid: true,
+                        };
+                    } else if (value.length > 0){
+                        return {
+                            valid: true,
+                        };
+                    }else{
+                        return {
+                            valid: false,
+                        };
+                    }     
+                },
+            };
+        };
+
+        const checkIfProductSellingPriceRequired = function () {
+            return {
+                validate: function (input) {
+                    const value = input.value;
+                    if(!addProduct){
+                        return {
+                            valid: true,
+                        };
+                    }else if (isWeightUnit) {
+                        return {
+                            valid: true,
+                        };
+                    } else if (value.length > 0){
+                        return {
+                            valid: true,
+                        };
+                    }else{
+                        return {
+                            valid: false,
+                        };
+                    }     
+                },
+            };
+        };
+
+
+        FormValidation.validators.checkIfProductCategorySerialNumberRequired = checkIfProductCategorySerialNumberRequired;
+        FormValidation.validators.checkIfProductSerialNumberRequired = checkIfProductSerialNumberRequired;
+        FormValidation.validators.checkIfProductSellingPriceRequired = checkIfProductSellingPriceRequired;
 
 
         validator = FormValidation.formValidation(
@@ -33,19 +116,36 @@ var KTModalProductCategoryAdd = function () {
 
                         }
                     },
-                    'costPrice': {
+                    'qty': {
                         validators: {
                             notEmpty: {
-                                message: 'سعر التكلفة للصنف مطلوب'
+                                message: 'الكمية مطلوبة.'
+                            }
+
+                        }
+                    },
+                    'productCategorySerialNumber': {
+                        validators: {
+                            checkIfProductCategorySerialNumberRequired: {
+                                message: 'السيريال نمبر للصنف مطلوب.'
                             }
 
                         }
                     }
                     ,
-                    'sellingPrice': {
+                    'productCategorySellingPrice': {
                         validators: {
                             notEmpty: {
                                 message: 'سعر البيع للصنف مطلوب.'
+                            }
+
+                        }
+                    },
+                    
+                    'costPrice': {
+                        validators: {
+                            notEmpty: {
+                                message: 'سعر التكلفة للصنف مطلوب.'
                             }
 
                         }
@@ -57,6 +157,24 @@ var KTModalProductCategoryAdd = function () {
                             }
 
                         }
+                    },
+                    'productSerialNumber': {
+                        validators: {
+                            checkIfProductSerialNumberRequired: {
+                                message: 'السيريال نمبر للمنتج مطلوب.'
+                            }
+                        }
+                    },
+                    'productSellingPrice': {
+                      
+                        validators: {
+                            checkIfProductSellingPriceRequired: {
+                                message: 'سعر بيع المنتج للوحدة الواحدة مطلوب'
+
+                            }
+                        }
+
+
                     }
                 },
                 plugins: {
@@ -93,13 +211,25 @@ var KTModalProductCategoryAdd = function () {
                         const payload = {
                             name: $("input[name=name]").val(),
                             unit: $("select[name=unit]").val(),
-                            costPrice: $("input[name=costPrice]").val(),
-                            sellingPrice: $("input[name=sellingPrice]").val(),
+                            qty: $("input[name=qty]").val(),
+                            productCategorySerialNumber: $("input[name=productCategorySerialNumber]").val(),
+                            productCategoryCostPrice:$("input[name=costPrice]").val(),
+                            productCategorySellingPrice: $("input[name=productCategorySellingPrice]").val(),
                             supplier: $("select[name=supplier]").val(),
+
+                            productSerialNumber: $("input[name=productSerialNumber]").val(),
+                            productSellingPrice: $("input[name=productSellingPrice]").val(),
+
+                            configs:{
+                                addProduct,
+                                internalProductSerialNumber,
+                                internalProductCategorySerialNumber,
+                                isWeightUnit
+                            }
 
                         }
 
-                        $.post('/productCategory/new', payload).then(recipientID => {
+                        $.post('/productCategory/new', {payload:JSON.stringify(payload)}).then(recipientID => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
@@ -220,6 +350,52 @@ var KTModalProductCategoryAdd = function () {
                 }
             });
         })
+
+        $('#unit').on('change', function (e) {
+            const selectedUnit = $(this).find('option:selected').attr('unit')
+            if (selectedUnit == 'weight') {
+                $('#productSellingPriceBlock').addClass('d-none')
+                isWeightUnit = true
+            } else {
+                $('#productSellingPriceBlock').removeClass('d-none')
+                isWeightUnit = false
+            }
+        })
+
+        $('#productCategorySerialNumberBtn').on('change', function (e) {
+            if (this.checked) {
+                $('#productCategorySerialNumberBlock').addClass('d-none')
+                internalProductCategorySerialNumber = true
+            } else {
+                $('#productCategorySerialNumberBlock').removeClass('d-none')
+                internalProductCategorySerialNumber = false
+            }
+        })
+        $('#addProduct').on('change', function (e) {
+            if (this.checked) {
+                $('#productBlock').removeClass('d-none')
+                addProduct = true
+            } else {
+                $('#productBlock').addClass('d-none')
+                addProduct = false
+            }
+        })
+
+
+        $('#productSerialNumberBtn').on('change', function (e) {
+            if (this.checked) {
+                $('#productSerialNumberBlock').addClass('d-none')
+                internalProductSerialNumber = true
+            } else {
+                $('#productSerialNumberBlock').removeClass('d-none')
+                internalProductSerialNumber = true
+            }
+        })
+
+
+
+
+
     }
 
     return {
@@ -242,11 +418,11 @@ var KTModalProductCategoryAdd = function () {
 
 
 
-  
+
 
 // On document ready
 KTUtil.onDOMContentLoaded(function () {
-   
+
     KTModalProductCategoryAdd.init();
 });
 

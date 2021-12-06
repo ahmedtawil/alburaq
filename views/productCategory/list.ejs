@@ -147,7 +147,7 @@
                 <div class="card-body pt-0">
                     <!--begin::Table-->
                     <table class="text-center table align-middle table-row-dashed fs-6 gy-5"
-                        id="kt_productCategories_table"> 
+                        id="kt_productCategories_table">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -214,72 +214,163 @@
                                     data-kt-scroll-dependencies="#kt_modal_add_productCategory_header"
                                     data-kt-scroll-wrappers="#kt_modal_add_productCategory_scroll"
                                     data-kt-scroll-offset="300px" style="max-height: 647px;">
-                                    <!--begin::Input group-->
-                                    <div class="fv-row mb-7 fv-plugins-icon-container">
-                                        <!--begin::Label-->
-                                        <label class="required fs-6 fw-bold mb-2">اسم الصنف</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" placeholder=""
-                                            name="name">
-                                        <!--end::Input-->
-                                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                                    <div
+                                        class="d-flex flex-column fv-row rounded-3 mb-5 p-3 border border-dashed border-gray-300">
+
+                                        <!--begin::Input group-->
+                                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">اسم الصنف</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" class="form-control form-control-solid" placeholder=""
+                                                name="name">
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
+
+                                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">وحدة الصنف</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select name="unit" id="unit"
+                                                class="form-select form-select-solid fw-bolder" data-kt-select2="true"
+                                                data-placeholder="أختر..." data-hide-search="true">
+                                                <% units.forEach(unit=> { %>
+                                                    <% if (unit._id==killogramUnitID) { %>
+                                                        <option unit="weight" value="<%= unit._id %>">
+                                                            <%= unit.title %>
+                                                        </option>
+                                                        <% } else { %>
+                                                            <option value="<%= unit._id %>">
+                                                                <%= unit.title %>
+                                                            </option>
+                                                            <% } %>
+
+                                                                <% }) %>
+
+                                            </select>
+
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
+
+                                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">الكمية الموجودة في
+                                                المستودع</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="number" class="form-control form-control-solid" placeholder=""
+                                                name="qty" min="0" value="0">
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
+
+                                        <div class="fv-row mb-4 fv-plugins-icon-container"
+                                            id="productCategorySerialNumberBlock">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">السيريال نمبر للصنف</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="number" class="form-control form-control-solid" placeholder=""
+                                                name="productCategorySerialNumber" min="0">
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
+                                        <div
+                                            class="form-check form-switch form-check-custom form-check-solid mb-5 me-10">
+                                            <input class="form-check-input h-20px w-30px" type="checkbox" value=""
+                                                id="productCategorySerialNumberBtn">
+                                            <label class="form-check-label" for="flexSwitch20x30">
+                                                إستخدام سيريال نمبر داخلي
+                                            </label>
+                                        </div>
+
+                                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">سعر التكلفة للصنف</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="number" class="form-control form-control-solid" placeholder=""
+                                                name="costPrice" min="0">
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
+
+                                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">سعر البيع للصنف</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="number" class="form-control form-control-solid" placeholder=""
+                                                name="productCategorySellingPrice" min="0">
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
+
+                                        <div class="fv-row mb-7 fv-plugins-icon-container">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">المزود</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <select name="supplier" class="form-select form-select-solid fw-bolder"
+                                                data-kt-select2="true" data-placeholder="أختر...">
+                                                <% suppliers.forEach(supplier=> { %>
+                                                    <option value="<%= supplier._id %>">
+                                                        <%= supplier.name %>
+                                                    </option>
+
+                                                    <% }) %>
+
+                                            </select>
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
+                                    </div>
+                                    <div class="form-check form-switch form-check-custom form-check-solid mb-5 me-10">
+                                        <input class="form-check-input h-20px w-30px" type="checkbox" value=""
+                                            id="addProduct">
+                                        <label class="form-check-label" for="flexSwitch20x30">
+                                            إضافة منتج على الصنف
+                                        </label>
+                                    </div>
+                                    <div class="d-flex flex-column fv-row rounded-3 mb-4 p-4 border border-dashed border-gray-300 d-none"
+                                        id="productBlock">
+                                        <div class="fv-row mb-7 fv-plugins-icon-container"
+                                            id="productSerialNumberBlock">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">السيريال نمبر للمنتج</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="number" class="form-control form-control-solid" placeholder=""
+                                                name="productSerialNumber" min="0">
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
+                                        <div
+                                            class="form-check form-switch form-check-custom form-check-solid mb-5 me-10">
+                                            <input class="form-check-input h-20px w-30px" type="checkbox" value=""
+                                                id="productSerialNumberBtn">
+                                            <label class="form-check-label" for="flexSwitch20x30">
+                                                إستخدام سيريال نمبر داخلي
+                                            </label>
+                                        </div>
+                                        <div class="fv-row mb-7 fv-plugins-icon-container"
+                                            id="productSellingPriceBlock">
+                                            <!--begin::Label-->
+                                            <label class="required fs-6 fw-bold mb-2">سعر البيع للمنتج (وحدة واحدة
+                                                )</label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="number" class="form-control form-control-solid" placeholder=""
+                                                name="productSellingPrice" min="0">
+                                            <!--end::Input-->
+                                            <div class="fv-plugins-message-container invalid-feedback"></div>
+                                        </div>
                                     </div>
 
-                                    <div class="fv-row mb-7 fv-plugins-icon-container">
-                                        <!--begin::Label-->
-                                        <label class="required fs-6 fw-bold mb-2">وحدة الصنف</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <select name="unit" class="form-select form-select-solid fw-bolder"
-                                            data-kt-select2="true" data-placeholder="أختر..." data-hide-search="true">
-                                            <% units.forEach(unit => { %>
-                                                <option value="<%= unit._id %>"><%= unit.title %></option>
-                                             
-                                            <% }) %>
-                                           
-                                        </select>
-                                        
-                                        <!--end::Input-->
-                                        <div class="fv-plugins-message-container invalid-feedback"></div>
-                                    </div>
-                                    <div class="fv-row mb-7 fv-plugins-icon-container">
-                                        <!--begin::Label-->
-                                        <label class="required fs-6 fw-bold mb-2">سعر التكلفة للوحدة الواحدة</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="number"  class="form-control form-control-solid" placeholder=""
-                                            name="costPrice" min="0">
-                                        <!--end::Input-->
-                                        <div class="fv-plugins-message-container invalid-feedback"></div>
-                                    </div>
-                                    <div class="fv-row mb-7 fv-plugins-icon-container">
-                                        <!--begin::Label-->
-                                        <label class="required fs-6 fw-bold mb-2">سعر البيع للوحدة الواحدة</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="number" class="form-control form-control-solid" placeholder=""
-                                            name="sellingPrice" min="0"> 
-                                        <!--end::Input-->
-                                        <div class="fv-plugins-message-container invalid-feedback"></div>
-                                    </div>
-
-                                    <div class="fv-row mb-7 fv-plugins-icon-container">
-                                        <!--begin::Label-->
-                                        <label class="required fs-6 fw-bold mb-2">المزود</label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <select name="supplier" class="form-select form-select-solid fw-bolder"
-                                            data-kt-select2="true" data-placeholder="أختر..." >
-                                            <% suppliers.forEach(supplier => { %>
-                                                <option value="<%= supplier._id %>"><%= supplier.name %></option>
-                                             
-                                            <% }) %>
-                                           
-                                        </select>
-                                        <!--end::Input-->
-                                        <div class="fv-plugins-message-container invalid-feedback"></div>
-                                    </div>
 
                                 </div>
                                 <!--end::Scroll-->

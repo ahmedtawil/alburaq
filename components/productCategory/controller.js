@@ -5,13 +5,17 @@ const catchAsyncErrors = require('../../middlewares/catchAsyncErrors');
 const ProductCategory = require('../../models/ProductCategory')
 const Supplier = require('../../models/Supplier')
 const Unit = require('../../models/Unit')
+const Product = require('../../models/Product')
+const Stock = require('../../models/Stock')
+
+const { killogramUnitID } = require('../../configs/constants')
 
 
 exports.getProductCategoriesPage = catchAsyncErrors(async (req, res) => {
   const units = await Unit.find()
   const suppliers = await Supplier.find()
 
-  res.render('productCategory/list' , {units , suppliers})
+  res.render('productCategory/list', { units, suppliers, killogramUnitID })
 })
 
 exports.getProductCategoriesData = catchAsyncErrors(async (req, res) => {
@@ -41,7 +45,7 @@ exports.getProductCategoriesData = catchAsyncErrors(async (req, res) => {
 
   const productCategoriesCount = await ProductCategory.estimatedDocumentCount()
   const productCategoriesFillterCount = await ProductCategory.find(queryObj).countDocuments()
-  const productCategories = await ProductCategory.find(queryObj).limit(parseInt(query.length)).skip(parseInt(query.start)).populate({path:'unit'}).populate({path:'supplier' , select:{name:1}})
+  const productCategories = await ProductCategory.find(queryObj).limit(parseInt(query.length)).skip(parseInt(query.start)).populate({ path: 'unit' }).populate({ path: 'supplier', select: { name: 1 } })
 
   return res.json({
     recordsTotal: productCategoriesCount,
@@ -57,12 +61,52 @@ exports.getProductCategoriesData = catchAsyncErrors(async (req, res) => {
 // post new Program
 
 exports.newProductCategory = catchAsyncErrors(async (req, res) => {
-  const data = req.body
-  const newProductCategory = new ProductCategory(data)
+  const data = JSON.parse(req.body.payload)
+  const newProductCategory = new ProductCategory({
+    serialNumber: (data.configs.internalProductCategorySerialNumber) ? null : data.productCategorySerialNumber,
+    name: data.name,
+    unit: data.unit,
+    costPrice:data.productCategoryCostPrice,
+    sellingPrice: data.productCategorySellingPrice,
+    supplier: data.supplier
+  })
   await newProductCategory.validate()
-  newProductCategory.save()
-  res.end()
+  await newProductCategory.save()
 
+  const productCategory = await ProductCategory.findById(newProductCategory._id).populate({ path: 'unit' })
+  let productData = {
+    name: `${productCategory.name} ${productCategory.unit.title}`,
+    serialNumber: productCategory.serialNumber,
+    productCategory: productCategory._id,
+  }
+  if (!data.configs.isWeightUnit) {
+    productData = {
+      ...productData,
+      ratioPerUnit: productCategory.unit.weight,
+      price: productCategory.sellingPrice
+    }
+  }
+  const product1 = new Product(productData)
+  product1.save()
+
+  productData = {
+    name:`${productCategory.name} ${(data.configs.isWeightUnit)? `وزن` : `قطعة`}`,
+    serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
+    productCategory: productCategory._id,
+  }
+  if (!data.configs.isWeightUnit) {
+    productData = {
+      ...productData,
+      ratioPerUnit: 1,
+      price: data.productSellingPrice
+    }
+  }
+
+  const product2 = new Product(productData)
+  product2.save()
+  const stock = new Stock({ productCategory: productCategory._id, qty: data.qty })
+  stock.save()
+  res.end()
 })
 // post editPage 
 
