@@ -10,7 +10,7 @@ var KTFormsSelect2Demo = function () {
                 return item.text;
             }
 
-            var url = hostUrl + 'media/' + item.element.getAttribute('data-kt-select2-country');
+            var url = 'assets/media/' + item.element.getAttribute('data-kt-select2-country');
             var img = $("<img>", {
                 class: "rounded-circle me-2",
                 width: 26,
@@ -38,7 +38,7 @@ var KTFormsSelect2Demo = function () {
                 return item.text;
             }
 
-            var url = hostUrl + 'media/' + item.element.getAttribute('data-kt-select2-user');
+            var url = 'assets/media/' + item.element.getAttribute('data-kt-select2-user');
             var img = $("<img>", {
                 class: "rounded-circle me-2",
                 width: 26,

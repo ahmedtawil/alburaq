@@ -335,7 +335,7 @@ var KTDialer = function(element, options) {
             _decrease();
         });
 
-        KTUtil.addEvent(the.inputElement, 'input', function(e) {
+        KTUtil.addEvent(the.inputElement, 'change', function(e) {
             e.preventDefault();
 
             _setValue();
@@ -360,8 +360,7 @@ var KTDialer = function(element, options) {
         // Trigger "after.dialer" event
         KTEventHandler.trigger(the.element, 'kt.dialer.decrease', the);
 
-        the.inputElement.value = the.value - the.options.step;      
-
+        the.inputElement.value = the.value - the.options.step;        
         _setValue();
 
         // Trigger "before.dialer" event
@@ -375,39 +374,20 @@ var KTDialer = function(element, options) {
         // Trigger "after.dialer" event
         KTEventHandler.trigger(the.element, 'kt.dialer.change', the);
 
-        the.value = _parse(the.inputElement.value); 
+        the.value = parseFloat(the.inputElement.value.replace(/[^\d.]/g, '')); 
         
-        if (the.options.min !== null && the.value < the.options.min) {
+        if (the.value < the.options.min) {
             the.value = the.options.min;
         }
 
-        if (the.options.max !== null && the.value > the.options.max) {
+        if (the.value > the.options.max) {
             the.value = the.options.max;
         }
 
         the.inputElement.value = _format(the.value);
 
-        // Trigger input change event
-        the.inputElement.dispatchEvent(new Event('change'));
-
         // Trigger "after.dialer" event
         KTEventHandler.trigger(the.element, 'kt.dialer.changed', the);
-    }
-
-    var _parse = function(val) {
-        val = val
-            .replace(/[^0-9.-]/g, '')       // remove chars except number, hyphen, point. 
-            .replace(/(\..*)\./g, '$1')     // remove multiple points.
-            .replace(/(?!^)-/g, '')         // remove middle hyphen.
-            .replace(/^0+(\d)/gm, '$1');    // remove multiple leading zeros. <-- I added this.
-
-        val = parseFloat(val);
-
-        if (isNaN(val)) {
-            val = 0;
-        } 
-
-        return val;
     }
 
     // Format
@@ -795,46 +775,6 @@ KTDrawer.getInstance = function(element) {
         return KTUtil.data(element).get('drawer');
     } else {
         return null;
-    }
-}
-
-// Hide all drawers and skip one if provided
-KTDrawer.hideAll = function(skip = null, selector = '[data-kt-drawer="true"]') {
-    var items = document.querySelectorAll(selector);
-
-    if (items && items.length > 0) {
-        for (var i = 0, len = items.length; i < len; i++) {
-            var item = items[i];
-            var drawer = KTDrawer.getInstance(item);
-
-            if (!drawer) {
-                continue;
-            }
-
-            if ( skip ) {
-                if ( item !== skip ) {
-                    drawer.hide();
-                }
-            } else {
-                drawer.hide();
-            }
-        }
-    }
-}
-
-// Update all drawers
-KTDrawer.updateAll = function(selector = '[data-kt-drawer="true"]') {
-    var items = document.querySelectorAll(selector);
-
-    if (items && items.length > 0) {
-        for (var i = 0, len = items.length; i < len; i++) {
-            var item = items[i];
-            var drawer = KTDrawer.getInstance(item);
-
-            if (drawer) {
-                drawer.update();;
-            }
-        }
     }
 }
 
@@ -1959,14 +1899,16 @@ var KTMenu = function(element, options) {
             placement = 'right';
         }
 
+        // Flip
+        var flipValue = _getItemOption(item, 'flip');
+        var flip = flipValue ? flipValue.split(",") : [];
+
         // Offset
         var offsetValue = _getItemOption(item, 'offset');
         var offset = offsetValue ? offsetValue.split(",") : [];
 
         // Strategy
         var strategy = _getItemOption(item, 'overflow') === true ? 'absolute' : 'fixed';
-
-        var altAxis = _getItemOption(item, 'flip') !== false ? true : false;
 
         var popperConfig = {
             placement: placement,
@@ -1979,12 +1921,12 @@ var KTMenu = function(element, options) {
             }, {
                 name: 'preventOverflow',
                 options: {
-                    altAxis: altAxis
+                    rootBoundary: 'clippingParents'
                 }
             }, {
                 name: 'flip', 
                 options: {
-                    flipVariations: false
+                    fallbackPlacements: flip
                 }
             }]
         };
@@ -3340,7 +3282,7 @@ var KTSearch = function(element, options) {
             }
 
             // Hide search toolbar
-            if (the.toolbarElement && the.formElement.contains(the.toolbarElement)) {
+            if (the.toolbarElement) {
                 the.toolbarElement.classList.add("d-none");
             }
 
@@ -3391,7 +3333,7 @@ var KTSearch = function(element, options) {
         }
 
         // Show search toolbar
-        if (the.toolbarElement && the.formElement.contains(the.toolbarElement)) {
+        if (the.toolbarElement) {
             the.toolbarElement.classList.remove("d-none");
         }
 
@@ -3936,12 +3878,13 @@ var KTSticky = function(element, options) {
     // Default Options
     var defaultOptions = {
         offset: 200,
-        releaseOffset: 0,
+        flipOffset: 0,
         reverse: false,
         animation: true,
         animationSpeed: '0.3s',
         animationClass: 'animation-slide-in-down'
     };
+
     ////////////////////////////
     // ** Private Methods  ** //
     ////////////////////////////
@@ -3962,7 +3905,6 @@ var KTSticky = function(element, options) {
         the.attributeName = 'data-kt-sticky-' + the.name;
         the.eventTriggerState = true;
         the.lastScrollTop = 0;
-        the.scrollHandler;
 
         // Set initialized
         the.element.setAttribute('data-kt-sticky', 'true');
@@ -3979,7 +3921,6 @@ var KTSticky = function(element, options) {
 
     var _scroll = function(e) {
         var offset = _getOption('offset');
-        var releaseOffset = _getOption('release-offset');
         var reverse = _getOption('reverse');
         var st;
         var attrName;
@@ -3991,12 +3932,10 @@ var KTSticky = function(element, options) {
         }
 
         offset = parseInt(offset);
-        releaseOffset = releaseOffset ? parseInt(releaseOffset) : 0;
         st = KTUtil.getScrollTop();
-        diff = document.documentElement.scrollHeight - window.innerHeight - KTUtil.getScrollTop();
 
         if ( reverse === true ) {  // Release on reverse scroll mode
-            if ( st > offset && (releaseOffset === 0 || releaseOffset < diff)) {
+            if ( st > offset) {
                 if ( body.hasAttribute(the.attributeName) === false) {
                     _enable();
                     body.setAttribute(the.attributeName, 'on');
@@ -4023,7 +3962,7 @@ var KTSticky = function(element, options) {
 
             the.lastScrollTop = st;
         } else { // Classic scroll mode
-            if ( st > offset && (releaseOffset === 0 || releaseOffset < diff)) {
+            if ( st > offset) {
                 if ( body.hasAttribute(the.attributeName) === false) {
                     _enable();
                     body.setAttribute(the.attributeName, 'on');
@@ -4048,13 +3987,7 @@ var KTSticky = function(element, options) {
             }
         }
 
-        if (releaseOffset > 0) {
-            if ( diff < releaseOffset ) {
-                the.element.setAttribute('data-kt-sticky-released', 'true');
-            } else {
-                the.element.removeAttribute('data-kt-sticky-released');
-            }
-        }        
+        //_flip();
     }
 
     var _enable = function(update) {
@@ -4109,6 +4042,23 @@ var KTSticky = function(element, options) {
         KTUtil.css(the.element, 'position', '');
     }
 
+    var _flip = function() {        
+        var flipOffset = _getOption('flip-offset');
+        var flipBottom = _getOption('flip-bottom');
+        var diff = document.documentElement.scrollHeight - window.innerHeight - KTUtil.getScrollTop();
+        flipOffset = parseInt(flipOffset);
+
+        if (flipOffset > 0) {
+            if (diff >= flipOffset) {
+                KTUtil.css(the.element, 'top', top);
+                KTUtil.css(the.element, 'bottom', 'auto');
+            } else {
+                KTUtil.css(the.element, 'top', 'auto');
+                KTUtil.css(the.element, 'bottom', flipBottom);
+            }
+        }
+    } 
+
     var _getOption = function(name) {
         if ( the.element.hasAttribute('data-kt-sticky-' + name) === true ) {
             var attr = the.element.getAttribute('data-kt-sticky-' + name);
@@ -4133,7 +4083,6 @@ var KTSticky = function(element, options) {
     }
 
     var _destroy = function() {
-        window.removeEventListener('scroll', _scroll);
         KTUtil.data(the.element).remove('sticky');
     }
 
@@ -6191,10 +6140,6 @@ var KTUtil = function() {
             } catch (e) {
                 return true;
             }
-        },
-
-        isHexColor(code) {
-            return /^#[0-9A-F]{6}$/i.test(code);
         }
     }
 }();
@@ -6206,13 +6151,13 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 "use strict";
 
 // Class definition
-var KTApp = function () {
-    var initPageLoader = function () {
+var KTApp = function() {
+    var initPageLoader =  function() {
         // CSS3 Transitions only after page load(.page-loading class added to body tag and remove with JS on page load)
         KTUtil.removeClass(document.body, 'page-loading');
     }
 
-    var initBootstrapTooltip = function (el, options) {
+    var initBootstrapTooltip = function(el, options) {
         var delay = {};
 
         // Handle delay options
@@ -6231,7 +6176,7 @@ var KTApp = function () {
         // Check dismiss options
         if (el.hasAttribute('data-bs-dismiss') && el.getAttribute('data-bs-dismiss') == 'click') {
             options['dismiss'] = 'click';
-        }
+        }            
 
         // Initialize popover
         var tp = new bootstrap.Tooltip(el, options);
@@ -6239,7 +6184,7 @@ var KTApp = function () {
         // Handle dismiss
         if (options['dismiss'] && options['dismiss'] === 'click') {
             // Hide popover on element click
-            el.addEventListener("click", function (e) {
+            el.addEventListener("click", function(e) {
                 tp.hide();
             });
         }
@@ -6247,7 +6192,7 @@ var KTApp = function () {
         return tp;
     }
 
-    var initBootstrapTooltips = function (el, options) {
+    var initBootstrapTooltips = function(el, options) {
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
@@ -6255,7 +6200,7 @@ var KTApp = function () {
         });
     }
 
-    var initBootstrapPopover = function (el, options) {
+    var initBootstrapPopover = function(el, options) {
         var delay = {};
 
         // Handle delay options
@@ -6289,12 +6234,12 @@ var KTApp = function () {
                 popover.hide();
             }
 
-            el.addEventListener('shown.bs.popover', function () {
+            el.addEventListener('shown.bs.popover', function() {
                 var dismissEl = document.getElementById(el.getAttribute('aria-describedby'));
                 dismissEl.addEventListener('click', dismissHandler);
             });
 
-            el.addEventListener('hide.bs.popover', function () {
+            el.addEventListener('hide.bs.popover', function() {
                 var dismissEl = document.getElementById(el.getAttribute('aria-describedby'));
                 dismissEl.removeEventListener('click', dismissHandler);
             });
@@ -6303,7 +6248,7 @@ var KTApp = function () {
         return popover;
     }
 
-    var initBootstrapPopovers = function () {
+    var initBootstrapPopovers = function() {
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
 
         var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
@@ -6311,11 +6256,11 @@ var KTApp = function () {
         });
     }
 
-    var initBootstrapScrollSpy = function () {
+    var initScrollSpy = function() {
         var elements = [].slice.call(document.querySelectorAll('[data-bs-spy="scroll"]'));
 
         elements.map(function (element) {
-            var sel = element.getAttribute('data-bs-target');
+            var sel = element.getAttribute('data-bs-target');            
             var scrollContent = document.querySelector(element.getAttribute('data-bs-target'));
             var scrollSpy = bootstrap.ScrollSpy.getInstance(scrollContent);
             if (scrollSpy) {
@@ -6324,21 +6269,14 @@ var KTApp = function () {
         });
     }
 
-    var initBootstrapToast = function () {
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-        var toastList = toastElList.map(function (toastEl) {
-            return new bootstrap.Toast(toastEl, {})
-        });
-    }
-
-    var initButtons = function () {
+    var initButtons = function() {
         var buttonsGroup = [].slice.call(document.querySelectorAll('[data-kt-buttons="true"]'));
 
         buttonsGroup.map(function (group) {
             var selector = group.hasAttribute('data-kt-buttons-target') ? group.getAttribute('data-kt-buttons-target') : '.btn';
 
             // Toggle Handler
-            KTUtil.on(group, selector, 'click', function (e) {
+            KTUtil.on(group, selector, 'click', function(e) {
                 var buttons = [].slice.call(group.querySelectorAll(selector + '.active'));
 
                 buttons.map(function (button) {
@@ -6348,11 +6286,11 @@ var KTApp = function () {
                 this.classList.add('active');
             });
         });
-    }
+    }   
 
-    var initCheck = function () {
+    var initCheck = function() {
         // Toggle Handler
-        KTUtil.on(document.body, '[data-kt-check="true"]', 'change', function (e) {
+        KTUtil.on(document.body,  '[data-kt-check="true"]', 'change', function(e) {
             var check = this;
             var targets = document.querySelectorAll(check.getAttribute('data-kt-check-target'));
 
@@ -6361,49 +6299,44 @@ var KTApp = function () {
                     target.checked = check.checked;
                 } else {
                     target.classList.toggle('active');
-                }
+                }                
             });
         });
     }
 
-    var initSelect2 = function () {
-        // Check if jQuery included
-        if (typeof jQuery == 'undefined') {
-            return;
-        }
-
+    var initSelect2 = function() {
         var elements = [].slice.call(document.querySelectorAll('[data-control="select2"], [data-kt-select2="true"]'));
-
+       
         elements.map(function (element) {
             var options = {
                 dir: document.body.getAttribute('direction')
             };
 
-            if (element.getAttribute('data-hide-search') == 'true') {
+            if ( element.getAttribute('data-hide-search') == 'true') {
                 options.minimumResultsForSearch = Infinity;
             }
-
+            
             $(element).select2(options);
         });
     }
 
-    var initAutosize = function () {
+    var initAutosize = function() {
         var inputs = [].slice.call(document.querySelectorAll('[data-kt-autosize="true"]'));
-
+       
         inputs.map(function (input) {
             autosize(input);
         });
     }
 
-    var initCountUp = function () {
+    var initCountUp = function() {
         var elements = [].slice.call(document.querySelectorAll('[data-kt-countup="true"]:not(.counted)'));
 
         elements.map(function (element) {
-            if (KTUtil.isInViewport(element) && KTUtil.visible(element)) {
+            if (KTUtil.isInViewport(element) && KTUtil.visible(element) ) {
                 var options = {};
 
                 var value = element.getAttribute('data-kt-countup-value');
-                value = parseFloat(value.replace(/,/g, ""));
+                value = parseFloat(value.replace(/,/,''));
 
                 if (element.hasAttribute('data-kt-countup-start-val')) {
                     options.startVal = parseFloat(element.getAttribute('data-kt-countup-start-val'));
@@ -6421,10 +6354,6 @@ var KTApp = function () {
                     options.prefix = element.getAttribute('data-kt-countup-prefix');
                 }
 
-                if (element.hasAttribute('data-kt-countup-separator')) {
-                    options.separator = element.getAttribute('data-kt-countup-separator');
-                }
-
                 if (element.hasAttribute('data-kt-countup-suffix')) {
                     options.suffix = element.getAttribute('data-kt-countup-suffix');
                 }
@@ -6432,13 +6361,13 @@ var KTApp = function () {
                 var count = new countUp.CountUp(element, value, options);
 
                 count.start();
-
+                
                 element.classList.add('counted');
-            }
+            }                
         });
     }
 
-    var initCountUpTabs = function () {
+    var initCountUpTabs = function() {
         // Initial call
         initCountUp();
 
@@ -6449,12 +6378,12 @@ var KTApp = function () {
         var tabs = [].slice.call(document.querySelectorAll('[data-kt-countup-tabs="true"][data-bs-toggle="tab"]'));
         tabs.map(function (tab) {
             tab.addEventListener('shown.bs.tab', initCountUp);
-        });
+        });        
     }
 
-    var initTinySliders = function () {
+    var initTinySliders = function() {
         // Init Slider
-        var initSlider = function (el) {
+        var initSlider = function(el) {
             if (!el) {
                 return;
             }
@@ -6462,7 +6391,7 @@ var KTApp = function () {
             const tnsOptions = {};
 
             // Convert string boolean
-            const checkBool = function (val) {
+            const checkBool = function(val) {
                 if (val === 'true') {
                     return true;
                 }
@@ -6473,16 +6402,16 @@ var KTApp = function () {
             };
 
             // get extra options via data attributes
-            el.getAttributeNames().forEach(function (attrName) {
+            el.getAttributeNames().forEach(function(attrName) {
                 // more options; https://github.com/ganlanyuan/tiny-slider#options
                 if ((/^data-tns-.*/g).test(attrName)) {
-                    let optionName = attrName.replace('data-tns-', '').toLowerCase().replace(/(?:[\s-])\w/g, function (match) {
+                    let optionName = attrName.replace('data-tns-', '').toLowerCase().replace(/(?:[\s-])\w/g, function(match) {
                         return match.replace('-', '').toUpperCase();
                     });
-
+                    
                     if (attrName === 'data-tns-responsive') {
                         // fix string with a valid json
-                        const jsonStr = el.getAttribute(attrName).replace(/(\w+:)|(\w+ :)/g, function (matched) {
+                        const jsonStr = el.getAttribute(attrName).replace(/(\w+:)|(\w+ :)/g, function(matched) {
                             return '"' + matched.substring(0, matched.length - 1) + '":';
                         });
                         try {
@@ -6519,16 +6448,14 @@ var KTApp = function () {
             return;
         }
 
-        elements.forEach(function (el) {
+        elements.forEach(function(el) {
             initSlider(el);
         });
     }
 
-    var initSmoothScroll = function () {
+    var initSmoothScroll = function() {
         if (SmoothScroll) {
-
             new SmoothScroll('a[data-kt-scroll-toggle][href*="#"]', {
-                speed: 900,
                 offset: function (anchor, toggle) {
                     // Integer or Function returning an integer. How far to offset the scrolling anchor location in pixels
                     // This example is a function, but you could do something as simple as `offset: 25`
@@ -6543,25 +6470,25 @@ var KTApp = function () {
                     }
                 }
             });
-        }
+        }        
     }
 
     return {
-        init: function () {
+        init: function() {
             this.initPageLoader();
 
             this.initBootstrapTooltips();
-
+            
             this.initBootstrapPopovers();
-
-            this.initBootstrapScrollSpy();
-
+            
+            this.initScrollSpy();
+            
             this.initButtons();
-
+            
             this.initCheck();
-
+            
             this.initSelect2();
-
+            
             this.initCountUp();
 
             this.initCountUpTabs();
@@ -6571,84 +6498,78 @@ var KTApp = function () {
             this.initTinySliders();
 
             this.initSmoothScroll();
-
-            this.initBootstrapToast();
         },
 
-        initPageLoader: function () {
+        initPageLoader: function() {
             initPageLoader();
         },
 
-        initBootstrapTooltip: function (el, options) {
+        initBootstrapTooltip: function(el, options) {
             return initBootstrapTooltip(el, options);
         },
 
-        initBootstrapTooltips: function () {
+        initBootstrapTooltips: function() {
             initBootstrapTooltips();
         },
 
-        initBootstrapPopovers: function () {
+        initBootstrapPopovers: function() {
             initBootstrapPopovers();
         },
 
-        initBootstrapPopover: function (el, options) {
+        initBootstrapPopover: function(el, options) {
             return initBootstrapPopover(el, options);
         },
 
-        initBootstrapScrollSpy: function () {
-            initBootstrapScrollSpy();
-        },        
-
-        initBootstrapToast: function () {
-            initBootstrapToast();
+        initScrollSpy: function() {
+            initScrollSpy();
         },
 
-        initButtons: function () {
+        initButtons: function() {
             initButtons();
         },
 
-        initCheck: function () {
+        initCheck: function() {
             initCheck();
         },
 
-        initSelect2: function () {
+        initSelect2: function() {
             initSelect2();
         },
 
-        initCountUp: function () {
+        initCountUp: function() {
             initCountUp();
         },
 
-        initCountUpTabs: function () {
+        initCountUpTabs: function() {
             initCountUpTabs();
         },
 
-        initAutosize: function () {
+        initAutosize: function() {
             initAutosize();
         },
 
-        initTinySliders: function () {
+        initTinySliders: function() {
             initTinySliders();
         },
 
-        initSmoothScroll: function () {
+        initSmoothScroll: function() {
             initSmoothScroll();
         },
 
-        isDarkMode: function () {
+        isDarkMode: function() {
             return document.body.classList.contains('dark-mode');
         }
     };
 }();
 
 // On document ready
-KTUtil.onDOMContentLoaded(function () {
+KTUtil.onDOMContentLoaded(function() {
     KTApp.init();
 });
 
 // On window load
-window.addEventListener("load", function () {
-    KTApp.initPageLoader();
+window.addEventListener("load", function() {
+	KTApp.initPageLoader();
 });
 
 // Webpack support
@@ -6722,141 +6643,6 @@ var KTLayoutExplore = function() {
 // On document ready
 KTUtil.onDOMContentLoaded(function() {
     KTLayoutExplore.init();
-});
-"use strict";
-
-// Class definition
-var KTLayoutSearch = function() {
-    // Private variables
-    var element;
-    var formElement;
-    var mainElement;
-    var resultsElement;
-    var wrapperElement;
-    var emptyElement;
-
-    var preferencesElement;
-    var preferencesShowElement;
-    var preferencesDismissElement;
-    
-    var advancedOptionsFormElement;
-    var advancedOptionsFormShowElement;
-    var advancedOptionsFormCancelElement;
-    var advancedOptionsFormSearchElement;
-    
-    var searchObject;
-
-    // Private functions
-    var processs = function(search) {
-        var timeout = setTimeout(function() {
-            var number = KTUtil.getRandomInt(1, 3);
-
-            // Hide recently viewed
-            mainElement.classList.add('d-none');
-
-            if (number === 3) {
-                // Hide results
-                resultsElement.classList.add('d-none');
-                // Show empty message 
-                emptyElement.classList.remove('d-none');
-            } else {
-                // Show results
-                resultsElement.classList.remove('d-none');
-                // Hide empty message 
-                emptyElement.classList.add('d-none');
-            }                  
-
-            // Complete search
-            search.complete();
-        }, 1500);
-    }
-
-    var clear = function(search) {
-        // Show recently viewed
-        mainElement.classList.remove('d-none');
-        // Hide results
-        resultsElement.classList.add('d-none');
-        // Hide empty message 
-        emptyElement.classList.add('d-none');
-    }    
-/*
-    var handlePreferences = function() {
-        // Preference show handler
-        preferencesShowElement.addEventListener('click', function() {
-            wrapperElement.classList.add('d-none');
-            preferencesElement.classList.remove('d-none');
-        });
-
-        // Preference dismiss handler
-        preferencesDismissElement.addEventListener('click', function() {
-            wrapperElement.classList.remove('d-none');
-            preferencesElement.classList.add('d-none');
-        });
-    }
-
-    var handleAdvancedOptionsForm = function() {
-        // Show
-        advancedOptionsFormShowElement.addEventListener('click', function() {
-            wrapperElement.classList.add('d-none');
-            advancedOptionsFormElement.classList.remove('d-none');
-        });
-
-        // Cancel
-        advancedOptionsFormCancelElement.addEventListener('click', function() {
-            wrapperElement.classList.remove('d-none');
-            advancedOptionsFormElement.classList.add('d-none');
-        });
-
-        // Search
-        advancedOptionsFormSearchElement.addEventListener('click', function() {
-            
-        });
-    }
-*/
-    // Public methods
-	return {
-		init: function() {
-            // Elements
-            element = document.querySelector('#kt_header_search');
-
-            if (!element) {
-                return;
-            }
-
-            wrapperElement = element.querySelector('[data-kt-search-element="wrapper"]');
-            formElement = element.querySelector('[data-kt-search-element="form"]');
-            mainElement = element.querySelector('[data-kt-search-element="main"]');
-            resultsElement = element.querySelector('[data-kt-search-element="results"]');
-            emptyElement = element.querySelector('[data-kt-search-element="empty"]');
-
-            preferencesElement = element.querySelector('[data-kt-search-element="preferences"]');
-            preferencesShowElement = element.querySelector('[data-kt-search-element="preferences-show"]');
-            preferencesDismissElement = element.querySelector('[data-kt-search-element="preferences-dismiss"]');
-
-            advancedOptionsFormElement = element.querySelector('[data-kt-search-element="advanced-options-form"]');
-            advancedOptionsFormShowElement = element.querySelector('[data-kt-search-element="advanced-options-form-show"]');
-            advancedOptionsFormCancelElement = element.querySelector('[data-kt-search-element="advanced-options-form-cancel"]');
-            advancedOptionsFormSearchElement = element.querySelector('[data-kt-search-element="advanced-options-form-search"]');
-            
-            // Initialize search handler
-            searchObject = new KTSearch(element);
-
-            // Search handler
-            searchObject.on('kt.search.process', processs);
-
-            // Clear handler
-            searchObject.on('kt.search.clear', clear);
-
-            // Custom handlers
-            //handlePreferences();
-           // handleAdvancedOptionsForm();            
-		}
-	};
-}();
-
-// On document ready
-KTUtil.onDOMContentLoaded(function() {
-    KTLayoutSearch.init();
 });
 "use strict";
 

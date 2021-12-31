@@ -71,7 +71,7 @@ var KTFormsTagifyDemos = function () {
             delimiters: null,
             templates: {
                 tag: function (tagData) {
-                    const countryPath = hostUrl + 'media/flags/' + tagData.value.toLowerCase().replace(/\s+/g, '-') + '.svg';
+                    const countryPath = 'assets/media/flags/' + tagData.value.toLowerCase().replace(/\s+/g, '-') + '.svg';
                     try {
                         // _ESCAPE_START_
                         return `<tag title='${tagData.value}' contenteditable='false' spellcheck="false" class='tagify__tag ${tagData.class ? tagData.class : ""}' ${this.getAttributes(tagData)}>
@@ -89,7 +89,7 @@ var KTFormsTagifyDemos = function () {
                 },
 
                 dropdownItem: function (tagData) {
-                    const countryPath = hostUrl + 'media/flags/' + tagData.value.toLowerCase().replace(/\s+/g, '-') + '.svg';
+                    const countryPath = 'assets/media/flags/' + tagData.value.toLowerCase().replace(/\s+/g, '-') + '.svg';
                     try {
                         // _ESCAPE_START_
                         return `<div class='tagify__dropdown__item ${tagData.class ? tagData.class : ""}'>
@@ -174,7 +174,7 @@ var KTFormsTagifyDemos = function () {
                     <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
                     <div class="d-flex align-items-center">
                         <div class='tagify__tag__avatar-wrap ps-0'>
-                            <img onerror="this.style.visibility='hidden'" class="rounded-circle w-25px me-2" src="${hostUrl}media/${tagData.avatar}">
+                            <img onerror="this.style.visibility='hidden'" class="rounded-circle w-25px me-2" src="assets/media/${tagData.avatar}">
                         </div>
                         <span class='tagify__tag-text'>${tagData.name}</span>
                     </div>
@@ -191,7 +191,7 @@ var KTFormsTagifyDemos = function () {
 
                     ${tagData.avatar ? `
                             <div class='tagify__dropdown__item__avatar-wrap me-2'>
-                                <img onerror="this.style.visibility='hidden'"  class="rounded-circle w-50px me-2" src="${hostUrl}media/${tagData.avatar}">
+                                <img onerror="this.style.visibility='hidden'"  class="rounded-circle w-50px me-2" src="assets/media/${tagData.avatar}">
                             </div>` : ''
                         }
 

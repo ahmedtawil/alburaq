@@ -33,9 +33,7 @@ productCategorySchema.pre('save', async function (next) {
         if (this.isNew) {
             const counter = await SerialNumber.newProduct()
             this.serialNumber = counter
-
         }
-
     }
     next()
 })

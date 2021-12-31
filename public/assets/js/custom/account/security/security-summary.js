@@ -31,8 +31,8 @@ var KTAccountSecuritySummary = function () {
                 bar: {
                     horizontal: false,
                     columnWidth: ['35%'],
-                    borderRadius: 6
-                }
+                    endingShape: 'rounded'
+                },
             },
             legend: {
                 show: false
@@ -120,10 +120,8 @@ var KTAccountSecuritySummary = function () {
         var tab = document.querySelector(tabSelector);
         
         if (initByDefault === true) {
-            setTimeout(function() {
-                chart.render();
-                init = true;
-            }, 500);
+            chart.render();
+            init = true;
         }        
 
         tab.addEventListener('shown.bs.tab', function (event) {

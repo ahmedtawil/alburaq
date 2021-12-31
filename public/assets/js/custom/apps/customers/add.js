@@ -1,5 +1,5 @@
 "use strict";
-
+alert('++++++++++++++++++++++')
 // Class definition
 var KTModalCustomersAdd = function () {
     var submitButton;

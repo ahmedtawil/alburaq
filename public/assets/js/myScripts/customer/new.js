@@ -255,6 +255,8 @@ var KTModalCustomerAdd = function () {
     };
 }();
 
+
+
 const checkValidPhoneNumber = function () {
     return {
         validate: function (input) {
@@ -330,5 +332,6 @@ const checkValidFormalID = function () {
 KTUtil.onDOMContentLoaded(function () {
    
     KTModalCustomerAdd.init();
+   
 });
 

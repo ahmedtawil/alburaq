@@ -25,7 +25,13 @@ var KTModalUnitAdd = function () {
                             }
                         }
                     },
-
+                    'smallTitle': {
+                        validators: {
+                            notEmpty: {
+                                message: 'اسم الوحدة الجزئية مطلوب.'
+                            }
+                        }
+                    },
                     'weight': {
                         validators: {
                             notEmpty: {
@@ -68,6 +74,7 @@ var KTModalUnitAdd = function () {
                         submitButton.disabled = true;
                         const payload = {
                             title: $("input[name=title]").val(),
+                            title: $("input[name=smallTitle]").val(),
                             weight: $("input[name=weight]").val(),
                         }
 

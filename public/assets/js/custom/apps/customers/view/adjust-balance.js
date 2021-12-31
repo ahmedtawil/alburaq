@@ -27,9 +27,7 @@ var KTModalAdjustBalance = function () {
         maskInput = document.getElementById('kt_modal_inputmask');
 
         // Get current balance value
-        const isNegative = currentBalance.innerHTML.includes('-');
         let currentValue = parseFloat(currentBalance.innerHTML.replace(/[^0-9.]/g, '').replace(',', ''));
-        currentValue = isNegative ? currentValue * -1 : currentValue; 
 
         // On change event for inputmask
         let maskValue;

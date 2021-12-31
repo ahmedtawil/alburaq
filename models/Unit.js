@@ -3,7 +3,12 @@ const { Schema } = mongoose;
 const unitSchema = new Schema({
     title: {
         type: String,
-        required: [true, 'اسم الزبون مطلوب'],
+        required: [true, 'اسم الوحدة مطلوبة'],
+        trim: true
+    },
+    smallTitle: {
+        type: String,
+        required: [true, 'اسم الوحدة الجزئية مطلوب.'],
         trim: true
     },
     weight: {

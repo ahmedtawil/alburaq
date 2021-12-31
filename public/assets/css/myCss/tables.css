@@ -1,0 +1,14 @@
+.dataTables_empty{
+text-align: center !important;
+padding: 30px !important;
+}
+
+.previous{
+    display: none !important;
+
+}
+
+table {
+    text-align: center !important;
+}
+

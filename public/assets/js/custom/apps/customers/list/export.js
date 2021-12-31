@@ -38,7 +38,7 @@ var KTCustomersExport = function () {
 
 		// Action buttons
 		submitButton.addEventListener('click', function (e) {
-			e.preventDefault();      
+			e.preventDefault();
 
 			// Validate form before submit
 			if (validator) {
@@ -67,7 +67,7 @@ var KTCustomersExport = function () {
 									modal.hide();
 
                                     // Enable submit button after loading
-                                    submitButton.disabled = false;        
+                                    submitButton.disabled = false;
 								}
 							});
 
@@ -105,7 +105,7 @@ var KTCustomersExport = function () {
             }).then(function (result) {
                 if (result.value) {
                     form.reset(); // Reset form	
-                    modal.hide(); // Hide modal		
+                    modal.hide(); // Hide modal				
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",
@@ -137,7 +137,7 @@ var KTCustomersExport = function () {
             }).then(function (result) {
                 if (result.value) {
                     form.reset(); // Reset form	
-                    modal.hide(); // Hide modal			
+                    modal.hide(); // Hide modal				
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "Your form has not been cancelled!.",

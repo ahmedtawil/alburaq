@@ -13,6 +13,8 @@ const supplierRoute = require('./components/supplier/route')
 const unit = require('./components/unit/route')
 
 const productCategory = require('./components/productCategory/route')
+const product = require('./components/product/route')
+const home = require('./components/order/route')
 
 
 const app = express();
@@ -25,13 +27,16 @@ app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', (req,res)=>{
-    res.render('customer/new')
+    res.redirect('/order/new')
 })
 
+
+app.use('/', home)
 app.use('/', customerRoute)
 app.use('/', supplierRoute)
 app.use('/', unit)
 app.use('/', productCategory)
+app.use('/', product)
 
 
 

@@ -20,7 +20,7 @@ var KTCreateApp = function () {
 		// Initialize Stepper
 		stepperObj = new KTStepper(stepper);
 
-		// Stepper change event(handle hiding submit button for the last step)
+		// Stepper change event
 		stepperObj.on('kt.stepper.changed', function (stepper) {
 			if (stepperObj.getCurrentStepIndex() === 4) {
 				formSubmitButton.classList.remove('d-none');

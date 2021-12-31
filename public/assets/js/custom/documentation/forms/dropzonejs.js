@@ -1,39 +1,38 @@
 "use strict";
 
 // Class definition
-var KTFormsDropzoneJSDemos = function () {
+var KTFormsDropzoneJSDemos = function() {
     // Private functions
-    var exampleBasic = function () {
+    var exampleBasic = function() {
         // For more info about Dropzone plugin visit:  https://www.dropzonejs.com/#usage
-        var myDropzone = new Dropzone("#kt_dropzonejs_example_1", {
-            url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
+		var myDropzone = new Dropzone("#kt_dropzonejs_example_1", { 
+			url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
             paramName: "file", // The name that will be used to transfer the file
             maxFiles: 10,
             maxFilesize: 10, // MB
             addRemoveLinks: true,
-            accept: function (file, done) {
+            accept: function(file, done) {
                 if (file.name == "wow.jpg") {
                     done("Naha, you don't.");
                 } else {
                     done();
                 }
             }
-        });
+		});
     }
 
-    var exampleQueue = function () {
+    var exampleQueue = function() {
         // set the dropzone container id
-        const id = "#kt_dropzonejs_example_2";
-        const dropzone = document.querySelector(id);
+        var id = "#kt_dropzonejs_example_2";
 
         // set the preview element template
-        var previewNode = dropzone.querySelector(".dropzone-item");
+        var previewNode = $(id + " .dropzone-item");
         previewNode.id = "";
-        var previewTemplate = previewNode.parentNode.innerHTML;
-        previewNode.parentNode.removeChild(previewNode);
+        var previewTemplate = previewNode.parent(".dropzone-items").html();
+        previewNode.remove();
 
         var myDropzone = new Dropzone(id, { // Make the whole body a dropzone
-            url: "https://preview.keenthemes.com/api/dropzone/void.php", // Set the url for your upload script location
+            url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
             parallelUploads: 20,
             previewTemplate: previewTemplate,
             maxFilesize: 1, // Max filesize in MB
@@ -42,90 +41,72 @@ var KTFormsDropzoneJSDemos = function () {
             clickable: id + " .dropzone-select" // Define the element that should be used as click trigger to select files.
         });
 
-        myDropzone.on("addedfile", function (file) {
+        myDropzone.on("addedfile", function(file) {
             // Hookup the start button
-            file.previewElement.querySelector(id + " .dropzone-start").onclick = function () { myDropzone.enqueueFile(file); };
-            const dropzoneItems = dropzone.querySelectorAll('.dropzone-item');
-            dropzoneItems.forEach(dropzoneItem => {
-                dropzoneItem.style.display = '';
-            });
-            dropzone.querySelector('.dropzone-upload').style.display = "inline-block";
-            dropzone.querySelector('.dropzone-remove-all').style.display = "inline-block";
+            file.previewElement.querySelector(id + " .dropzone-start").onclick = function() { myDropzone.enqueueFile(file); };
+            $(document).find( id + " .dropzone-item").css("display", "");
+            $( id + " .dropzone-upload, " + id + " .dropzone-remove-all").css("display", "inline-block");
         });
 
         // Update the total progress bar
-        myDropzone.on("totaluploadprogress", function (progress) {
-            const progressBars = dropzone.querySelectorAll('.progress-bar');
-            progressBars.forEach(progressBar => {
-                progressBar.style.width = progress + "%";
-            });
+        myDropzone.on("totaluploadprogress", function(progress) {
+            $(this).find( id + " .progress-bar").css("width", progress + "%");
         });
 
-        myDropzone.on("sending", function (file) {
+        myDropzone.on("sending", function(file) {
             // Show the total progress bar when upload starts
-            const progressBars = dropzone.querySelectorAll('.progress-bar');
-            progressBars.forEach(progressBar => {
-                progressBar.style.opacity = "1";
-            });
+            $( id + " .progress-bar").css("opacity", "1");
             // And disable the start button
             file.previewElement.querySelector(id + " .dropzone-start").setAttribute("disabled", "disabled");
         });
 
         // Hide the total progress bar when nothing's uploading anymore
-        myDropzone.on("complete", function (progress) {
-            const progressBars = dropzone.querySelectorAll('.dz-complete');
+        myDropzone.on("complete", function(progress) {
+            var thisProgressBar = id + " .dz-complete";
 
-            setTimeout(function () {
-                progressBars.forEach(progressBar => {
-                    progressBar.querySelector('.progress-bar').style.opacity = "0";
-                    progressBar.querySelector('.progress').style.opacity = "0";
-                    progressBar.querySelector('.dropzone-start').style.opacity = "0";
-                });
-            }, 300);
+            setTimeout(function(){
+                $( thisProgressBar + " .progress-bar, " + thisProgressBar + " .progress, " + thisProgressBar + " .dropzone-start").css("opacity", "0");
+            }, 300)
+
         });
 
         // Setup the buttons for all transfers
-        dropzone.querySelector(".dropzone-upload").addEventListener('click', function () {
+        document.querySelector( id + " .dropzone-upload").onclick = function() {
             myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
-        });
+        };
 
         // Setup the button for remove all files
-        dropzone.querySelector(".dropzone-remove-all").addEventListener('click', function () {
-            dropzone.querySelector('.dropzone-upload').style.display = "none";
-            dropzone.querySelector('.dropzone-remove-all').style.display = "none";
+        document.querySelector(id + " .dropzone-remove-all").onclick = function() {
+            $( id + " .dropzone-upload, " + id + " .dropzone-remove-all").css("display", "none");
             myDropzone.removeAllFiles(true);
-        });
+        };
 
         // On all files completed upload
-        myDropzone.on("queuecomplete", function (progress) {
-            const uploadIcons = dropzone.querySelectorAll('.dropzone-upload');
-            uploadIcons.forEach(uploadIcon => {
-                uploadIcon.style.display = "none";
-            });
+        myDropzone.on("queuecomplete", function(progress){
+            $( id + " .dropzone-upload").css("display", "none");
         });
 
         // On all files removed
-        myDropzone.on("removedfile", function (file) {
-            if (myDropzone.files.length < 1) {
-                dropzone.querySelector('.dropzone-upload').style.display = "none";
-                dropzone.querySelector('.dropzone-remove-all').style.display = "none";
+        myDropzone.on("removedfile", function(file){
+            if(myDropzone.files.length < 1) {
+                $( id + " .dropzone-upload, " + id + " .dropzone-remove-all").css("display", "none");
             }
         });
     }
 
-    var exampleQueueAutoUpload = function () {
+    var exampleQueueAutoUpload = function() {
         // set the dropzone container id
-        const id = "#kt_dropzonejs_example_3";
-        const dropzone = document.querySelector(id);
+        var id = "#kt_dropzonejs_example_3";
 
         // set the preview element template
-        var previewNode = dropzone.querySelector(".dropzone-item");
+        var previewNode = $(id + " .dropzone-item");
+
         previewNode.id = "";
-        var previewTemplate = previewNode.parentNode.innerHTML;
-        previewNode.parentNode.removeChild(previewNode);
+        var previewTemplate = previewNode.parent(".dropzone-items").html();
+        previewNode.remove();
 
         var myDropzone = new Dropzone(id, { // Make the whole body a dropzone
-            url: "https://preview.keenthemes.com/api/dropzone/void.php", // Set the url for your upload script location
+            url: "https://keenthemes.com/scripts/void.php", // Set the url for your upload script location
             parallelUploads: 20,
             maxFilesize: 1, // Max filesize in MB
             previewTemplate: previewTemplate,
@@ -133,47 +114,35 @@ var KTFormsDropzoneJSDemos = function () {
             clickable: id + " .dropzone-select" // Define the element that should be used as click trigger to select files.
         });
 
-
-        myDropzone.on("addedfile", function (file) {
+        
+        myDropzone.on("addedfile", function(file) {
             // Hookup the start button
-            const dropzoneItems = dropzone.querySelectorAll('.dropzone-item');
-            dropzoneItems.forEach(dropzoneItem => {
-                dropzoneItem.style.display = '';
-            });
+            $(document).find( id + " .dropzone-item").css("display", "");
         });
 
         // Update the total progress bar
-        myDropzone.on("totaluploadprogress", function (progress) {
-            const progressBars = dropzone.querySelectorAll('.progress-bar');
-            progressBars.forEach(progressBar => {
-                progressBar.style.width = progress + "%";
-            });
+        myDropzone.on("totaluploadprogress", function(progress) {
+            $( id + " .progress-bar").css("width", progress + "%");
         });
 
-        myDropzone.on("sending", function (file) {
+        myDropzone.on("sending", function(file) {
             // Show the total progress bar when upload starts
-            const progressBars = dropzone.querySelectorAll('.progress-bar');
-            progressBars.forEach(progressBar => {
-                progressBar.style.opacity = "1";
-            });
+            $( id + " .progress-bar").css("opacity", "1");
         });
 
         // Hide the total progress bar when nothing"s uploading anymore
-        myDropzone.on("complete", function (progress) {
-            const progressBars = dropzone.querySelectorAll('.dz-complete');
+        myDropzone.on("complete", function(progress) {
+            var thisProgressBar = id + " .dz-complete";
 
-            setTimeout(function () {
-                progressBars.forEach(progressBar => {
-                    progressBar.querySelector('.progress-bar').style.opacity = "0";
-                    progressBar.querySelector('.progress').style.opacity = "0";
-                });
-            }, 300);
+            setTimeout(function(){
+                $( thisProgressBar + " .progress-bar, " + thisProgressBar + " .progress").css("opacity", "0");
+            }, 300)
         });
     }
-
+    
     return {
         // Public Functions
-        init: function (element) {
+        init: function(element) {
             exampleBasic();
             exampleQueue();
             exampleQueueAutoUpload();
@@ -182,6 +151,6 @@ var KTFormsDropzoneJSDemos = function () {
 }();
 
 // On document ready
-KTUtil.onDOMContentLoaded(function () {
+KTUtil.onDOMContentLoaded(function() {
     KTFormsDropzoneJSDemos.init();
 });

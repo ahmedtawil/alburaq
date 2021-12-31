@@ -60,7 +60,7 @@
         </div>
         <!--end::Card-->
         <!--begin::Modal - Customers - Add-->
-        <div class="modal fade" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="kt_modal_add_customer"   aria-hidden="true">
 
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-450px">
@@ -92,7 +92,7 @@
                         </div>
                         <!--end::Modal header-->
                         <!--begin::Modal body-->
-                        <div class="modal-body py-10 px-lg-17">
+                        <div class="modal-body py-10 px-lg-17" id="kt">
                             <!--begin::Scroll-->
                             <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true"
                                 data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
@@ -110,12 +110,12 @@
                                     <!--end::Input-->
                                     <div class="fv-plugins-message-container invalid-feedback"></div>
                                 </div>
-                                <div id="select1" class="fv-row mb-7 fv-plugins-icon-container">
+                                <div id="select" class="fv-row mb-7 fv-plugins-icon-container">
                                     <!--begin::Label-->
                                     <label class="required fs-6 fw-bold mb-2">نوع الزبون</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select name="type" aria-label="اختار البرنامج" data-control="select2"
+                                    <select name="type" aria-label="اختار الزبون" data-control="select2" id="type2"
                                         data-placeholder="نوع الزبون" data-hide-search="true"
                                         class="form-select form-select-solid fw-bolder">
                                         <option value="regular">عادي</option>

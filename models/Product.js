@@ -8,13 +8,14 @@ const productSchema = new Schema({
         type: String,
     },
     name: {
-        type: String,
+        type: String, 
         required: [true, 'اسم المنتج مطلوب'],
         trim: true
     },
-    productCategory: { type: Schema.Types.ObjectId, ref: 'productCategory', required: [true, 'صنف المنتج مطلوب.'] },
+    productCategory: { type: Schema.Types.ObjectId, ref: 'ProductCategory', required: [true, 'صنف المنتج مطلوب.'] },
     ratioPerUnit: {
         type: Number,
+        /*
         required: async function (val) {
             const productCategory = await mongoose.model('ProductCategory').findById(this.productCategory)
             if(productCategory.unit == killogramUnitID){
@@ -22,6 +23,7 @@ const productSchema = new Schema({
             }
             return [true, 'نسبه قيمة المنتج للوحدة مطلوبة.']
         },
+        */
     },
 
     price: {
@@ -43,9 +45,7 @@ productSchema.pre('save', async function (next) {
         if (this.isNew) {
             const counter = await SerialNumber.newProduct()
             this.serialNumber = counter
-
         }
-
     }
     next()
 })

@@ -207,7 +207,7 @@ var KTModalProductCategoryAdd = function () {
                         submitButton.setAttribute('data-kt-indicator', 'on');
 
                         // Disable submit button whilst loading
-                        submitButton.disabled = true;
+                        submitButton.disabled = true; 
                         const payload = {
                             name: $("input[name=name]").val(),
                             unit: $("select[name=unit]").val(),

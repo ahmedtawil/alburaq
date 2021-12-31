@@ -43,60 +43,98 @@ License: For each use you must have a valid license purchased only from above li
 <!--begin::Body-->
 
 <body id="kt_body"
-	class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed">
+	class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
+	style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 	<!--begin::Main-->
 	<!--begin::Root-->
 	<div class="d-flex flex-column flex-root">
 		<!--begin::Page-->
 		<div class="page d-flex flex-row flex-column-fluid">
 			<!--begin::Aside-->
-			<div id="kt_aside" class="aside pb-5 pt-5 pt-lg-0" data-kt-drawer="true" data-kt-drawer-name="aside"
-				data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
-				data-kt-drawer-width="{default:'80px', '300px': '100px'}" data-kt-drawer-direction="start"
-				data-kt-drawer-toggle="#kt_aside_mobile_toggle">
+			<div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true"
+				data-kt-drawer-name="aside" data-kt-drawer-activate="{default: true, lg: false}"
+				data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}"
+				data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_aside_mobile_toggle">
 				<!--begin::Brand-->
-				<div class="aside-logo py-8" id="kt_aside_logo">
+				<div class="aside-logo flex-column-auto" id="kt_aside_logo">
 					<!--begin::Logo-->
-					<a href="../../demo6/dist/index.html" class="d-flex align-items-center">
-						<img alt="Logo" src="/assets/media/logos/logo-demo6.svg" class="h-45px logo" />
+					<a href="../../demo1/dist/index.html">
+						<img alt="Logo" src="/assets/media/logos/logo-1-dark.svg" class="h-25px logo" />
 					</a>
 					<!--end::Logo-->
+					<!--begin::Aside toggler-->
+					<div id="kt_aside_toggle" class="btn btn-icon w-auto px-0 btn-active-color-primary aside-toggle"
+						data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body"
+						data-kt-toggle-name="aside-minimize">
+						<!--begin::Svg Icon | path: icons/duotune/arrows/arr079.svg-->
+						<span class="svg-icon svg-icon-1 rotate-180">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+								fill="none">
+								<path opacity="0.5"
+									d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z"
+									fill="black" />
+								<path
+									d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z"
+									fill="black" />
+							</svg>
+						</span>
+						<!--end::Svg Icon-->
+					</div>
+					<!--end::Aside toggler-->
 				</div>
 				<!--end::Brand-->
 				<!--begin::Aside menu-->
-				<div class="aside-menu flex-column-fluid" id="kt_aside_menu">
+				<div class="aside-menu flex-column-fluid">
 					<!--begin::Aside Menu-->
-					<div class="hover-scroll-overlay-y my-2 my-lg-5 pe-lg-n1" id="kt_aside_menu_wrapper"
-						data-kt-scroll="true" data-kt-scroll-height="auto"
+					<div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
+						data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
 						data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer"
-						data-kt-scroll-wrappers="#kt_aside, #kt_aside_menu" data-kt-scroll-offset="5px">
+						data-kt-scroll-wrappers="#kt_aside_menu" data-kt-scroll-offset="0" style="height: 832px;">
 						<!--begin::Menu-->
-						<div class="menu menu-column menu-title-gray-700 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fw-bold"
+						<div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500"
 							id="#kt_aside_menu" data-kt-menu="true">
-							<div class="menu-item py-2">
-								<a class="menu-link active menu-center" href="../../demo6/dist/index.html"
-									data-bs-trigger="hover" data-bs-dismiss="click" data-bs-placement="right">
-									<span class="menu-icon me-0">
-										<i class="bi bi-house fs-2"></i>
+							<div class="menu-item">
+								<div class="menu-content pb-2">
+									<span class="menu-section text-muted text-uppercase fs-8 ls-1"><a href="/"
+											class="text-muted text-hover-primary">لوحة التحكم</a>
 									</span>
-									<span class="menu-title">الرئيسية</span>
+								</div>
+							</div>
+							<div class="menu-item">
+								<a class="menu-link active" href="/">
+									<span class="menu-icon">
+										<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+										<span class="svg-icon svg-icon-2">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+												viewBox="0 0 24 24" fill="none">
+												<rect x="2" y="2" width="9" height="9" rx="2" fill="black"></rect>
+												<rect opacity="0.3" x="13" y="2" width="9" height="9" rx="2"
+													fill="black"></rect>
+												<rect opacity="0.3" x="13" y="13" width="9" height="9" rx="2"
+													fill="black"></rect>
+												<rect opacity="0.3" x="2" y="13" width="9" height="9" rx="2"
+													fill="black"></rect>
+											</svg>
+										</span>
+										<!--end::Svg Icon-->
+									</span>
+									<span class="menu-title">الرئيسة</span>
 								</a>
 							</div>
-							<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-								class="menu-item py-2">
-								<span class="menu-link menu-center" data-bs-trigger="hover" data-bs-dismiss="click"
-									data-bs-placement="right">
+
+
+
+
+							<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+								<span class="menu-link">
 									<span class="menu-icon me-0">
 										<i class="bi bi-file-earmark-lock fs-2"></i>
 									</span>
+
 									<span class="menu-title">الزبائن</span>
+									<span class="menu-arrow"></span>
 								</span>
-								<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-									<div class="menu-item">
-										<div class="menu-content">
-											<span class="menu-section fs-5 fw-bolder ps-1 py-1">الزبائن</span>
-										</div>
-									</div>
+								<div class="menu-sub menu-sub-accordion">
 									<div class="menu-item">
 										<a class="menu-link" href="/customer/new">
 											<span class="menu-bullet">
@@ -113,24 +151,22 @@ License: For each use you must have a valid license purchased only from above li
 											<span class="menu-title">الزبائن</span>
 										</a>
 									</div>
+
+
 								</div>
 							</div>
-							<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-								class="menu-item py-2">
-								<span class="menu-link menu-center" data-bs-trigger="hover" data-bs-dismiss="click"
-									data-bs-placement="right">
+							<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+
+								<span class="menu-link">
 									<span class="menu-icon me-0">
 										<i class="bi bi-shield-check fs-2"></i>
 									</span>
 									<span class="menu-title">المورديين</span>
+									<span class="menu-arrow"></span>
 								</span>
-								<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-									<div class="menu-item">
-										<div class="menu-content">
-											<span class="menu-section fs-5 fw-bolder ps-1 py-1">المورديين</span>
-										</div>
-									</div>
-									
+
+								<div class="menu-sub menu-sub-accordion">
+
 									<div class="menu-item">
 										<a class="menu-link" href="/suppliers/page/get">
 											<span class="menu-bullet">
@@ -140,25 +176,39 @@ License: For each use you must have a valid license purchased only from above li
 										</a>
 									</div>
 
+								
+
 								</div>
 							</div>
-							<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-								class="menu-item py-2">
-								<span class="menu-link menu-center" data-bs-trigger="hover" data-bs-dismiss="click"
-									data-bs-placement="right">
-									<span class="menu-icon me-0">
-										<i class="bi bi-shield-check fs-2"></i>
+
+							<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+								<span class="menu-link">
+									<span class="menu-icon">
+										<!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
+										<span class="svg-icon svg-icon-2">
+											<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Home/Box.svg--><svg
+												xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+												viewBox="0 0 24 24" version="1.1">
+												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<rect x="0" y="0" width="24" height="24"></rect>
+													<path
+														d="M4,7 L20,7 L20,19.5 C20,20.3284271 19.3284271,21 18.5,21 L5.5,21 C4.67157288,21 4,20.3284271 4,19.5 L4,7 Z M10,10 C9.44771525,10 9,10.4477153 9,11 C9,11.5522847 9.44771525,12 10,12 L14,12 C14.5522847,12 15,11.5522847 15,11 C15,10.4477153 14.5522847,10 14,10 L10,10 Z"
+														fill="#000000"></path>
+													<rect fill="#000000" opacity="0.3" x="2" y="3" width="20" height="4"
+														rx="1"></rect>
+												</g>
+											</svg>
+											<!--end::Svg Icon-->
+										</span>
+										<!--end::Svg Icon-->
 									</span>
 									<span class="menu-title">المبيعات</span>
+									<span class="menu-arrow"></span>
 								</span>
-								<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
+								<div class="menu-sub menu-sub-accordion">
 									<div class="menu-item">
-										<div class="menu-content">
-											<span class="menu-section fs-5 fw-bolder ps-1 py-1">المبيعات</span>
-										</div>
-									</div>
-									<div class="menu-item">
-										<a class="menu-link" href="../../demo6/dist/account/overview.html">
+										<a class="menu-link" href="/sessions/today">
 											<span class="menu-bullet">
 												<span class="bullet bullet-dot"></span>
 											</span>
@@ -176,22 +226,40 @@ License: For each use you must have a valid license purchased only from above li
 
 								</div>
 							</div>
-							<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-								class="menu-item py-2">
-								<span class="menu-link menu-center" data-bs-trigger="hover" data-bs-dismiss="click"
-									data-bs-placement="right">
-									<span class="menu-icon me-0">
-										<i class="bi bi-chat-square-text fs-2"></i>
+
+
+
+							<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+								<span class="menu-link">
+									<span class="menu-icon">
+										<!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
+										<span class="svg-icon svg-icon-2">
+											<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Communication/Incoming-box.svg--><svg
+												xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+												viewBox="0 0 24 24" version="1.1">
+												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<rect x="0" y="0" width="24" height="24"></rect>
+													<path
+														d="M22,17 L22,21 C22,22.1045695 21.1045695,23 20,23 L4,23 C2.8954305,23 2,22.1045695 2,21 L2,17 L6.27924078,17 L6.82339262,18.6324555 C7.09562072,19.4491398 7.8598984,20 8.72075922,20 L15.381966,20 C16.1395101,20 16.8320364,19.5719952 17.1708204,18.8944272 L18.118034,17 L22,17 Z"
+														fill="#000000"></path>
+													<path
+														d="M2.5625,15 L5.92654389,9.01947752 C6.2807805,8.38972356 6.94714834,8 7.66969497,8 L16.330305,8 C17.0528517,8 17.7192195,8.38972356 18.0734561,9.01947752 L21.4375,15 L18.118034,15 C17.3604899,15 16.6679636,15.4280048 16.3291796,16.1055728 L15.381966,18 L8.72075922,18 L8.17660738,16.3675445 C7.90437928,15.5508602 7.1401016,15 6.27924078,15 L2.5625,15 Z"
+														fill="#000000" opacity="0.3"></path>
+													<path
+														d="M11.1288761,0.733697713 L11.1288761,2.69017121 L9.12120481,2.69017121 C8.84506244,2.69017121 8.62120481,2.91402884 8.62120481,3.19017121 L8.62120481,4.21346991 C8.62120481,4.48961229 8.84506244,4.71346991 9.12120481,4.71346991 L11.1288761,4.71346991 L11.1288761,6.66994341 C11.1288761,6.94608579 11.3527337,7.16994341 11.6288761,7.16994341 C11.7471877,7.16994341 11.8616664,7.12798964 11.951961,7.05154023 L15.4576222,4.08341738 C15.6683723,3.90498251 15.6945689,3.58948575 15.5161341,3.37873564 C15.4982803,3.35764848 15.4787093,3.33807751 15.4576222,3.32022374 L11.951961,0.352100892 C11.7412109,0.173666017 11.4257142,0.199862688 11.2472793,0.410612793 C11.1708299,0.500907473 11.1288761,0.615386087 11.1288761,0.733697713 Z"
+														fill="#000000" fill-rule="nonzero"
+														transform="translate(11.959697, 3.661508) rotate(-270.000000) translate(-11.959697, -3.661508) ">
+													</path>
+												</g>
+											</svg>
+										</span>
+										<!--end::Svg Icon-->
 									</span>
 									<span class="menu-title">الأصناف</span>
+									<span class="menu-arrow"></span>
 								</span>
-								<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-									<div class="menu-item">
-										<div class="menu-content">
-											<span class="menu-section fs-5 fw-bolder ps-1 py-1">الأصناف</span>
-										</div>
-									</div>
-									
+								<div class="menu-sub menu-sub-accordion">
 									<div class="menu-item">
 										<a class="menu-link" href="/productCategories/page/get">
 											<span class="menu-bullet">
@@ -208,35 +276,41 @@ License: For each use you must have a valid license purchased only from above li
 											<span class="menu-title">الوحدات</span>
 										</a>
 									</div>
-
 								</div>
 							</div>
-							<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-								class="menu-item py-2">
-								<span class="menu-link menu-center" data-bs-trigger="hover" data-bs-dismiss="click"
-									data-bs-placement="right">
-									<span class="menu-icon me-0">
-										<i class="bi bi-people fs-2"></i>
+
+
+							<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+
+								<span class="menu-link">
+									<span class="menu-icon">
+										<!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
+										<span class="svg-icon svg-icon-2">
+											<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Clothes/Crown.svg--><svg
+												xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+												viewBox="0 0 24 24" version="1.1">
+												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<polygon points="0 0 24 0 24 24 0 24"></polygon>
+													<path
+														d="M11.2600599,5.81393408 L2,16 L22,16 L12.7399401,5.81393408 C12.3684331,5.40527646 11.7359848,5.37515988 11.3273272,5.7466668 C11.3038503,5.7680094 11.2814025,5.79045722 11.2600599,5.81393408 Z"
+														fill="#000000" opacity="0.3"></path>
+													<path
+														d="M12.0056789,15.7116802 L20.2805786,6.85290308 C20.6575758,6.44930487 21.2903735,6.42774054 21.6939717,6.8047378 C21.8964274,6.9938498 22.0113578,7.25847607 22.0113578,7.535517 L22.0113578,20 L16.0113578,20 L2,20 L2,7.535517 C2,7.25847607 2.11493033,6.9938498 2.31738608,6.8047378 C2.72098429,6.42774054 3.35378194,6.44930487 3.7307792,6.85290308 L12.0056789,15.7116802 Z"
+														fill="#000000"></path>
+												</g>
+											</svg>
+											<!--end::Svg Icon-->
+										</span>
+										<!--end::Svg Icon-->
 									</span>
 									<span class="menu-title">المنتجات</span>
+									<span class="menu-arrow"></span>
 								</span>
-								<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
+
+								<div class="menu-sub menu-sub-accordion">
 									<div class="menu-item">
-										<div class="menu-content">
-											<span class="menu-section fs-5 fw-bolder ps-1 py-1">المنتجات</span>
-										</div>
-									</div>
-									<div class="menu-item">
-										<a class="menu-link"
-											href="../../demo6/dist/apps/customers/getting-started.html">
-											<span class="menu-bullet">
-												<span class="bullet bullet-dot"></span>
-											</span>
-											<span class="menu-title">منتج جديد</span>
-										</a>
-									</div>
-									<div class="menu-item">
-										<a class="menu-link" href="../../demo6/dist/apps/customers/list.html">
+										<a class="menu-link" href="/products/page/get">
 											<span class="menu-bullet">
 												<span class="bullet bullet-dot"></span>
 											</span>
@@ -246,47 +320,94 @@ License: For each use you must have a valid license purchased only from above li
 
 								</div>
 							</div>
-							<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-								class="menu-item py-2">
-								<span class="menu-link menu-center" data-bs-trigger="hover" data-bs-dismiss="click"
-									data-bs-placement="right">
-									<span class="menu-icon me-0">
-										<i class="bi bi-file-text fs-2"></i>
+							<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+
+								<span class="menu-link">
+									<span class="menu-icon">
+										<!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
+										<span class="svg-icon svg-icon-2">
+											<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Layout/Layout-4-blocks.svg--><svg
+												xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+												viewBox="0 0 24 24" version="1.1">
+												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<rect x="0" y="0" width="24" height="24"></rect>
+													<rect fill="#000000" x="4" y="4" width="7" height="7" rx="1.5">
+													</rect>
+													<path
+														d="M5.5,13 L9.5,13 C10.3284271,13 11,13.6715729 11,14.5 L11,18.5 C11,19.3284271 10.3284271,20 9.5,20 L5.5,20 C4.67157288,20 4,19.3284271 4,18.5 L4,14.5 C4,13.6715729 4.67157288,13 5.5,13 Z M14.5,4 L18.5,4 C19.3284271,4 20,4.67157288 20,5.5 L20,9.5 C20,10.3284271 19.3284271,11 18.5,11 L14.5,11 C13.6715729,11 13,10.3284271 13,9.5 L13,5.5 C13,4.67157288 13.6715729,4 14.5,4 Z M14.5,13 L18.5,13 C19.3284271,13 20,13.6715729 20,14.5 L20,18.5 C20,19.3284271 19.3284271,20 18.5,20 L14.5,20 C13.6715729,20 13,19.3284271 13,18.5 L13,14.5 C13,13.6715729 13.6715729,13 14.5,13 Z"
+														fill="#000000" opacity="0.3"></path>
+												</g>
+											</svg>
+											<!--end::Svg Icon-->
+										</span>
+										<!--end::Svg Icon-->
 									</span>
 									<span class="menu-title">المستودع</span>
+									<span class="menu-arrow"></span>
 								</span>
-								<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
+
+								<div class="menu-sub menu-sub-accordion">
 									<div class="menu-item">
-										<div class="menu-content">
-											<span class="menu-section fs-5 fw-bolder ps-1 py-1">المستودع</span>
-										</div>
+										<a class="menu-link" href="/products/page/get">
+											<span class="menu-bullet">
+												<span class="bullet bullet-dot"></span>
+											</span>
+											<span class="menu-title">المستودع</span>
+										</a>
 									</div>
+
+								</div>
+							</div>
+							<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+
+								<span class="menu-link">
+									<span class="menu-icon">
+										<!--begin::Svg Icon | path: icons/duotune/communication/com012.svg-->
+										<span class="svg-icon svg-icon-2">
+											<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Communication/Group.svg--><svg
+												xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+												viewBox="0 0 24 24" version="1.1">
+												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<polygon points="0 0 24 0 24 24 0 24"></polygon>
+													<path
+														d="M18,14 C16.3431458,14 15,12.6568542 15,11 C15,9.34314575 16.3431458,8 18,8 C19.6568542,8 21,9.34314575 21,11 C21,12.6568542 19.6568542,14 18,14 Z M9,11 C6.790861,11 5,9.209139 5,7 C5,4.790861 6.790861,3 9,3 C11.209139,3 13,4.790861 13,7 C13,9.209139 11.209139,11 9,11 Z"
+														fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+													<path
+														d="M17.6011961,15.0006174 C21.0077043,15.0378534 23.7891749,16.7601418 23.9984937,20.4 C24.0069246,20.5466056 23.9984937,21 23.4559499,21 L19.6,21 C19.6,18.7490654 18.8562935,16.6718327 17.6011961,15.0006174 Z M0.00065168429,20.1992055 C0.388258525,15.4265159 4.26191235,13 8.98334134,13 C13.7712164,13 17.7048837,15.2931929 17.9979143,20.2 C18.0095879,20.3954741 17.9979143,21 17.2466999,21 C13.541124,21 8.03472472,21 0.727502227,21 C0.476712155,21 -0.0204617505,20.45918 0.00065168429,20.1992055 Z"
+														fill="#000000" fill-rule="nonzero"></path>
+												</g>
+											</svg>
+											<!--end::Svg Icon-->
+										</span>
+										<!--end::Svg Icon-->
+									</span>
+									<span class="menu-title">التقارير</span>
+									<span class="menu-arrow"></span>
+								</span>
+
+								<div class="menu-sub menu-sub-accordion">
+									<div class="menu-item">
+										<a class="menu-link" href="/products/page/get">
+											<span class="menu-bullet">
+												<span class="bullet bullet-dot"></span>
+											</span>
+											<span class="menu-title">التقارير</span>
+										</a>
+									</div>
+
+
 								</div>
 							</div>
 
-							<div data-kt-menu-trigger="click" data-kt-menu-placement="right-start"
-								class="menu-item py-2">
-								<span class="menu-link menu-center" data-bs-trigger="hover" data-bs-dismiss="click"
-									data-bs-placement="right">
-									<span class="menu-icon me-0">
-										<i class="bi bi-file-text fs-2"></i>
-									</span>
-									<span class="menu-title">التقارير</span>
-								</span>
-								<div class="menu-sub menu-sub-dropdown w-225px px-1 py-4">
-									<div class="menu-item">
-										<div class="menu-content">
-											<span class="menu-section fs-5 fw-bolder ps-1 py-1">التقارير</span>
-										</div>
-									</div>
-								</div>
-							</div>
 						</div>
 						<!--end::Menu-->
 					</div>
 					<!--end::Aside Menu-->
 				</div>
 				<!--end::Aside menu-->
+
 			</div>
 			<!--end::Aside-->
 			<!--begin::Wrapper-->
@@ -296,8 +417,8 @@ License: For each use you must have a valid license purchased only from above li
 					<!--begin::Container-->
 					<div class="container-fluid d-flex align-items-stretch justify-content-between">
 						<!--begin::Aside mobile toggle-->
-						<div class="d-flex align-items-center d-lg-none ms-n1 me-2" title="Show aside menu">
-							<div class="btn btn-icon btn-active-color-primary w-30px h-30px w-md-40px h-md-40px"
+						<div class="d-flex align-items-center d-lg-none ms-n3 me-1" title="Show aside menu">
+							<div class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px"
 								id="kt_aside_mobile_toggle">
 								<!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
 								<span class="svg-icon svg-icon-2x mt-1">
@@ -317,8 +438,8 @@ License: For each use you must have a valid license purchased only from above li
 						<!--end::Aside mobile toggle-->
 						<!--begin::Mobile logo-->
 						<div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-							<a href="../../demo6/dist/index.html" class="d-lg-none">
-								<img alt="Logo" src="/assets/media/logos/logo-demo6.svg" class="h-30px" />
+							<a href="../../demo1/dist/index.html" class="d-lg-none">
+								<img alt="Logo" src="/assets/media/logos/logo-2.svg" class="h-30px" />
 							</a>
 						</div>
 						<!--end::Mobile logo-->
@@ -334,7 +455,9 @@ License: For each use you must have a valid license purchased only from above li
 									data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_header_menu_mobile_toggle"
 									data-kt-swapper="true" data-kt-swapper-mode="prepend"
 									data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
+									<!--begin::Menu-->
 
+									<!--end::Menu-->
 								</div>
 								<!--end::Menu wrapper-->
 							</div>
@@ -350,19 +473,32 @@ License: For each use you must have a valid license purchased only from above li
 											data-kt-search-keypress="true" data-kt-search-min-length="2"
 											data-kt-search-enter="enter" data-kt-search-layout="menu"
 											data-kt-menu-trigger="auto" data-kt-menu-overflow="false"
-											data-kt-menu-permanent="true" data-kt-menu-placement="bottom-end">
+											data-kt-menu-permanent="true" data-kt-menu-placement="bottom-end"
+											data-kt-menu-flip="bottom">
 											<!--begin::Search toggle-->
 											<div class="d-flex align-items-center" data-kt-search-element="toggle"
 												id="kt_header_search_toggle">
 												<div
 													class="btn btn-icon btn-active-light-primary w-30px h-30px w-md-40px h-md-40px">
-													<i class="bi bi-search fs-2"></i>
+													<!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+													<span class="svg-icon svg-icon-1">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+															viewBox="0 0 24 24" fill="none">
+															<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546"
+																height="2" rx="1" transform="rotate(45 17.0365 15.1223)"
+																fill="black" />
+															<path
+																d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+																fill="black" />
+														</svg>
+													</span>
+													<!--end::Svg Icon-->
 												</div>
 											</div>
 											<!--end::Search toggle-->
 											<!--begin::Menu-->
 											<div data-kt-search-element="content"
-												class="menu menu-sub menu-sub-dropdown p-7 w-325px w-md-375px">
+												class="menu menu-sub menu-sub-dropdown p-5 mx-4 w-325px w-md-375px">
 												<!--begin::Wrapper-->
 												<div data-kt-search-element="wrapper">
 													<!--begin::Form-->
@@ -387,7 +523,7 @@ License: For each use you must have a valid license purchased only from above li
 														<!--end::Icon-->
 														<!--begin::Input-->
 														<input type="text" class="form-control form-control-flush ps-10"
-															name="search" value="" placeholder="بحث..."
+															name="search" value="" placeholder="بحث ..."
 															data-kt-search-element="input" />
 														<!--end::Input-->
 														<!--begin::Spinner-->
@@ -417,7 +553,12 @@ License: For each use you must have a valid license purchased only from above li
 															<!--end::Svg Icon-->
 														</span>
 														<!--end::Reset-->
+														<!--begin::Toolbar-->
+														<div class="position-absolute top-50 end-0 translate-middle-y"
+															data-kt-search-element="toolbar">
 
+														</div>
+														<!--end::Toolbar-->
 													</form>
 													<!--end::Form-->
 													<!--begin::Separator-->
@@ -425,12 +566,26 @@ License: For each use you must have a valid license purchased only from above li
 													<!--end::Separator-->
 													<!--begin::Recently viewed-->
 													<div data-kt-search-element="results" class="d-none">
+														<!--begin::Items-->
+														<div class="scroll-y mh-200px mh-lg-350px">
+															<!--begin::Category title-->
+															<h3 class="fs-5 text-muted m-0 pb-5"
+																data-kt-search-element="category-title">المستفيدين</h3>
+															<!--end::Category title-->
+															<!--begin::Item-->
+															<div class="content-search">
 
+															</div>
+
+															<!--end::Item-->
+
+
+														</div>
+														<!--end::Items-->
 													</div>
 													<!--end::Recently viewed-->
 													<!--begin::Recently viewed-->
 													<div class="mb-4" data-kt-search-element="main">
-
 													</div>
 													<!--end::Recently viewed-->
 													<!--begin::Empty-->
@@ -460,9 +615,13 @@ License: For each use you must have a valid license purchased only from above li
 														<!--end::Icon-->
 														<!--begin::Message-->
 														<div class="pb-15 fw-bold">
-															<h3 class="text-gray-600 fs-5 mb-2">لا يوجد نتائج لعرضها!
+															<h3 class="text-gray-600 fs-5 mb-2">لا يوجد نتائج لعرضها
 															</h3>
 															<div class="text-muted fs-7">الرجاء إستخدام إستعلام أخر
+															</div>
+															<div class="mt-3">
+																<a href="3">إضافة مستفيد جديد</a>
+
 															</div>
 														</div>
 														<!--end::Message-->
@@ -470,6 +629,8 @@ License: For each use you must have a valid license purchased only from above li
 													<!--end::Empty-->
 												</div>
 												<!--end::Wrapper-->
+												
+											
 											</div>
 											<!--end::Menu-->
 										</div>
@@ -477,6 +638,7 @@ License: For each use you must have a valid license purchased only from above li
 									</div>
 									<!--end::Search-->
 
+								
 
 									<!--begin::User-->
 									<div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
@@ -538,6 +700,7 @@ License: For each use you must have a valid license purchased only from above li
 										<!--end::Menu wrapper-->
 									</div>
 									<!--end::User -->
+
 								</div>
 								<!--end::Toolbar wrapper-->
 							</div>
@@ -548,7 +711,9 @@ License: For each use you must have a valid license purchased only from above li
 					<!--end::Container-->
 				</div>
 				<!--end::Header-->
+
 				<%- body %>
+
 					<!--begin::Footer-->
 					<div class="footer py-4 d-flex flex-lg-column" id="kt_footer">
 						<!--begin::Container-->
@@ -576,6 +741,13 @@ License: For each use you must have a valid license purchased only from above li
 	</div>
 	<!--end::Root-->
 
+
+
+	<!--begin::Modals-->
+
+
+	
+	<!--end::Modals-->
 	<!--begin::Scrolltop-->
 	<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
 		<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
@@ -592,12 +764,11 @@ License: For each use you must have a valid license purchased only from above li
 	</div>
 	<!--end::Scrolltop-->
 	<!--end::Main-->
-	<script>var hostUrl = "/assets/";</script>
 	<!--begin::Javascript-->
-	<!--begin::Page Vendors Javascript(used by this page)-->
+	<!--begin::Global Javascript Bundle(used by all pages)-->
 
-	<!--end::Page Vendors Javascript-->
-	<!--begin::Page Custom Javascript(used by this page)-->
+	<script src="/assets/js/myScripts/nav-search.js"></script>
+
 
 	<!--end::Page Custom Javascript-->
 	<!--end::Javascript-->

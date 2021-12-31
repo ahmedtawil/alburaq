@@ -19,7 +19,6 @@ exports.getProductCategoriesPage = catchAsyncErrors(async (req, res) => {
 })
 
 exports.getProductCategoriesData = catchAsyncErrors(async (req, res) => {
-  console.log('--------------');
   const query = req.query
 
   const queryValue = (req.query.search.value == '') ? {} : JSON.parse(query.search.value)
@@ -78,39 +77,56 @@ exports.newProductCategory = catchAsyncErrors(async (req, res) => {
     name: `${productCategory.name} ${productCategory.unit.title}`,
     serialNumber: productCategory.serialNumber,
     productCategory: productCategory._id,
-  }
-  if (!data.configs.isWeightUnit) {
-    productData = {
-      ...productData,
-      ratioPerUnit: productCategory.unit.weight,
-      price: productCategory.sellingPrice
-    }
+    ratioPerUnit: productCategory.unit.weight,
+    price: productCategory.sellingPrice
+
   }
   const product1 = new Product(productData)
   product1.save()
 
-  productData = {
-    name:`${productCategory.name} ${(data.configs.isWeightUnit)? `وزن` : `قطعة`}`,
-    serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
-    productCategory: productCategory._id,
-  }
-  if (!data.configs.isWeightUnit) {
+  if(data.configs.addProduct){
     productData = {
-      ...productData,
-      ratioPerUnit: 1,
-      price: data.productSellingPrice
+      name:`${productCategory.name} ${(data.configs.isWeightUnit)? `وزن` : `قطعة`}`,
+      serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
+      productCategory: productCategory._id,
     }
+    if (!data.configs.isWeightUnit) {
+      productData = {
+        ...productData,
+        ratioPerUnit: 1,
+        price: data.productSellingPrice
+      }
+    }
+  
+    const product2 = new Product(productData)
+    product2.save()
   }
-
-  const product2 = new Product(productData)
-  product2.save()
   const stock = new Stock({ productCategory: productCategory._id, qty: data.qty })
   stock.save()
+
   res.end()
 })
 // post editPage 
 
-exports.editProductCategory = catchAsyncErrors(async (req, res) => {
+exports.getProductCategoryUnit = catchAsyncErrors(async (req, res , next) => {
+    const id = req.params.id
+    if (!mongoose.isValidObjectId(id)) return next(new ErrorHandler('', 404))
+
+    let productCategory = await ProductCategory.findById(id).populate({path:'unit'}).lean()
+    if (!productCategory) return next(new ErrorHandler('', 404))
+
+    let unit = productCategory.unit
+
+    if(unit._id == killogramUnitID){
+      unit.isWeightUnit = true
+    }else{
+      unit.isWeightUnit = false
+    }
+
+    res.json(unit)
+})
+
+exports.editProductCategory = catchAsyncErrors(async (req, res , next) => {
   if (req.access.can(req.user.role).updateAny('program').granted) {
 
     let program = null
@@ -129,6 +145,7 @@ exports.editProductCategory = catchAsyncErrors(async (req, res) => {
   }
 
 })
+
 
 
 
