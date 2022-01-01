@@ -22,5 +22,20 @@ serialNumberSchema.statics.newProduct = async function () {
     return productCounter.counter
 }
 
+serialNumberSchema.statics.newInvoice = async function () {
+    const invoiceCounter = await mongoose.model('SerialNumber').findOne({name:'invoices'})
+    invoiceCounter.counter++
+    await invoiceCounter.save()
+    return invoiceCounter.counter
+}
+
+serialNumberSchema.statics.newOrder = async function () {
+    const orderCounter = await mongoose.model('SerialNumber').findOne({name:'orders'})
+    orderCounter.counter++
+    await orderCounter.save()
+    return orderCounter.counter
+}
+
+
 
 module.exports = mongoose.model('SerialNumber', serialNumberSchema)

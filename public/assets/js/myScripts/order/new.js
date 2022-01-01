@@ -118,7 +118,6 @@ var KTModalOrderAdd = function () {
 
                             submitButton.removeAttribute('data-kt-indicator');
                             submitButton.disabled = false;
-                            window.location = '/order/new'
 
                         })
 
@@ -338,7 +337,6 @@ var KTModalOrderAdd = function () {
                         const index = rowId.split('-')[1]
 
                         orderData.products.splice(index, 1)
-                        console.log(orderData.products);
                         $(`#${rowId}`).remove();
 
                         $('#orderTbody > tr').each(function (index, tr) {

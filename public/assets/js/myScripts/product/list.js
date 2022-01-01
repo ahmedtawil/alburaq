@@ -60,7 +60,7 @@ var KTproductsList = function () {
                     data: 'price',
 
                      render:function (data, type, doc) {
-                         return `<span class="badge badge-light-success fw-bolder my-2">${data || '-'} شيكل</span>`
+                         return `<span class="badge badge-light-success fw-bolder my-2">${(typeof data == 'undefined')? `سعر يدوي` : `${data} شيكل`}</span>`
                      }
                 },
 
@@ -147,7 +147,6 @@ var KTproductsList = function () {
 
         // Reset datatable
         resetButton.addEventListener('click', function () {
-            console.log($(datepicker).val());
             $(datepicker).val('')
             dateQuery = {}
 

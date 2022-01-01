@@ -54,7 +54,26 @@ var KTcustomersList = function () {
                 },
                 {
                     data: 'type', render: function (data, type, doc) {
-                        return (data == 'regular') ? `<span class="badge badge-light fw-bolder my-2">زبون عادي</span>` : `<span class="badge badge-light-warning fw-bolder my-2">زبون جملة</span>`
+                        let span
+                        switch (data) {
+                            case 'public':
+                                span = `<span class="badge badge-light-success fw-bolder my-2">زبون عام</span>`
+
+                                break;
+                            case 'credit':
+                                span = `<span class="badge badge-light-warning fw-bolder my-2">زبون دين</span>`
+
+                                break;
+                            case 'wholesaler':
+                                span = `<span class="badge badge-light-info fw-bolder my-2">زبون جملة</span>`
+
+                                break;
+
+                            default:
+                                span = `<span class="badge badge-light fw-bolder my-2">زبون عام</span>`
+                                break;
+                        }
+                        return span
 
                     }
                 },
@@ -142,7 +161,6 @@ var KTcustomersList = function () {
 
         // Reset datatable
         resetButton.addEventListener('click', function () {
-            console.log($(datepicker).val());
             $(datepicker).val('')
             dateQuery = {}
 

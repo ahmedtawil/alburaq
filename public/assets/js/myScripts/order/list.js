@@ -3,7 +3,7 @@ let tableQuery = {
 
 }
 // Class definition
-var KTunitsList = function () {
+var KTOrdersList = function () {
     // Define shared variables
     var datatable;
     var filterMonth;
@@ -16,7 +16,7 @@ var KTunitsList = function () {
     }
 
     // Private functions
-    var initunitList = function () {
+    var initordersList = function () {
         // Set date data order
         const tableRows = table.querySelectorAll('tbody tr');
 
@@ -34,8 +34,8 @@ var KTunitsList = function () {
 
 
             "ajax": {
-                url: "/unit/data/get",
-                "dataSrc": 'units',
+                url: "/orders/data/get",
+                "dataSrc": 'orders',
                 "dataFilter": function (res) {
                     dataRes = JSON.parse(res)
                     return res
@@ -44,12 +44,79 @@ var KTunitsList = function () {
 
 
             columns: [
-                { data: 'title' },
-                { data: 'smallTitle' },
+                { data: 'serialNumber' },
                 {
-                    data: 'weight',
+                    data: 'customer',
+
+                    render: function (data, type, doc) {
+                        let span
+                        const customerType = (typeof data == 'undefined') ? 'public' : data.type
+                        switch (customerType) {
+                            case 'public':
+                                span = `<span class="badge badge-light-success fw-bolder my-2">زبون عام</span>`
+
+                                break;
+                            case 'credit':
+                                span = `<span class="badge badge-light-warning fw-bolder my-2">${data.name}</span>`
+
+                                break;
+                            case 'wholesaler':
+                                span = `<span class="badge badge-light-info fw-bolder my-2">${data.name}</span>`
+
+                                break;
+
+                            default:
+                                span = `<span class="badge badge-light fw-bolder my-2">زبون عام</span>`
+                                break;
+                        }
+                        return span
+                    }
                 },
-                
+                {
+                    data: 'products.length',
+                },
+                 {
+                    data: 'totalProductsPrice',
+                    render: function (data, type, doc) {
+                        return `${data} شيكل`
+
+                    }
+
+                },
+                {
+                    data: 'discount',
+                    render: function (data, type, doc) {
+                        return `<span class="badge badge-light-${(data > 0) ?'success' : 'danger'} fw-bolder my-2">${(data > 0) ? `${data} شيكل` : 'لا يوجد'}</span>`
+
+                    }
+
+                },
+
+                {
+                    data: 'totalPrice',
+                    render: function (data, type, doc) {
+                        return `${data} شيكل`
+
+                    }
+
+                },
+                {
+                    data: 'paidAmount',
+                    render: function (data, type, doc) {
+                        return `${data} شيكل`
+
+                    }
+
+                },
+                {
+                    data: 'moneyBack',
+                    render: function (data, type, doc) {
+                        return `${data} شيكل`
+
+                    }
+
+                },
+
                 {
                     data: '',
                     render: function (data, type, doc) {
@@ -96,7 +163,7 @@ var KTunitsList = function () {
 
     // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
     var handleSearchDatatable = () => {
-        const filterSearch = document.querySelector('[data-kt-unit-table-filter="search"]');
+        const filterSearch = document.querySelector('[data-kt-orders-table-filter="search"]');
         filterSearch.addEventListener('keyup', function (e) {
             tableQuery.search = e.target.value
             datatable.search(JSON.stringify(tableQuery)).draw();
@@ -105,9 +172,9 @@ var KTunitsList = function () {
     // Filter Datatable
     var handleFilter = function () {
         // Select filter options
-        const filterForm = document.querySelector('[data-kt-unit-table-filter="form"]');
-        const filterButton = filterForm.querySelector('[data-kt-unit-table-filter="filter"]');
-        const resetButton = filterForm.querySelector('[data-kt-unit-table-filter="reset"]');
+        const filterForm = document.querySelector('[data-kt-orders-table-filter="form"]');
+        const filterButton = filterForm.querySelector('[data-kt-orders-table-filter="filter"]');
+        const resetButton = filterForm.querySelector('[data-kt-orders-table-filter="reset"]');
         const selectOptions = filterForm.querySelectorAll('select');
         const datepicker = filterForm.querySelector("[name=date]");
 
@@ -132,7 +199,6 @@ var KTunitsList = function () {
 
         // Reset datatable
         resetButton.addEventListener('click', function () {
-            console.log($(datepicker).val());
             $(datepicker).val('')
             dateQuery = {}
 
@@ -201,10 +267,10 @@ var KTunitsList = function () {
     $(document).on('click', 'body .dropdown-menu', function (e) {
         e.stopPropagation();
     });
-    // Delete unit
+    // Delete orders
     var handleDeleteRows = () => {
         // Select all delete buttons
-        const deleteButtons = table.querySelectorAll('[data-kt-unit-table-filter="delete_row"]');
+        const deleteButtons = table.querySelectorAll('[data-kt-orders-table-filter="delete_row"]');
 
         deleteButtons.forEach(d => {
             // Delete button on click
@@ -214,12 +280,12 @@ var KTunitsList = function () {
                 // Select parent row
                 const parent = e.target.closest('tr');
 
-                // Get unit name
-                const unitName = parent.querySelectorAll('td')[1].innerText;
+                // Get orders name
+                const ordersName = parent.querySelectorAll('td')[1].innerText;
 
                 // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                 Swal.fire({
-                    text: "Are you sure you want to delete " + unitName + "?",
+                    text: "Are you sure you want to delete " + ordersName + "?",
                     icon: "warning",
                     showCancelButton: true,
                     buttonsStyling: false,
@@ -232,7 +298,7 @@ var KTunitsList = function () {
                 }).then(function (result) {
                     if (result.value) {
                         Swal.fire({
-                            text: "You have deleted " + unitName + "!.",
+                            text: "You have deleted " + ordersName + "!.",
                             icon: "success",
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
@@ -245,7 +311,7 @@ var KTunitsList = function () {
                         });
                     } else if (result.dismiss === 'cancel') {
                         Swal.fire({
-                            text: unitName + " was not deleted.",
+                            text: ordersName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
@@ -267,14 +333,14 @@ var KTunitsList = function () {
 
 
         init: function () {
-            table = document.querySelector('#kt_units_table');
+            table = document.querySelector('#kt_orders_table');
 
 
             if (!table) {
                 return;
             }
 
-            initunitList();
+            initordersList();
             handleSearchDatatable();
             handleDeleteRows();
             handleFilter();
@@ -286,6 +352,6 @@ var KTunitsList = function () {
 
 // On document ready
 KTUtil.onDOMContentLoaded(function () {
-    KTunitsList.init();
+    KTOrdersList.init();
 
 });

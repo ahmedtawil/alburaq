@@ -8,6 +8,7 @@ const { killogramUnitID } = require('../../configs/constants')
 
 const ErrorHandler = require('../../utils/errorHandler');
 const catchAsyncErrors = require('../../middlewares/catchAsyncErrors');
+const Invoice = require('../../models/Invoice')
 
 exports.newOrderPage = catchAsyncErrors(async (req, res, next) => {
   const customers = await Customer.find()
@@ -16,16 +17,68 @@ exports.newOrderPage = catchAsyncErrors(async (req, res, next) => {
   res.render('order/cpanel', { customers, products, killogramUnitID })
 })
 
-exports.newOrder = catchAsyncErrors(async (req, res) => {
-  console.log(JSON.parse(req.body.payload));
+exports.getOrdersPage = catchAsyncErrors(async (req, res, next) => {
+  res.render('order/list')
+})
+exports.getTodayOrdersPage = catchAsyncErrors(async (req, res, next) => {
+  res.render('order/todayList')
+})
 
-  const newOrder = new Order(JSON.parse(req.body.payload))
+exports.getOrdersData = catchAsyncErrors(async (req, res) => {
+  const query = req.query
+
+  const queryValue = (req.query.search.value == '') ? {} : JSON.parse(query.search.value)
+  let queryObj = {}
+
+  if (queryValue.filter) {
+    queryObj.$and = [queryValue.filter]
+  }
+
+  if (queryValue.search) {
+    let val = queryValue.search
+    const qu = {
+      $regex: val,
+      $options: 'i'
+    }
+    const customersIDs = await Customer.find({name:qu} , {_id:1})
+    const searchQuery = { $or: [{ serialNumber: qu }, { customer: {$in:customersIDs} }] }
+    if (queryValue.filter) {
+      queryObj.$and.push(searchQuery)
+    } else {
+      queryObj = searchQuery
+    }
+  }
+
+  const ordersCount = await Order.estimatedDocumentCount()
+  const ordersFillterCount = await Order.find(queryObj).countDocuments()
+  const orders = await Order.find(queryObj).sort({createdAt:-1}).limit(parseInt(query.length)).skip(parseInt(query.start)).populate({ path: 'customer'})
+
+  return res.json({
+    recordsTotal: ordersCount,
+    recordsFiltered: ordersFillterCount,
+    orders
+  })
+
+
+})
+
+
+
+
+exports.newOrder = catchAsyncErrors(async (req, res) => {
+  const data = JSON.parse(req.body.payload)
+  let customerID = data.customer
+  if (customerID == 'public') {
+    const publicCustomer = await Customer.findOne({type:customerID})
+    data.customer = publicCustomer._id
+  }
+
+  const newOrder = new Order(data)
 
   const order = await newOrder.populate({ path: 'productsData', populate: { path: "productCategory", populate: { path: 'unit' } } })
   const { products } = order
   const populatedProducts = order.productsData
   /*
-   console.log(populatedProducts);
    return res.end()
 */
   const promises = products.map(async (product, productIndex) => {
@@ -42,19 +95,39 @@ exports.newOrder = catchAsyncErrors(async (req, res) => {
       const ratioPerUnit = orginProduct.ratioPerUnit
       qtyToMin = (qty * ratioPerUnit) / unitWeight
     }
-    console.log(productCategory);
-    const productCategoryInStock = await Stock.findOne({productCategory})
-    console.log(productCategoryInStock);
+    const productCategoryInStock = await Stock.findOne({ productCategory })
     productCategoryInStock.qty -= qtyToMin
     return productCategoryInStock.save()
   })
-  Promise.all(promises).then(async result=>{
-    if(newOrder.customer != 'regular' && (newOrder.paidAmount < newOrder.totalPrice)){
-      const customer = await Customer.findById(newOrder.customer)
-      customer.debt+=Math.abs(newOrder.totalPrice - newOrder.paidAmount)
-      customer.save()
-    }
+
+  Promise.all(promises).then(async result => {
+
+
+
     newOrder.save()
+    const invoiceData = {
+      InvoiceType: 'Order',
+      data: newOrder._id,
+      forType: 'Customer',
+      for:newOrder._id,
+      amount: newOrder.totalPrice,
+    }
+    if (customerID !== 'public') {
+      customer = await Customer.findById(newOrder.customer)
+      const debit = newOrder.totalPrice - newOrder.paidAmount
+      invoiceData.for = customer._id
+      invoiceData.oldBalance = customer.debt
+      if (debit < 0) {
+        invoiceData.newBalance = invoiceData.oldBalance
+      } else {
+        invoiceData.newBalance = invoiceData.oldBalance + debit
+        customer.debt = invoiceData.newBalance
+        await customer.save()
+      }
+    }
+    const invoice = new Invoice(invoiceData)
+    await invoice.save()
+
     res.end()
 
   })

@@ -1,8 +1,13 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose;
+const SerialNumber = require('./serialNumber')
 const orderSchema = new Schema({
-    customer: { type: Schema.Types.ObjectId, ref: 'Customer' , required:true }
-    ,
+    customer: { type: Schema.Types.ObjectId, ref: 'Customer' },
+    serialNumber:{
+        type:String
+    },
+
+  
     products: [{
         _id: { type: Schema.Types.ObjectId, ref: 'Product' },
         name: {
@@ -54,6 +59,16 @@ const orderSchema = new Schema({
 
     
 })
+orderSchema.pre('save', async function (next) {
+    if(!this.serialNumber){
+        if (this.isNew) {
+            const counter = await SerialNumber.newOrder()
+            this.serialNumber = counter
+        }
+    }
+    next()
+})
+
 orderSchema.virtual('productsData',{
     ref: 'Product',
     localField: 'products._id',

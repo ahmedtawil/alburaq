@@ -90,12 +90,7 @@
                                     <!--begin::Modal body-->
                                     <div class="modal-body py-3 px-lg-10" id="kt">
                                         <!--begin::Scroll-->
-                                        <div class="scroll-y me-n7 pe-7" id="kt_modal_add_order_scroll"
-                                            data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
-                                            data-kt-scroll-max-height="auto"
-                                            data-kt-scroll-dependencies="#kt_modal_add_order_header"
-                                            data-kt-scroll-wrappers="#kt_modal_add_order_scroll"
-                                            data-kt-scroll-offset="300px" style="max-height: 647px;">
+                                        <div class=" me-n7 pe-7" >
 
 
                                             <div id="select" class="fv-row mb-7 fv-plugins-icon-container">
@@ -106,11 +101,17 @@
                                                 <select name="customer" aria-label="اختار الزبون" data-control="select2"
                                                     id="type2" data-placeholder="نوع الزبون"
                                                     class="form-select form-select-solid fw-bolder">
-                                                    <option value="regular" selected>زبون عام</option>
                                                     <% customers.forEach(customer=> { %>
-                                                        <option value="<%= customer._id  %>">
-                                                            <%= customer.name %>
-                                                        </option>
+                                                        <% if (customer.type == 'public') { %>
+                                                            <option selected value="public">
+                                                                <%= customer.name %>
+                                                            </option>
+                                                            <% } else { %>
+                                                                <option value="<%= customer._id  %>">
+                                                                    <%= customer.name %>
+                                                                </option>
+                                                        <% } %>
+                                                       
 
                                                         <% }) %>
                                                 </select>
@@ -191,7 +192,13 @@
                                                 </div>
                                                                                                 
                                             </div>
-                                            <div id="table">
+                                            <div class="scroll-y" id="table"
+                                            id="kt_modal_add_order_scroll"
+                                            data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
+                                            data-kt-scroll-max-height="auto"
+                                            data-kt-scroll-dependencies="#kt_modal_add_order_header"
+                                            data-kt-scroll-wrappers="#kt_modal_add_order_scroll"
+                                            data-kt-scroll-offset="300px" style="max-height: 647px;">
                                                 <!--begin::Table-->
                                                 <table class="text-center table align-middle table-row-dashed fs-6 gy-5"
                                                     id="order_table">

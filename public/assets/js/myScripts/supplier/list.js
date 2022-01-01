@@ -132,7 +132,6 @@ var KTsuppliersList = function () {
 
         // Reset datatable
         resetButton.addEventListener('click', function () {
-            console.log($(datepicker).val());
             $(datepicker).val('')
             dateQuery = {}
 

@@ -37,7 +37,7 @@ const customerSchema = new Schema({
     type:{
         type:String,
         required: [true, 'نوع الزبون مطلوب.'],
-        enum:['regular' , 'wholesaler']
+        enum:['public' , 'wholesaler' , 'credit']
 
     },
     phoneNumber: {
