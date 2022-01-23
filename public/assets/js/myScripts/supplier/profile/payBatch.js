@@ -1,6 +1,7 @@
 "use strict";
 // Class definition
-var KTModalProductCategoryAdd = function () {
+
+var KTModalPayBatch = function () {
     var submitButton;
     var cancelButton;
     var closeButton;
@@ -8,111 +9,18 @@ var KTModalProductCategoryAdd = function () {
     var form;
     var modal;
 
-    let isWeightUnit = false
-    let internalProductSerialNumber = false
-
-
     // Init form inputs
     var handleForm = function () {
         // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-    
-        const checkIfProductSerialNumberRequired = function () {
-            return {
-                validate: function (input) {
-                    const value = input.value;
-                    if(!addProduct){
-                        return {
-                            valid: true,
-                        };
-                    }else if (internalProductSerialNumber) {
-                        return {
-                            valid: true,
-                        };
-                    } else if (value.length > 0){
-                        return {
-                            valid: true,
-                        };
-                    }else{
-                        return {
-                            valid: false,
-                        };
-                    }     
-                },
-            };
-        };
-
-        const checkIfProductSellingPriceRequired = function () {
-            return {
-                validate: function (input) {
-                    const value = input.value;
-                    if(!addProduct){
-                        return {
-                            valid: true,
-                        };
-                    }else if (isWeightUnit) {
-                        return {
-                            valid: true,
-                        };
-                    } else if (value.length > 0){
-                        return {
-                            valid: true,
-                        };
-                    }else{
-                        return {
-                            valid: false,
-                        };
-                    }     
-                },
-            };
-        };
-
-
-        FormValidation.validators.checkIfProductSerialNumberRequired = checkIfProductSerialNumberRequired;
-        FormValidation.validators.checkIfProductSellingPriceRequired = checkIfProductSellingPriceRequired;
-
-
         validator = FormValidation.formValidation(
             form,
             {
                 fields: {
-                    'name': {
+                    'amount': {
                         validators: {
                             notEmpty: {
-                                message: 'اسم المنتج مطلوب'
+                                message: 'قيمة الدفعة مطلوبة'
                             }
-                        }
-                    },
-                    'productCategory': {
-                        validators: {
-                            notEmpty: {
-                                message:'اسم الصنف مطلوب.'
-                            }
-
-                        }
-                    },
-                    'productSerialNumber': {
-                        validators: {
-                            checkIfProductCategorySerialNumberRequired: {
-                                message: 'السيريال نمبر للصنف مطلوب.'
-                            }
-
-                        }
-                    },
-                    'ratioPerUnit': {
-                        validators: {
-                            notEmpty: {
-                                message:'القيمة الوزنية للمنتج بالنسبة للوحدة مطلوب.'
-                            }
-
-                        }
-                    }
-                    ,
-                    'price': {
-                        validators: {
-                            notEmpty: {
-                                message: 'سعر البيع للمنتج مطلوب.'
-                            }
-
                         }
                     }
                 },
@@ -148,25 +56,22 @@ var KTModalProductCategoryAdd = function () {
                         // Disable submit button whilst loading
                         submitButton.disabled = true;
                         const payload = {
-                            name: $("input[name=name]").val(),
-                            productCategory: $("select[name=productCategory]").val(),
-                            productSerialNumber: $("input[name=productSerialNumber]").val(),
-
-                            ratioPerUnit: $("input[name=ratioPerUnit]").val(),
-                            price:$("input[name=price]").val(),
-
-                            configs:{
-                                internalProductSerialNumber,
-                                isWeightUnit
-                            }
-
+                            for: supplierID,
+                            forType:'Supplier',
+                            InvoiceType:'batch',
+                            ObjType:'Import',
+                      
+                            amount: $("input[name=batch_amount]").val()
                         }
 
-                        $.post('/product/new', {payload:JSON.stringify(payload)}).then(recipientID => {
+
+
+
+                        $.post('/invoice/new', payload).then(recipientID => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
-                                text: "تم إضافة المنتج بنجاح!",
+                                text: "تم تسديد الدفعة بنجاح!",
                                 icon: "success",
                                 buttonsStyling: false,
                                 confirmButtonText: "حسنا",
@@ -180,11 +85,13 @@ var KTModalProductCategoryAdd = function () {
 
                                     // Enable submit button after loading
                                     submitButton.disabled = false;
-                                    window.location = '/products/page/get'
+
+                                    // Redirect to suppliers list page
+                                    window.location.reload();
 
                                 }
                             })
-                        }).catch(err => {
+                        }).catch((err) => {
                             Swal.fire({
                                 text: errDisplay(err),
                                 icon: "error",
@@ -197,6 +104,7 @@ var KTModalProductCategoryAdd = function () {
 
                             submitButton.removeAttribute('data-kt-indicator');
                             submitButton.disabled = false;
+
                         })
 
                     } else {
@@ -210,6 +118,8 @@ var KTModalProductCategoryAdd = function () {
                             }
                         });
                         submitButton.removeAttribute('data-kt-indicator');
+                        submitButton.disabled = false;
+
 
                     }
                 });
@@ -234,7 +144,6 @@ var KTModalProductCategoryAdd = function () {
                 if (result.value) {
                     form.reset(); // Reset form	
                     modal.hide(); // Hide modal	
-                    window.location = `/products/page/get`
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: "لم يتم إلغاء نموذج الإضافة!",
@@ -245,6 +154,8 @@ var KTModalProductCategoryAdd = function () {
                             confirmButton: "btn btn-primary",
                         }
                     });
+                    submitButton.disabled = false;
+
                 }
             });
         });
@@ -267,7 +178,7 @@ var KTModalProductCategoryAdd = function () {
                 if (result.value) {
                     form.reset(); // Reset form	
                     modal.hide(); // Hide modal	
-                    window.location = `/products/page/get`
+                    window.location = `/recipient/new`
 
 
                 } else if (result.dismiss === 'cancel') {
@@ -283,61 +194,18 @@ var KTModalProductCategoryAdd = function () {
                 }
             });
         })
-
-      
-       
-
-        $('#productSerialNumberBtn').on('change', function (e) {
-            if (this.checked) {
-                $('#productSerialNumberBlock').addClass('d-none')
-                internalProductSerialNumber = true
-            } else {
-                $('#productSerialNumberBlock').removeClass('d-none')
-                internalProductSerialNumber = true
-            }
-        })
-
-        $('#addProduct').on('click',async function (e) {
-            const productCategoryLabel = $('#productCategoryUnitSmallTitle')
-            const getProductCategoryUnit = async (productCategoryID)=>{
-                const res = await fetch(`/productCategory/unit/get/${productCategoryID}`)
-                return  await res.json()
-            }
-            const unit = await getProductCategoryUnit($('#productCategory').find('option:selected').val())
-
-            productCategoryLabel.text(unit.smallTitle)
-
-
-
-
-            $('#productCategory').on('change',async function (e) {
-                const selectedProductCategoryID  = $(this).find('option:selected').val()
-                const unit = await getProductCategoryUnit(selectedProductCategoryID)
-
-                productCategoryLabel.text(unit.smallTitle)
-            })
-    
-        })
-
-
-
-
-
-
-
     }
 
     return {
         // Public functions
         init: function () {
             // Elements
-            modal = new bootstrap.Modal(document.querySelector('#kt_modal_add_product'));
+            modal = new bootstrap.Modal(document.querySelector('#kt_modal_pay_batch'));
 
-            form = document.querySelector('#kt_modal_add_product_form');
-            submitButton = form.querySelector('#kt_modal_add_product_submit');
-            cancelButton = form.querySelector('#kt_modal_add_product_cancel');
-            closeButton = form.querySelector('#kt_modal_add_product_close');
-
+            form = document.querySelector('#kt_modal_pay_batch_form');
+            submitButton = form.querySelector('#kt_modal_pay_batch_submit');
+            cancelButton = form.querySelector('#kt_modal_pay_batch_cancel');
+            closeButton = form.querySelector('#kt_modal_pay_batch_close');
 
 
             handleForm();
@@ -349,9 +217,28 @@ var KTModalProductCategoryAdd = function () {
 
 
 
+const checkValidFormalID = function () {
+    return {
+        validate: function (input) {
+            const value = input.value;
+            if (!isNaN(Number(value)) && value.length == 9 && value.indexOf('0') !== 0) {
+                return {
+                    valid: true,
+                };
+
+
+            }
+            return {
+                valid: false,
+            };
+
+        },
+    };
+};
+
+
+
 // On document ready
 KTUtil.onDOMContentLoaded(function () {
-
-    KTModalProductCategoryAdd.init();
+    KTModalPayBatch.init();
 });
-

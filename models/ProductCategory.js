@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose;
 const SerialNumber = require('./serialNumber')
+const moment = require('moment')
 
 const productCategorySchema = new Schema({
     serialNumber:{
@@ -23,7 +24,12 @@ const productCategorySchema = new Schema({
         required: [true, 'سعر البيع مطلوب.'],
     }
     ,
-    supplier: { type: Schema.Types.ObjectId, ref: 'Supplier', required: [true , 'اسم المزود مطلوب'] }
+    supplier: { type: Schema.Types.ObjectId, ref: 'Supplier', required: [true , 'اسم المزود مطلوب'] },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+
    
   
   

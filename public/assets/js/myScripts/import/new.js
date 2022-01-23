@@ -6,9 +6,9 @@ var KTModalOrderAdd = function () {
     var closeButton;
     var validator;
     var form;
-    const orderData = {
-        products: [],
-        totalProductsPrice: 0,
+    const importData = {
+        productCategories: [],
+        totalProductCategoriesPrice: 0,
         discount: 0,
         paidAmount: 0,
         totalPrice: 0,
@@ -74,15 +74,15 @@ var KTModalOrderAdd = function () {
                         // Disable submit button whilst loading
                         submitButton.disabled = true;
                         const payload = {
-                            customer: $('select[name="customer"]').val(),
-                            ...orderData
+                            supplier: $('select[name="supplier"]').val(),
+                            ...importData
                         }
 
-                        $.post('/order/new', { payload: JSON.stringify(payload) }).then(recipientID => {
+                        $.post('/import/new', { payload: JSON.stringify(payload) }).then(recipientID => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
-                                text: "تم إضافة الطلبية بنجاح!",
+                                text: "تم إضافة التوريد بنجاح!",
                                 icon: "success",
                                 buttonsStyling: false,
                                 confirmButtonText: "حسنا",
@@ -95,7 +95,7 @@ var KTModalOrderAdd = function () {
 
                                     // Enable submit button after loading
                                     submitButton.disabled = false;
-                                    window.location = '/order/new'
+                                    window.location = '/import/new'
 
                                 }
                             })
@@ -168,50 +168,44 @@ var KTModalOrderAdd = function () {
 
         const updateRow = (index) => {
             const row = $(`#item-${index}`)
-            const product = orderData.products[index]
-            $(`#${product._id}`).val(product.qty)
-            row.find('td').eq(2).html(product.price)
-            row.find('td').eq(3).html(product.Totalprice)
-            updateOrderResults()
+            const productCategory = importData.productCategories[index]
+            $(`#qty-${productCategory._id}`).val(productCategory.qty)
+            $(`#costPrice-${productCategory._id}`).val(productCategory.costPrice)
+            $(`#sellingPrice-${productCategory._id}`).val(productCategory.sellingPrice)
+            row.find('td').eq(4).html(productCategory.totalPrice)
+            updateImportResult()
         }
 
 
-        const addProduct = (product) => {
-            const existIndex = orderData.products.findIndex(prod => prod._id == product._id)
+        const addProductCategory = (productCategory) => {
+            const existIndex = importData.productCategories.findIndex(prod => prod._id == productCategory._id)
             if (existIndex >= 0) {
-                if (typeof product.price == 'undefined') {
-                    return
-                }
-                orderData.products[existIndex].qty++
-                orderData.products[existIndex].Totalprice += product.price
+                importData.productCategories[existIndex].qty++
+                importData.productCategories[existIndex].totalPrice += productCategory.costPrice 
                 updateRow(existIndex)
                 return
             }
-            const newProduct = {
-                _id: product._id,
-                name: product.name,
+            const newProductCategory = {
+                _id: productCategory._id,
+                name: `${productCategory.name} - ${productCategory.unit.title}`,
                 qty: 1,
-                price: product.price || 0,
-                Totalprice: product.price || 0,
-                manualPrice: false
-
+                costPrice: productCategory.costPrice,
+                sellingPrice:productCategory.sellingPrice,
+                totalPrice: productCategory.costPrice,
             }
-            if (newProduct.price == 0) {
-                newProduct.price = 1
-                newProduct.Totalprice = 1
-                newProduct.manualPrice = true
-            }
-            orderData.products.push(newProduct)
-            updateOrderResults()
+            
+            importData.productCategories.push(newProductCategory)
+            updateImportResult()
 
             const tr = document.createElement('tr')
-            tr.setAttribute("id", `item-${orderData.products.indexOf(newProduct)}`);
+            tr.setAttribute("id", `item-${importData.productCategories.indexOf(newProductCategory)}`);
 
             tr.innerHTML = `
-            <td>${newProduct.name}</td>
-            <td>${(newProduct.manualPrice != true) ? `<input type="number" class="form-control form-control-solid productQty" id="${newProduct._id}" value="${newProduct.qty}" min="1">` : `-`}</td>
-            <td>${(newProduct.manualPrice != true) ? newProduct.price : `<input type="number" class="form-control form-control-solid weightProduct" id="${newProduct._id}" value="1" min="1">`}</td>
-            <td>${(newProduct.manualPrice != true) ? newProduct.Totalprice : 1}</td>
+            <td>${newProductCategory.name}</td>
+            <td><input type="number" class="form-control form-control-solid productCategoryQty" id="qty-${newProductCategory._id}" value="${newProductCategory.qty}" min="1"></td>
+            <td><input type="number" class="form-control form-control-solid productCategoryCostPrice" id="costPrice-${newProductCategory._id}" value="${newProductCategory.costPrice}" min="1"></td>
+            <td><input type="number" class="form-control form-control-solid productCategorySellingPrice" id="sellingPrice-${newProductCategory._id}" value="${newProductCategory.sellingPrice}" min="1"></td>
+            <td>${newProductCategory.totalPrice}</td>
             <td><button type="button" class="btn btn-icon btn-flex btn-active-light-primary w-30px h-30px me-3 add_delete_row" >
             <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
             <span class="svg-icon svg-icon-3">
@@ -223,69 +217,72 @@ var KTModalOrderAdd = function () {
             </span>
             <!--end::Svg Icon-->
             </button></td>`
-            form.querySelector('#orderTbody').appendChild(tr);
+            form.querySelector('#import_tbody').appendChild(tr);
 
 
-            $('.productQty').on('change keyup', async function (event) {
+            $('.productCategoryQty').on('change keyup', async function (event) { 
                 const val = $(this).val().trim()
-                const id = $(this).attr("id")
-                const productIndex = orderData.products.findIndex(product => product._id == id)
-                orderData.products[productIndex].qty = val
-                orderData.products[productIndex].Totalprice = orderData.products[productIndex].qty * orderData.products[productIndex].price
-                updateRow(productIndex)
+                const id = $(this).attr("id").split('-')[1]
+                const productCategoryIndex = importData.productCategories.findIndex(productCategory => productCategory._id == id)
+                importData.productCategories[productCategoryIndex].qty = Number(val)
+                importData.productCategories[productCategoryIndex].totalPrice = importData.productCategories[productCategoryIndex].qty * importData.productCategories[productCategoryIndex].costPrice
+                updateRow(productCategoryIndex)
             })
 
-            $('.weightProduct').on('change keyup', async function (e) {
+            $('.productCategoryCostPrice').on('change keyup', async function (event) {
                 const val = $(this).val().trim()
-                const id = $(this).attr("id")
-                const res = await fetch(`/product/productCategory/${id}/get`)
-                const { product } = await res.json()
-                const productIndex = orderData.products.findIndex(product => product._id == id)
-                orderData.products[productIndex].qty = 1
-                orderData.products[productIndex].price = val
-                orderData.products[productIndex].Totalprice = orderData.products[productIndex].qty * val
-                const row = $(e.target.closest('tr'));
-
-                row.find('td').eq(3).html(orderData.products[productIndex].Totalprice)
-                updateOrderResults()
+                const id = $(this).attr("id").split('-')[1]
+                const productCategoryIndex = importData.productCategories.findIndex(productCategory => productCategory._id == id)
+                importData.productCategories[productCategoryIndex].costPrice = Number(val)
+                importData.productCategories[productCategoryIndex].totalPrice = importData.productCategories[productCategoryIndex].qty * val
+                updateRow(productCategoryIndex)
             })
+
+            $('.productCategorySellingPrice').on('change keyup', async function (event) {
+                const val = $(this).val().trim()
+                const id = $(this).attr("id").split('-')[1]
+                const productCategoryIndex = importData.productCategories.findIndex(productCategory => productCategory._id == id)
+                importData.productCategories[productCategoryIndex].sellingPrice = Number(val)
+            })
+
+          
             deleteCustomField()
 
         }
 
         const getProuctBySerialNumber = async (serialNumber = 00000000) => {
-            const res = await fetch(`/product/get?serialNumber=${serialNumber}`)
+            const res = await fetch(`/productCategory/get?serialNumber=${serialNumber}`) 
             const data = await res.json()
-            return data.product
+            return data.productCategory
         }
 
-        $('#productSerialNumber').on('keyup', async function (event) {
+        $('#productCategorySerialNumber').on('keyup', async function (event) {
             if (event.which === 13) {
                 event.preventDefault();
                 const val = $(this).val().trim()
-                const product = await getProuctBySerialNumber(val)
-                if (!product) {
+                const productCategory = await getProuctBySerialNumber(val)
+                if (!productCategory) {
                     return
                 }
-                addProduct(product)
+                addProductCategory(productCategory)
                 $(this).val('')
             }
 
         })
-        $('#products').on('change', async function (event) {
+        $('#productCategories').on('change', async function (event) {
             const val = $(this).val().trim()
-            const product = await getProuctBySerialNumber(val)
-            if (!product) {
+            const productCategory = await getProuctBySerialNumber(val)
+            if (!productCategory) {
                 return
             }
-            addProduct(product)
+            addProductCategory(productCategory)
             $(this).val('')
         })
 
 
 
     }
-    // Delete product
+    // Delete productCategory
     var deleteCustomField = function () {
 
         $('.add_delete_row').on('click', function (e) {
@@ -322,13 +319,13 @@ var KTModalOrderAdd = function () {
                         const rowId = $(row).attr("id")
                         const index = rowId.split('-')[1]
 
-                        orderData.products.splice(index, 1)
+                        importData.productCategories.splice(index, 1)
                         $(`#${rowId}`).remove();
 
                         $('#orderTbody > tr').each(function (index, tr) {
                             $(this).attr("id", `item-${index}`)
                         });
-                        updateOrderResults()
+                        updateImportResult()
 
                     });
                 } else if (result.dismiss === 'cancel') {
@@ -347,54 +344,53 @@ var KTModalOrderAdd = function () {
 
     }
 
-    const updateOrderResults = () => {
-        const totalProductsPrice = claTotalProductsPrice()
-        orderData.totalProductsPrice = totalProductsPrice
-        $('#new_total_price_result').html(`${totalProductsPrice} شيكل`)
+    const updateImportResult = () => {
+        const totalProductCategoriesPrice = claTotalProductCategoriesPrice()
+        importData.totalProductCategoriesPrice = totalProductCategoriesPrice
+        $('#new_total_price_result').html(`${totalProductCategoriesPrice} شيكل`)
 
-        const discount = orderData.discount
+        const discount = importData.discount
         $('#new_discount_amount_result').html(`${discount} شيكل`)
 
 
-        const paid_amount = orderData.paidAmount
+        const paid_amount = importData.paidAmount
         $('#new_paid_amount_result').html(`${paid_amount} شيكل`)
 
 
 
-        const totalAmount = totalProductsPrice - discount
-        orderData.totalPrice = totalAmount
+        const totalAmount = totalProductCategoriesPrice - discount
+        importData.totalPrice = totalAmount
         $('#new_total_amount_result').html(`${totalAmount} شيكل`)
 
         const paid_amount_back = paid_amount - totalAmount
-        orderData.moneyBack = paid_amount_back
+        importData.moneyBack = paid_amount_back
         $('#new_paid_amount_back_result').html(`${paid_amount_back} شيكل`)
     }
 
-    const claTotalProductsPrice = () => {
-        const total = orderData.products.reduce((acc, product) => acc + product.Totalprice, 0)
+    const claTotalProductCategoriesPrice = () => {
+        const total = importData.productCategories.reduce((acc, productCategory) => acc + productCategory.totalPrice, 0)
         return total
     }
 
     $('#new_discount').on('change keyup', function (e) {
         const val = $(this).val().trim()
-        orderData.discount = val
-        updateOrderResults()
+        importData.discount = val
+        updateImportResult()
     })
 
     $('#new_paid_amount').on('change keyup', function (e) {
         const val = $(this).val().trim()
-        orderData.paidAmount = val
-        orderData.moneyBack = orderData.totalPrice - orderData.paidAmount
-        updateOrderResults()
+        importData.paidAmount = val
+        importData.moneyBack = importData.totalPrice - importData.paidAmount
+        updateImportResult()
     })
 
     const checkValidPaidAmount = function () {
         return {
             validate: function (input) {
                 const value = input.value;
-                const customer = $('select[name="customer"]').val()
 
-                if (customer !== 'public' && value > orderData.totalPrice) {
+                if ( value > importData.totalPrice) {
                     return {
                         valid: false,
                     };
@@ -413,9 +409,8 @@ var KTModalOrderAdd = function () {
         return {
             validate: function (input) {
                 const value = input.value;
-                const customer = $('select[name="customer"]').val()
 
-                if (value > orderData.totalProductsPrice) {
+                if (value > importData.totalProductCategoriesPrice) {
                     return {
                         valid: false,
                     };
@@ -437,9 +432,9 @@ var KTModalOrderAdd = function () {
         init: function () {
             // Elements
 
-            form = document.querySelector('#kt_modal_add_order_form');
-            submitButton = form.querySelector('#kt_modal_add_order_submit');
-            cancelButton = form.querySelector('#kt_modal_add_order_cancel');
+            form = document.querySelector('#kt_modal_add_import_form');
+            submitButton = form.querySelector('#kt_modal_add_import_submit');
+            cancelButton = form.querySelector('#kt_modal_add_import_cancel');
 
 
 
@@ -453,7 +448,7 @@ var KTModalOrderAdd = function () {
 
 
 $(document).ready(function () {
-    $('#productSerialNumber').focus()
+    $('#productCategorySerialNumber').focus()
     $(window).keydown(function (event) {
         if (event.keyCode == 13) {
             event.preventDefault();

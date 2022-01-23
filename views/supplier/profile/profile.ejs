@@ -7,7 +7,7 @@
             <!--begin::Page title-->
             <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">الزبائن
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">الموردين
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
@@ -28,7 +28,7 @@
 <!--end::Toolbar-->
 
 <!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content" root-customer-id="<%= customer._id %>">
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content" root-supplier-id="<%= supplier._id %>">
     <!--begin::Container-->
     <div id="kt_content_container" class="container-xxl">
         <!--begin::Layout-->
@@ -48,13 +48,11 @@
                             <!--end::Avatar-->
                             <!--begin::Name-->
                             <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bolder mb-1">
-                                <%= customer.name %>
+                                <%= supplier.name %>
                             </a>
                             <!--end::Name-->
                             <!--begin::Position-->
-                            <div class="fs-5 fw-bold text-muted mb-6">
-                                <%= (customer.type=='wholesaler' ) ? 'زبون جملة' : 'زبون عادي' %>
-                            </div>
+                            <div class="fs-5 fw-bold text-muted mb-6">تاجر</div>
                             <!--end::Position-->
                             <!--begin::Info-->
                             <div class="d-flex flex-wrap flex-center">
@@ -80,8 +78,8 @@
                                 <!--end::Stats-->
                                 <!--begin::Stats-->
                                 <div class="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
-                                    <div class="fs-4 fw-bolder text-gray-700 text-center"><%= customer.debt %></div>
-                                    <div class="fw-bold text-muted">المستحق</div>
+                                    <div class="fs-4 fw-bolder text-gray-700 text-center"><%= supplier.credit %></div>
+                                    <div class="fw-bold text-muted">الرصيد</div>
                                 </div>
                                 <!--end::Stats-->
                                 <!--begin::Stats-->
@@ -111,8 +109,8 @@
                         <!--begin::Details toggle-->
                         <div class="d-flex flex-stack fs-4 py-3">
                             <div class="fw-bolder rotate collapsible" data-bs-toggle="collapse"
-                                href="#kt_customer_view_details" role="button" aria-expanded="false"
-                                aria-controls="kt_customer_view_details">البيانات
+                                href="#kt_supplier_view_details" role="button" aria-expanded="false"
+                                aria-controls="kt_supplier_view_details">البيانات
                                 <span class="ms-2 rotate-180">
                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                     <span class="svg-icon svg-icon-3">
@@ -126,35 +124,35 @@
                                     <!--end::Svg Icon-->
                                 </span>
                             </div>
-                            <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="Edit customer details">
+                            <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="Edit supplier details">
                                 <a href="#" class="btn btn-sm btn-light-primary" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_update_customer">تعديل</a>
+                                    data-bs-target="#kt_modal_update_supplier">تعديل</a>
                             </span>
                         </div>
                         <!--end::Details toggle-->
                         <div class="separator separator-dashed my-3"></div>
                         <!--begin::Details content-->
-                        <div id="kt_customer_view_details" class="collapse show">
+                        <div id="kt_supplier_view_details" class="collapse show">
                             <div class="py-5 fs-6">
                                 <!--begin::Badge-->
-                                <div class="badge badge-light-info d-inline">Premium user</div>
+                                <div class="badge badge-light-info d-inline">مورد</div>
                                 <!--begin::Badge-->
                                 <!--begin::Details item-->
                                 <div class="fw-bolder mt-5">رقم الهوية</div>
                                 <div class="text-gray-600">
-                                    <%= customer.formalID %>
+                                    <%= supplier.formalID %>
                                 </div>
                                 <!--begin::Details item-->
                                 <!--begin::Details item-->
                                 <div class="fw-bolder mt-5">رقم الجوال</div>
                                 <div class="text-gray-600">
-                                    <%= customer.phoneNumber %>
+                                    <%= supplier.phoneNumber %>
                                 </div>
                                 <!--begin::Details item-->
                                 <!--begin::Details item-->
                                 <div class="fw-bolder mt-5">العنوان</div>
                                 <div class="text-gray-600">
-                                    <%= customer.address %>
+                                    <%= supplier.address %>
                                 </div>
                                 <!--begin::Details item-->
 
@@ -175,7 +173,7 @@
                     <!--begin:::Tab item-->
                     <li class="nav-item">
                         <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                            href="#kt_customer_view_overview_tab">نظرة عاملة</a>
+                            href="#kt_supplier_view_overview_tab">نظرة عاملة</a>
                     </li>
                     <!--end:::Tab item-->
                     <!--begin:::Tab item-->
@@ -234,7 +232,7 @@
                 <!--begin:::Tab content-->
                 <div class="tab-content" id="myTabContent">
                     <!--begin:::Tab pane-->
-                    <div class="tab-pane fade show active" id="kt_customer_view_overview_tab" role="tabpanel">
+                    <div class="tab-pane fade show active" id="kt_supplier_view_overview_tab" role="tabpanel">
                         <div class="row mb-5 g-5 g-xl-8">
                             <div class="col-xl-12">
                                 <!--begin::Statistics Widget 5-->
@@ -251,8 +249,8 @@
                                             </svg>
                                         </span>
                                         <!--end::Svg Icon-->
-                                        <div class="text-gray-900 fw-bolder fs-2 mb-2 mt-5"><%= customer.debt %> ₪</div>
-                                        <div class="fw-bold text-gray-400">الرصيد المستحق</div>
+                                        <div class="text-gray-900 fw-bolder fs-2 mb-2 mt-5"><%= supplier.credit %> ₪</div>
+                                        <div class="fw-bold text-gray-400">الرصيد المتبقي</div> 
                                     </div>
                                     <!--end::Body-->
                                 </a>
@@ -264,7 +262,7 @@
                         <!--begin::Card-->
                         <div class="card pt-4 mb-6 mb-xl-9">
                             <div class="card-header border-0 pt-6">
-                                <h2 class="fw-bolder">الطلبيات</h2>
+                                <h2 class="fw-bolder">طلبيات التوريد</h2>
                             </div>
                             <!--begin::Card header-->
                             <div class="card-header border-0 pt-6">
@@ -284,9 +282,9 @@
                                             </svg>
                                         </span>
                                         <!--end::Svg Icon-->
-                                        <input type="text" data-kt-customer-purchases-table-filter="search"
+                                        <input type="text" data-kt-supplier-purchases-table-filter="search"
                                             class="form-control form-control-solid w-250px ps-15"
-                                            placeholder="البخث عن طلبية.." />
+                                            placeholder="البحث عن طلبية.." />
                                     </div>
                                     <!--end::Search-->
                                 </div>
@@ -295,7 +293,7 @@
                                 <div class="card-toolbar">
                                     <!--begin::Toolbar-->
                                     <div class="d-flex justify-content-end"
-                                        data-kt-customer-purchases-table-toolbar="base">
+                                        data-kt-supplier-purchases-table-toolbar="base">
 
                                         <!--begin::Filter-->
                                         <button type="button" class="btn btn-light-primary me-3"
@@ -324,7 +322,7 @@
                                             <div class="separator border-gray-200"></div>
                                             <!--end::Separator-->
                                             <!--begin::Content-->
-                                            <div class="px-7 py-5" data-kt-customer-purchases-table-filter="form">
+                                            <div class="px-7 py-5" data-kt-supplier-purchases-table-filter="form">
                                                 <!--begin::Input group-->
                                                 <div class="mb-6">
                                                     <label class="form-label fs-6 fw-bold">التاريخ</label>
@@ -349,10 +347,10 @@
                                                     <button type="reset"
                                                         class="btn btn-light btn-active-light-primary fw-bold me-2 px-6"
                                                         data-kt-menu-dismiss="true"
-                                                        data-kt-customer-purchases-table-filter="reset">مسح</button>
+                                                        data-kt-supplier-purchases-table-filter="reset">مسح</button>
                                                     <button type="submit" class="btn btn-primary fw-bold px-6"
                                                         data-kt-menu-dismiss="true"
-                                                        data-kt-customer-purchases-table-filter="filter">تطبيق</button>
+                                                        data-kt-supplier-purchases-table-filter="filter">تطبيق</button>
                                                 </div>
                                                 <!--end::Actions-->
                                             </div>
@@ -376,7 +374,7 @@
                             <div class="card-body pt-0 pb-5">
                                 <!--begin::Table-->
                                 <table class="text-center table align-middle table-row-dashed fs-6 gy-5"
-                                    id="kt_customer_purchases_table">
+                                    id="kt_supplier_purchases_table">
                                     <!--begin::Table head-->
                                     <thead>
                                         <!--begin::Table row-->
@@ -388,7 +386,7 @@
                                             <th>مطلوب للدفع</th>
                                             <th>المدفوع</th>
                                             <th>المسترد</th>
-                                            <th>خيارات</th>
+                                            <th>خيارات</th> 
                                         </tr>
                                         <!--end::Table row-->
                                     </thead>
@@ -427,9 +425,9 @@
                                             </svg>
                                         </span>
                                         <!--end::Svg Icon-->
-                                        <input type="text" data-kt-customer-invoices-table-filter="search"
+                                        <input type="text" data-kt-supplier-invoices-table-filter="search"
                                             class="form-control form-control-solid w-250px ps-15"
-                                            placeholder="البخث عن طلبية.." />
+                                            placeholder="البحث عن فاتورة.." />
                                     </div>
                                     <!--end::Search-->
                                 </div>
@@ -438,7 +436,7 @@
                                 <div class="card-toolbar">
                                     <!--begin::Toolbar-->
                                     <div class="d-flex justify-content-end"
-                                        data-kt-customer-invoices-table-toolbar="base">
+                                        data-kt-supplier-invoices-table-toolbar="base">
 
                                         <!--begin::Filter-->
                                         <button type="button" class="btn btn-light-primary me-3"
@@ -467,7 +465,7 @@
                                             <div class="separator border-gray-200"></div>
                                             <!--end::Separator-->
                                             <!--begin::Content-->
-                                            <div class="px-7 py-5" data-kt-customer-invoices-table-filter="form">
+                                            <div class="px-7 py-5" data-kt-supplier-invoices-table-filter="form">
                                                 <!--begin::Input group-->
                                                 <div class="mb-6">
                                                     <label class="form-label fs-6 fw-bold">التاريخ</label>
@@ -492,10 +490,10 @@
                                                     <button type="reset"
                                                         class="btn btn-light btn-active-light-primary fw-bold me-2 px-6"
                                                         data-kt-menu-dismiss="true"
-                                                        data-kt-customer-invoices-table-filter="reset">مسح</button>
+                                                        data-kt-supplier-invoices-table-filter="reset">مسح</button>
                                                     <button type="submit" class="btn btn-primary fw-bold px-6"
                                                         data-kt-menu-dismiss="true"
-                                                        data-kt-customer-invoices-table-filter="filter">تطبيق</button>
+                                                        data-kt-supplier-invoices-table-filter="filter">تطبيق</button>
                                                 </div>
                                                 <!--end::Actions-->
                                             </div>
@@ -519,13 +517,14 @@
                             <div class="card-body pt-0 pb-5">
                                 <!--begin::Table-->
                                 <table class="text-center table align-middle table-row-dashed fs-6 gy-5"
-                                    id="kt_customer_invoices_table">
+                                    id="kt_supplier_invoices_table">
                                     <!--begin::Table head-->
                                     <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                             <th>المسلسل</th>
                                             <th>نوع الفاتورة</th>
+                                            <th>الطلبية</th>
                                             <th>القيمة</th>
                                             <th>قديم</th>
                                             <th>جديد</th>
@@ -646,8 +645,8 @@
 <!--end::Page Vendors Javascript-->
 
 <script>
-    const customerID = $('#kt_content').attr('root-customer-id')
+    const supplierID = $('#kt_content').attr('root-supplier-id')
 </script>
-<script src="/assets/js/myScripts/customer/profile/purchases.js"></script>
-<script src="/assets/js/myScripts/customer/profile/invoices.js"></script>
-<script src="/assets/js/myScripts/customer/profile/payBatch.js"></script>
+<script src="/assets/js/myScripts/supplier/profile/imports.js"></script>
+<script src="/assets/js/myScripts/supplier/profile/invoices.js"></script>
+<script src="/assets/js/myScripts/supplier/profile/payBatch.js"></script>

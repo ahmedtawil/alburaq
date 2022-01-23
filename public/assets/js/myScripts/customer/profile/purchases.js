@@ -1,29 +1,28 @@
 "use strict";
-let tableQuery = {
-
-}
 // Class definition
-var KTsuppliersList = function () {
+var KTCustomerPurchasesList = function () {
     // Define shared variables
     var datatable;
     var filterMonth;
     var filterPayment;
     var table
     let dataRes
+    let tableQuery = {
 
+    }
+    
     let dateQuery = {
 
     }
 
     // Private functions
-    var initsupplierList = function () {
-        // Set date data order
-        const tableRows = table.querySelectorAll('tbody tr');
-
+    var initCustomerPurchasesList = function () {
         // Init datatable --- more info on datatables: https://datatables.net/manual/
         datatable = $(table).DataTable({
             "processing": true,
             "serverSide": true,
+            "autoWidth": false, // This parameter must be set to false
+
             "language": {
                 "info": "عرض من _START_ إلى _END_ من مجموع _TOTAL_ سجل",
                 "zeroRecords": "لا يوجد نتائج للبحث!",
@@ -34,8 +33,8 @@ var KTsuppliersList = function () {
 
 
             "ajax": {
-                url: "/suppliers/data/get",
-                "dataSrc": 'suppliers',
+                url: `/orders/data/customer/get/${customerID}`,
+                "dataSrc": 'orders',
                 "dataFilter": function (res) {
                     dataRes = JSON.parse(res)
                     return res
@@ -44,12 +43,53 @@ var KTsuppliersList = function () {
 
 
             columns: [
-                { data: 'name' },
-                { data: 'formalID'},
-                { data: 'phoneNumber'},
-                { data: 'address'},
+                { data: 'serialNumber' },
+  
+                {
+                    data: 'products.length', 
+                },
+                {
+                    data: 'totalProductsPrice',
+                    render: function (data, type, doc) {
+                        return `${data} شيكل`
 
-                
+                    }
+
+                },
+                {
+                    data: 'discount',
+                    render: function (data, type, doc) {
+                        return `<span class="badge badge-light-${(data > 0) ? 'success' : 'danger'} fw-bolder my-2">${(data > 0) ? `${data} شيكل` : 'لا يوجد'}</span>`
+
+                    }
+
+                },
+
+                {
+                    data: 'totalPrice',
+                    render: function (data, type, doc) {
+                        return `${data} شيكل`
+
+                    }
+
+                },
+                {
+                    data: 'paidAmount',
+                    render: function (data, type, doc) {
+                        return `${data} شيكل`
+
+                    }
+
+                },
+                {
+                    data: 'moneyBack',
+                    render: function (data, type, doc) {
+                        return `${data} شيكل`
+
+                    }
+
+                },
+
                 {
                     data: '',
                     render: function (data, type, doc) {
@@ -70,10 +110,6 @@ var KTsuppliersList = function () {
                     <!--begin::Menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
                         data-kt-menu="true">
-                        <div class="menu-item px-3">
-                         <a href="/supplier/profile/get/${doc._id}" class="menu-link px-3">البروفايل</a>
-
-                        </div>
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
                          <a href="#" class="menu-link px-3">حذف</a>
@@ -90,17 +126,16 @@ var KTsuppliersList = function () {
 
             ]
         });
-
         // Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
         datatable.on('draw', function () {
-            KTMenu.createInstances();
+                KTMenu.createInstances();
             handleDeleteRows();
         });
     }
 
     // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
     var handleSearchDatatable = () => {
-        const filterSearch = document.querySelector('[data-kt-supplier-table-filter="search"]');
+        const filterSearch = document.querySelector('[data-kt-customer-purchases-table-filter="search"]');
         filterSearch.addEventListener('keyup', function (e) {
             tableQuery.search = e.target.value
             datatable.search(JSON.stringify(tableQuery)).draw();
@@ -109,9 +144,9 @@ var KTsuppliersList = function () {
     // Filter Datatable
     var handleFilter = function () {
         // Select filter options
-        const filterForm = document.querySelector('[data-kt-supplier-table-filter="form"]');
-        const filterButton = filterForm.querySelector('[data-kt-supplier-table-filter="filter"]');
-        const resetButton = filterForm.querySelector('[data-kt-supplier-table-filter="reset"]');
+        const filterForm = document.querySelector('[data-kt-customer-purchases-table-filter="form"]');
+        const filterButton = filterForm.querySelector('[data-kt-customer-purchases-table-filter="filter"]');
+        const resetButton = filterForm.querySelector('[data-kt-customer-purchases-table-filter="reset"]');
         const selectOptions = filterForm.querySelectorAll('select');
         const datepicker = filterForm.querySelector("[name=date]");
 
@@ -204,10 +239,10 @@ var KTsuppliersList = function () {
     $(document).on('click', 'body .dropdown-menu', function (e) {
         e.stopPropagation();
     });
-    // Delete supplier
+    // Delete customer
     var handleDeleteRows = () => {
         // Select all delete buttons
-        const deleteButtons = table.querySelectorAll('[data-kt-supplier-table-filter="delete_row"]');
+        const deleteButtons = table.querySelectorAll('[data-kt-customer-purchases-table-filter="delete_row"]');
 
         deleteButtons.forEach(d => {
             // Delete button on click
@@ -217,12 +252,12 @@ var KTsuppliersList = function () {
                 // Select parent row
                 const parent = e.target.closest('tr');
 
-                // Get supplier name
-                const supplierName = parent.querySelectorAll('td')[1].innerText;
+                // Get customer name
+                const customerName = parent.querySelectorAll('td')[1].innerText;
 
                 // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                 Swal.fire({
-                    text: "Are you sure you want to delete " + supplierName + "?",
+                    text: "Are you sure you want to delete " + customerName + "?",
                     icon: "warning",
                     showCancelButton: true,
                     buttonsStyling: false,
@@ -235,7 +270,7 @@ var KTsuppliersList = function () {
                 }).then(function (result) {
                     if (result.value) {
                         Swal.fire({
-                            text: "You have deleted " + supplierName + "!.",
+                            text: "You have deleted " + customerName + "!.",
                             icon: "success",
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
@@ -248,7 +283,7 @@ var KTsuppliersList = function () {
                         });
                     } else if (result.dismiss === 'cancel') {
                         Swal.fire({
-                            text: supplierName + " was not deleted.",
+                            text: customerName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
@@ -270,14 +305,14 @@ var KTsuppliersList = function () {
 
 
         init: function () {
-            table = document.querySelector('#kt_suppliers_table');
+            table = document.querySelector('#kt_customer_purchases_table');
 
 
             if (!table) {
                 return;
             }
 
-            initsupplierList();
+            initCustomerPurchasesList();
             handleSearchDatatable();
             handleDeleteRows();
             handleFilter();
@@ -289,6 +324,6 @@ var KTsuppliersList = function () {
 
 // On document ready
 KTUtil.onDOMContentLoaded(function () {
-    KTsuppliersList.init();
+    KTCustomerPurchasesList.init();
 
 });

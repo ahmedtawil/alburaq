@@ -17,7 +17,6 @@ exports.getStockData = catchAsyncErrors(async (req, res) => {
   const query = req.query
 
   const queryValue = (req.query.search.value == '') ? {} : JSON.parse(query.search.value)
-  console.log('*******************');
   let queryObj = {}
 
   if (queryValue.filter) {
@@ -42,7 +41,6 @@ exports.getStockData = catchAsyncErrors(async (req, res) => {
   const stockFillterCount = await Stock.find(queryObj).countDocuments()
   const stock = await Stock.find(queryObj).limit(parseInt(query.length)).skip(parseInt(query.start))
   .populate({ path: 'productCategory' , populate:[{path:'unit'} , {path:'supplier' , select:{name:1}}]  })
-  console.log(stock);
 
   return res.json({
     recordsTotal: stockCount,

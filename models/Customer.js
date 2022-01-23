@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose;
+const moment = require('moment')
 const customerSchema = new Schema({
     name: {
         type: String,
@@ -60,9 +61,9 @@ const customerSchema = new Schema({
         type: Number,
         default:0
     },
-    createdAt:{
-        type:Date,
-        default:new Date()
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
    
   

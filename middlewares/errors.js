@@ -42,9 +42,11 @@ module.exports = (err, req, res, next) => {
             }
     */
     console.log(error);
+    /*
     if (err.statusCode === 404) {
         return res.render('error/404', { layout: false })
     }
+    */
     if (err.statusCode === 403) {
         return res.redirect('back')
     }

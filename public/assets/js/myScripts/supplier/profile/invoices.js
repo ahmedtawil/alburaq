@@ -1,29 +1,28 @@
 "use strict";
-let tableQuery = {
-
-}
 // Class definition
-var KTsuppliersList = function () {
+var KTCustomerInvoicesList = function () {
     // Define shared variables
     var datatable;
     var filterMonth;
     var filterPayment;
     var table
     let dataRes
+    let tableQuery = {
 
+    }
+    
     let dateQuery = {
 
     }
 
     // Private functions
-    var initsupplierList = function () {
-        // Set date data order
-        const tableRows = table.querySelectorAll('tbody tr');
-
+    var initCustomerInvoicesList = function () {
         // Init datatable --- more info on datatables: https://datatables.net/manual/
         datatable = $(table).DataTable({
             "processing": true,
             "serverSide": true,
+            "autoWidth": false, // This parameter must be set to false
+
             "language": {
                 "info": "عرض من _START_ إلى _END_ من مجموع _TOTAL_ سجل",
                 "zeroRecords": "لا يوجد نتائج للبحث!",
@@ -34,8 +33,8 @@ var KTsuppliersList = function () {
 
 
             "ajax": {
-                url: "/suppliers/data/get",
-                "dataSrc": 'suppliers',
+                url: `/invoices/data/supplier/get/${supplierID}`,
+                "dataSrc": 'invoices',
                 "dataFilter": function (res) {
                     dataRes = JSON.parse(res)
                     return res
@@ -44,12 +43,80 @@ var KTsuppliersList = function () {
 
 
             columns: [
-                { data: 'name' },
-                { data: 'formalID'},
-                { data: 'phoneNumber'},
-                { data: 'address'},
+                { data: 'serialNumber' },
 
+                {
+                    data: 'InvoiceType',
+                    render: function (data, type, doc) {
+                        let span
+                        switch (data) {
+                            case 'import':
+                                span = `<span class="badge badge-light-success fw-bolder my-2">توريد</span>`
+                                break;
+                            case 'batch':
+                                span = `<span class="badge badge-light-info fw-bolder my-2">دفعة</span>`
+                                break;
+                            case 'return':
+                                span = `<span class="badge badge-light-danger fw-bolder my-2">إرجاع</span>`
+                                break;
+                            case 'extra':
+                                span = `<span class="badge badge-light-warning fw-bolder my-2">مضافة</span>`
+                                break;
+                            case 'exchange':
+                                span = `<span class="badge badge-light-primary fw-bolder my-2">تبديل</span>`
+                                break;
+
+                            default:
+                                break;
+                        }
+                        return span
+
+                    }
+                },
+                {
+                    data: 'data.serialNumber',
+                    render: function (data, type, doc) {
+                        return `${data || '-'}`
+
+                    }
+
+                },
+                {
+                    data: 'amount',
+                    render: function (data, type, doc) {
+                        return `<span class="badge badge-light-info fw-bolder my-2">${data || '-'} شيكل</span>`
+
+                    }
+
+                },
                 
+                
+                {
+                    data: 'oldBalance',
+                    render: function (data, type, doc) {
+                        return `${data || '-'}`
+
+                    }
+
+                },
+                {
+                    data: 'newBalance',
+                    render: function (data, type, doc) {
+                        return `${data || '-'}`
+
+                    }
+
+                },
+                {
+                    data: 'createdAt',
+                    render: function (data, type, doc) {
+                        return moment(data).format('DD/MM/YYYY hh:mm A')
+
+                    }
+
+                },
+               
+
                 {
                     data: '',
                     render: function (data, type, doc) {
@@ -70,10 +137,6 @@ var KTsuppliersList = function () {
                     <!--begin::Menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
                         data-kt-menu="true">
-                        <div class="menu-item px-3">
-                         <a href="/supplier/profile/get/${doc._id}" class="menu-link px-3">البروفايل</a>
-
-                        </div>
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
                          <a href="#" class="menu-link px-3">حذف</a>
@@ -90,7 +153,6 @@ var KTsuppliersList = function () {
 
             ]
         });
-
         // Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
         datatable.on('draw', function () {
             KTMenu.createInstances();
@@ -100,7 +162,7 @@ var KTsuppliersList = function () {
 
     // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
     var handleSearchDatatable = () => {
-        const filterSearch = document.querySelector('[data-kt-supplier-table-filter="search"]');
+        const filterSearch = document.querySelector('[data-kt-supplier-invoices-table-filter="search"]');
         filterSearch.addEventListener('keyup', function (e) {
             tableQuery.search = e.target.value
             datatable.search(JSON.stringify(tableQuery)).draw();
@@ -109,9 +171,9 @@ var KTsuppliersList = function () {
     // Filter Datatable
     var handleFilter = function () {
         // Select filter options
-        const filterForm = document.querySelector('[data-kt-supplier-table-filter="form"]');
-        const filterButton = filterForm.querySelector('[data-kt-supplier-table-filter="filter"]');
-        const resetButton = filterForm.querySelector('[data-kt-supplier-table-filter="reset"]');
+        const filterForm = document.querySelector('[data-kt-supplier-invoices-table-filter="form"]');
+        const filterButton = filterForm.querySelector('[data-kt-supplier-invoices-table-filter="filter"]');
+        const resetButton = filterForm.querySelector('[data-kt-supplier-invoices-table-filter="reset"]');
         const selectOptions = filterForm.querySelectorAll('select');
         const datepicker = filterForm.querySelector("[name=date]");
 
@@ -207,7 +269,7 @@ var KTsuppliersList = function () {
     // Delete supplier
     var handleDeleteRows = () => {
         // Select all delete buttons
-        const deleteButtons = table.querySelectorAll('[data-kt-supplier-table-filter="delete_row"]');
+        const deleteButtons = table.querySelectorAll('[data-kt-supplier-invoices-table-filter="delete_row"]');
 
         deleteButtons.forEach(d => {
             // Delete button on click
@@ -270,14 +332,14 @@ var KTsuppliersList = function () {
 
 
         init: function () {
-            table = document.querySelector('#kt_suppliers_table');
+            table = document.querySelector('#kt_supplier_invoices_table');
 
 
             if (!table) {
                 return;
             }
 
-            initsupplierList();
+            initCustomerInvoicesList();
             handleSearchDatatable();
             handleDeleteRows();
             handleFilter();
@@ -289,6 +351,6 @@ var KTsuppliersList = function () {
 
 // On document ready
 KTUtil.onDOMContentLoaded(function () {
-    KTsuppliersList.init();
+    KTCustomerInvoicesList.init();
 
 });

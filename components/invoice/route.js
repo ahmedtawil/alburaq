@@ -1,13 +1,16 @@
 const router = require('express').Router()
-const { newSupplier ,newSupplierPage,getSuppliers , editSupplier , checkIFformalIDisExist , getSuppliersPage , getSuppliersData , getSupplierProfilePage} = require('./controller')
+const { getInvoicesForCustomer ,getInvoicesForSupplier, newInvoice ,getInvoicesData , getTodayInvoicesPage , getInvoiceOrderByQuery , getInvoiceImportByQuery} = require('./controller')
+//router.route('/invoices/page/get').get(getTodayInvoicesPage)
+router.route('/invoices/data/get').get(getInvoicesData)
+router.route('/invoices/page/today/get').get(getTodayInvoicesPage)
 
-router.route('/supplier/new').get(newSupplierPage).post(newSupplier)
-router.route('/suppliers/page/get').get(getSuppliersPage)
-router.route('/suppliers/data/get').get(getSuppliersData)
-router.route('/supplier/profile/get/:supplierID').get(getSupplierProfilePage)
+router.route('/invoices/data/customer/get/:customerID').get(getInvoicesForCustomer)
+router.route('/invoices/data/supplier/get/:SupplierID').get(getInvoicesForSupplier)
 
-//router.route('/supplier/get').get(getSuppliers)
-router.route('/supplier/checkID/:formalID').get(checkIFformalIDisExist)
+router.route('/invoice/order/get').get(getInvoiceOrderByQuery)
+router.route('/invoice/import/get').get(getInvoiceImportByQuery)
+
+router.route('/invoice/new').post(newInvoice)
 
 
 module.exports = router

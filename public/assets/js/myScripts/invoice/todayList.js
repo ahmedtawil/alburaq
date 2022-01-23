@@ -1,9 +1,6 @@
 "use strict";
-let tableQuery = {
-
-}
 // Class definition
-var KTsuppliersList = function () {
+var KTOrdersList = function () {
     // Define shared variables
     var datatable;
     var filterMonth;
@@ -14,9 +11,18 @@ var KTsuppliersList = function () {
     let dateQuery = {
 
     }
+    let tableQuery = {
+        filter: {
+            createdAt: {
+                $gte: moment().startOf('day').toDate(),
+                $lte: moment().endOf('day').toDate()
+            }
+        }
+    }
+
 
     // Private functions
-    var initsupplierList = function () {
+    var initordersList = function () {
         // Set date data order
         const tableRows = table.querySelectorAll('tbody tr');
 
@@ -34,8 +40,8 @@ var KTsuppliersList = function () {
 
 
             "ajax": {
-                url: "/suppliers/data/get",
-                "dataSrc": 'suppliers',
+                url: "/invoices/data/get",
+                "dataSrc": 'invoices',
                 "dataFilter": function (res) {
                     dataRes = JSON.parse(res)
                     return res
@@ -44,12 +50,104 @@ var KTsuppliersList = function () {
 
 
             columns: [
-                { data: 'name' },
-                { data: 'formalID'},
-                { data: 'phoneNumber'},
-                { data: 'address'},
+                { data: 'serialNumber' },
+                {
+                    data: 'ObjType',
+                    render: function (data, type, doc) {
+                        let span
+                        switch (data) {
+                            case 'Order':
+                                span = `<span class="badge badge-light-success fw-bolder my-2">بيع</span>`
+                                break;
+                            case 'Import':
+                                span = `<span class="badge badge-light-warning fw-bolder my-2">توريد</span>`
+                                break;
 
-                
+                            default:
+                                break;
+                        }
+                        return span
+
+                    }
+                },
+
+
+                {
+                    data: 'InvoiceType',
+                    render: function (data, type, doc) {
+                        let span
+                        switch (data) {
+                            case 'order':
+                                span = `<span class="badge badge-light-success fw-bolder my-2">بيع</span>`
+                                break;
+                            case 'import':
+                                span = `<span class="badge badge-light fw-bolder my-2">تورييد</span>`
+                                break;
+                            case 'batch':
+                                span = `<span class="badge badge-light-info fw-bolder my-2">دفعة</span>`
+                                break;
+                            case 'return':
+                                span = `<span class="badge badge-light-danger fw-bolder my-2">إرجاع</span>`
+                                break;
+                            case 'extra':
+                                span = `<span class="badge badge-light-warning fw-bolder my-2">مضافة</span>`
+                                break;
+                            case 'exchange':
+                                span = `<span class="badge badge-light-primary fw-bolder my-2">تبديل</span>`
+                                break;
+
+                            default:
+                                break;
+                        }
+                        return span
+
+                    }
+                },
+                { data: 'data.serialNumber' },
+                {
+                    data: 'for',
+                    render: function (data, type, doc) {
+                        console.log(doc);
+                        return `<span class="badge badge-light-info fw-bolder my-2">${data.name}</span>`
+
+                    }
+
+                },
+                {
+                    data: 'amount',
+                    render: function (data, type, doc) {
+                        return `<span class="badge badge-light-info fw-bolder my-2">${data} شيكل</span>`
+
+                    }
+
+                },
+
+                {
+                    data: 'oldBalance',
+                    render: function (data, type, doc) {
+                        return `${data || '-'}`
+
+                    }
+
+                },
+                {
+                    data: 'newBalance',
+                    render: function (data, type, doc) {
+                        return `${data || '-'}`
+
+                    }
+
+                },
+                {
+                    data: 'createdAt',
+                    render: function (data, type, doc) {
+                        return moment(data).format('h:mm a')
+
+                    }
+
+                },
+
+
                 {
                     data: '',
                     render: function (data, type, doc) {
@@ -70,10 +168,6 @@ var KTsuppliersList = function () {
                     <!--begin::Menu-->
                     <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
                         data-kt-menu="true">
-                        <div class="menu-item px-3">
-                         <a href="/supplier/profile/get/${doc._id}" class="menu-link px-3">البروفايل</a>
-
-                        </div>
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
                          <a href="#" class="menu-link px-3">حذف</a>
@@ -91,16 +185,19 @@ var KTsuppliersList = function () {
             ]
         });
 
+
         // Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
         datatable.on('draw', function () {
             KTMenu.createInstances();
             handleDeleteRows();
         });
+      
+
     }
 
     // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
     var handleSearchDatatable = () => {
-        const filterSearch = document.querySelector('[data-kt-supplier-table-filter="search"]');
+        const filterSearch = document.querySelector('[data-kt-today-invoices-filter="search"]');
         filterSearch.addEventListener('keyup', function (e) {
             tableQuery.search = e.target.value
             datatable.search(JSON.stringify(tableQuery)).draw();
@@ -109,26 +206,28 @@ var KTsuppliersList = function () {
     // Filter Datatable
     var handleFilter = function () {
         // Select filter options
-        const filterForm = document.querySelector('[data-kt-supplier-table-filter="form"]');
-        const filterButton = filterForm.querySelector('[data-kt-supplier-table-filter="filter"]');
-        const resetButton = filterForm.querySelector('[data-kt-supplier-table-filter="reset"]');
+        const filterForm = document.querySelector('[data-kt-today-invoices-filter="form"]');
+        const filterButton = filterForm.querySelector('[data-kt-today-invoices-filter="filter"]');
+        const resetButton = filterForm.querySelector('[data-kt-today-invoices-filter="reset"]');
         const selectOptions = filterForm.querySelectorAll('select');
         const datepicker = filterForm.querySelector("[name=date]");
 
         // Filter datatable on submit
         filterButton.addEventListener('click', function () {
             let filter = {
-
+                createdAt: {
+                    $gte: moment().startOf('day').toDate(),
+                    $lte: moment().endOf('day').toDate()
+                }
             }
             // Get filter values
             selectOptions.forEach((item, index) => {
+                /*
                 if (item.value && item.value !== '') {
                     filter[item.id] = item.value
                 }
+                */
             });
-            if (datepicker.value && dateQuery) {
-                filter.createdAt = dateQuery
-            }
             tableQuery.filter = filter
             // Filter datatable --- official docs reference: https://datatables.net/reference/api/search()
             datatable.search(JSON.stringify(tableQuery)).draw();
@@ -152,62 +251,13 @@ var KTsuppliersList = function () {
 
 
 
-        // Handle datepicker range -- For more info on flatpickr plugin, please visit: https://flatpickr.js.org/
-        $(function () {
-
-            var start = moment().subtract(29, 'days');
-            var end = moment();
-
-            function cb(start, end) {
-                dateQuery = {
-                    $gte: moment(start).startOf('day').toDate(),
-                    $lte: moment(end).endOf('day').toDate()
-                }
-                $('#reportrange span').html(start.format('DD/MM/YYYY') + ' - ' + end.format('DD/MM/YYYY'));
-            }
-
-            $(datepicker).daterangepicker({
-                clearBtn: true,
-                startDate: start,
-                endDate: end,
-                ranges: {
-                    'اليوم': [moment(), moment()],
-                    'الأمس': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'أخر 7 أيام': [moment().subtract(6, 'days'), moment()],
-                    'أخر 30 يوم': [moment().subtract(29, 'days'), moment()],
-                    'هذا الشهر': [moment().startOf('month'), moment().endOf('month')],
-                    'الشهر الفائت': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
-                },
-                "locale": {
-                    "format": "DD/MM/YYYY",
-                    "separator": " - ",
-                    "applyLabel": "تطبيق",
-                    "cancelLabel": "إلغاء",
-                    "fromLabel": "من",
-                    "toLabel": "إلى",
-                    "customRangeLabel": "تاريخ مخصص",
-                }
-
-            }, cb);
-            $(datepicker).val('')
-
-            cb(start, end);
-            $("div.daterangepicker").click(function (e) {
-                e.stopPropagation();
-            });
-
-        });
-
 
 
     }
-    $(document).on('click', 'body .dropdown-menu', function (e) {
-        e.stopPropagation();
-    });
-    // Delete supplier
+    // Delete orders
     var handleDeleteRows = () => {
         // Select all delete buttons
-        const deleteButtons = table.querySelectorAll('[data-kt-supplier-table-filter="delete_row"]');
+        const deleteButtons = table.querySelectorAll('[data-kt-today-invoices-filter="delete_row"]');
 
         deleteButtons.forEach(d => {
             // Delete button on click
@@ -217,12 +267,12 @@ var KTsuppliersList = function () {
                 // Select parent row
                 const parent = e.target.closest('tr');
 
-                // Get supplier name
-                const supplierName = parent.querySelectorAll('td')[1].innerText;
+                // Get orders name
+                const ordersName = parent.querySelectorAll('td')[1].innerText;
 
                 // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                 Swal.fire({
-                    text: "Are you sure you want to delete " + supplierName + "?",
+                    text: "Are you sure you want to delete " + ordersName + "?",
                     icon: "warning",
                     showCancelButton: true,
                     buttonsStyling: false,
@@ -235,7 +285,7 @@ var KTsuppliersList = function () {
                 }).then(function (result) {
                     if (result.value) {
                         Swal.fire({
-                            text: "You have deleted " + supplierName + "!.",
+                            text: "You have deleted " + ordersName + "!.",
                             icon: "success",
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
@@ -248,7 +298,7 @@ var KTsuppliersList = function () {
                         });
                     } else if (result.dismiss === 'cancel') {
                         Swal.fire({
-                            text: supplierName + " was not deleted.",
+                            text: ordersName + " was not deleted.",
                             icon: "error",
                             buttonsStyling: false,
                             confirmButtonText: "Ok, got it!",
@@ -270,18 +320,20 @@ var KTsuppliersList = function () {
 
 
         init: function () {
-            table = document.querySelector('#kt_suppliers_table');
+            table = document.querySelector('#kt_today_invoices_table');
 
 
             if (!table) {
                 return;
             }
 
-            initsupplierList();
+            initordersList();
+
             handleSearchDatatable();
             handleDeleteRows();
             handleFilter();
 
+             datatable.search(JSON.stringify(tableQuery)).draw();
 
         }
     }
@@ -289,6 +341,6 @@ var KTsuppliersList = function () {
 
 // On document ready
 KTUtil.onDOMContentLoaded(function () {
-    KTsuppliersList.init();
+    KTOrdersList.init();
 
 });

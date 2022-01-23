@@ -11,12 +11,12 @@
             <!--begin::Page title-->
             <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                 <!--begin::Title-->
-                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">المبيعات
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">التوريد
                     <!--begin::Separator-->
                     <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
                     <!--end::Separator-->
                     <!--begin::Description-->
-                    <small class="text-muted fs-7 fw-bold my-1 ms-1">طلبية جديدة</small>
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">توريد جديد</small>
                     <!--end::Description-->
                 </h1>
                 <!--end::Title-->
@@ -49,7 +49,7 @@
                             <div class="card-title">
                                 <!--begin::Search-->
                                 <div class="d-flex align-items-center position-relative my-1">
-                                    <h1>طلبية مسبقة</h1>
+                                    <h1>طلبية توريد مسبقة</h1>
                                 </div>
                                 <!--end::Search-->
                             </div>
@@ -63,16 +63,16 @@
                             <label class="required fs-6 fw-bold mb-2">رقم الفاتورة</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input  id="edit_order_serial_number"
+                            <input  id="edit_import_serial_number"
                                 class="form-control form-control-solid" type="text">
                             <!--end::Input-->
                             <div class="fv-plugins-message-container invalid-feedback">
                             </div>
                         </div>
-                        <div  id="editOrder" class="d-none">
+                        <div  id="editImport" class="d-none">
                             <!--begin::Form-->
                             <form class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#"
-                                id="kt_modal_edit_order_form" autocomplete="off">
+                                id="kt_modal_edit_import_form" autocomplete="off">
 
                                 <!--begin::Modal body-->
                                 <div class="modal-body py-3 px-lg-10" id="kt">
@@ -80,10 +80,10 @@
                                     <div class=" me-n7 pe-7">
                                         <div id="select" class="fv-row mb-7 fv-plugins-icon-container">
                                             <!--begin::Label-->
-                                            <label class="required fs-6 fw-bold mb-2">الزبون</label>
+                                            <label class="required fs-6 fw-bold mb-2">التاجر</label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <input type="text" name="edit_customer" id="edit_customer"
+                                            <input type="text" name="edit_supplier" id="edit_supplier"
                                                         class="form-control form-control-solid" readonly>
                                          
                                             </select>
@@ -95,10 +95,10 @@
                                             <div class="col-md-6">
                                                 <div class="fv-row mb-7 fv-plugins-icon-container">
                                                     <!--begin::Label-->
-                                                    <label class="required fs-6 fw-bold mb-2">سيريال المنتج</label>
+                                                    <label class="required fs-6 fw-bold mb-2">سيريال الصنف</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <input type="text" id="edit_product_serial_Number"
+                                                    <input type="text" id="edit_productCategory_serial_Number"
                                                         class="form-control form-control-solid">
                                                     <!--end::Input-->
                                                     <div class="fv-plugins-message-container invalid-feedback">
@@ -111,25 +111,14 @@
                                                     <label class="required fs-6 fw-bold mb-2">اسم الصنف</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <select name="edit_products" id="edit_products"
+                                                    <select name="edit_productCategories" id="edit_productCategories"
                                                         class="form-select form-select-solid fw-bolder"
                                                         data-kt-select2="true" data-placeholder="أختر...">
                                                         <option></option>
-                                                        <% products.forEach(product=> { %>
-                                                            <% if (!product.price) { %>
-                                                                <option value="<%= product.serialNumber  %>">
-                                                                    <%= product.name %>
-                                                                </option>
-                                                                <% } else { %>
-                                                                    <option value="<%= product.serialNumber  %>">
-                                                                        <%= `${product.name} ( ${product.price} شيكل )`
-                                                                            %>
-                                                                    </option>
-                                                                    <% } %>
-
-                                                                        <% }) %>
-
-
+                                                        <% productCategories.forEach(catrgory => { %>
+                                                            <option value="<%= catrgory.serialNumber %>" ><%= catrgory.name %></option>                                                       
+                                                        <% }) %>
+                                                      
                                                     </select>
 
                                                     <!--end::Input-->
@@ -143,7 +132,7 @@
                                             <div class="col-md-6">
                                                 <div class="fv-row mb-7 fv-plugins-icon-container">
                                                     <!--begin::Label-->
-                                                    <label class="required fs-6 fw-bold mb-2">الخصم</label>
+                                                    <label class="required fs-6 fw-bold mb-2">خصم المورد</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <input type="number" value="0" id="edit_discount" name="edit_discount"
@@ -156,7 +145,7 @@
                                             <div class="col-md-6">
                                                 <div class="fv-row mb-7 fv-plugins-icon-container">
                                                     <!--begin::Label-->
-                                                    <label class="required fs-6 fw-bold mb-2">المبلغ المدفوع</label>
+                                                    <label class="required fs-6 fw-bold mb-2">دفعتي</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <input type="number" value="0" id="edit_paid_amount" name="edit_paid_amount"
@@ -168,29 +157,30 @@
                                             </div>
 
                                         </div>
-                                        <div class="scroll-y" id="table" id="kt_modal_edit_order_scroll"
+                                        <div class="scroll-y" id="table" id="kt_modal_edit_import_scroll"
                                             data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
                                             data-kt-scroll-max-height="auto"
-                                            data-kt-scroll-dependencies="#kt_modal_edit_order_header"
-                                            data-kt-scroll-wrappers="#kt_modal_edit_order_scroll"
+                                            data-kt-scroll-dependencies="#kt_modal_edit_import_header"
+                                            data-kt-scroll-wrappers="#kt_modal_edit_import_scroll"
                                             data-kt-scroll-offset="300px" style="max-height: 647px;">
                                             <!--begin::Table-->
                                             <table class="text-center table align-middle table-row-dashed fs-6 gy-5"
-                                                id="edit_order_table">
+                                                id="edit_import_table">
                                                 <!--begin::Table head-->
                                                 <thead>
                                                     <!--begin::Table row-->
                                                     <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th>المنتج</th>
+                                                        <th>الصنف</th>
                                                         <th style="width: 20%;">الكمية</th>
-                                                        <th style="width: 20%;">السعر</th>
+                                                        <th style="width: 20%;">سعر التكلفة</th>
+                                                        <th style="width: 20%;">سعر البيع</th>
                                                         <th>المجموع</th>
                                                         <th>خيارات</th>
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
                                                 <!--end::Table head-->
-                                                <tbody id="edit_order_tbody">
+                                                <tbody id="edit_import_tbody">
 
                                                 </tbody>
 
@@ -220,7 +210,7 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th class="fs-5 left-td text-danger">الخصم</th>
+                                            <th class="fs-5 left-td text-danger">خصم المورد</th>
                                             <th class="text-danger" id="edit_discount_amount_result">0 شيكل</th>
                                         </tr>
 
@@ -228,21 +218,21 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th class="fs-5 left-td text-success">مطلوب للدفع</th>
+                                            <th class="fs-5 left-td text-success">مطلوب مني للدفع</th>
                                             <th class="text-success" id="edit_total_amount_result">0 شيكل</th>
                                         </tr>
                                         <tr class="align-top fw-bolder text-gray-700">
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th class="fs-5 left-td">المدفوع</th>
+                                            <th class="fs-5 left-td">دفعتي</th>
                                             <th id="edit_paid_amount_result">0 شيكل</th>
                                         </tr>
                                         <tr class="align-top fw-bolder text-gray-700">
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th class="fs-5 left-td">المسترد</th>
+                                            <th class="fs-5 left-td">مسترد المورد</th>
                                             <th id="edit_paid_amount_back_result">0 شيكل</th>
                                         </tr>
                                         <style>
@@ -257,11 +247,11 @@
                                 <div class="modal-footer flex-center">
 
                                     <!--begin::Button-->
-                                    <button type="reset" id="kt_modal_edit_order_cancel"
+                                    <button type="reset" id="kt_modal_edit_import_cancel"
                                         class="btn btn-light me-3">إلغاء</button>
                                     <!--end::Button-->
                                     <!--begin::Button-->
-                                    <button type="submit" id="kt_modal_edit_order_submit" class="btn btn-primary">
+                                    <button type="submit" id="kt_modal_edit_import_submit" class="btn btn-primary">
                                         <span class="indicator-label">حفظ</span>
                                         <span class="indicator-progress">الرجاء الإنتظار...
                                             <span
@@ -287,7 +277,7 @@
                             <div class="card-title">
                                 <!--begin::Search-->
                                 <div class="d-flex align-items-center position-relative my-1">
-                                    <h1>طلبية جديدة</h1>
+                                    <h1>طلبية توريد جديدة</h1>
                                 </div>
                                 <!--end::Search-->
                             </div>
@@ -298,7 +288,7 @@
                         <div id="newOrder">
                             <!--begin::Form-->
                             <form class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#"
-                                id="kt_modal_add_order_form" data-kt-redirect="/order/new" autocomplete="off">
+                                id="kt_modal_add_import_form" data-kt-redirect="/order/new" autocomplete="off">
 
                                 <!--begin::Modal body-->
                                 <div class="modal-body py-3 px-lg-10" id="kt">
@@ -308,25 +298,16 @@
 
                                         <div id="select" class="fv-row mb-7 fv-plugins-icon-container">
                                             <!--begin::Label-->
-                                            <label class="required fs-6 fw-bold mb-2">الزبون</label>
+                                            <label class="required fs-6 fw-bold mb-2">المورد</label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <select name="customer" aria-label="اختار الزبون" data-control="select2"
-                                                id="type2" data-placeholder="نوع الزبون"
+                                            <select name="supplier" aria-label="اختار المورد" data-control="select2"
+                                                id="type2" data-placeholder="المورد"
                                                 class="form-select form-select-solid fw-bolder">
-                                                <% customers.forEach(customer=> { %>
-                                                    <% if (customer.type=='public' ) { %>
-                                                        <option selected value="public">
-                                                            <%= customer.name %>
-                                                        </option>
-                                                        <% } else { %>
-                                                            <option value="<%= customer._id  %>">
-                                                                <%= customer.name %>
-                                                            </option>
-                                                            <% } %>
-
-
-                                                                <% }) %>
+                                                <% suppliers.forEach(supplier => { %>
+                                                    <option value="<%= supplier._id %>"><%= supplier.name %></option>
+                                                <% }) %>
+                                               
                                             </select>
                                             <!--end::Input-->
                                             <div class="fv-plugins-message-container invalid-feedback"></div>
@@ -336,10 +317,10 @@
                                             <div class="col-md-6">
                                                 <div class="fv-row mb-7 fv-plugins-icon-container">
                                                     <!--begin::Label-->
-                                                    <label class="required fs-6 fw-bold mb-2">سيريال المنتج</label>
+                                                    <label class="required fs-6 fw-bold mb-2">سيريال الصنف</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <input type="text" id="productSerialNumber"
+                                                    <input type="text" id="productCategorySerialNumber"
                                                         class="form-control form-control-solid">
                                                     <!--end::Input-->
                                                     <div class="fv-plugins-message-container invalid-feedback">
@@ -352,25 +333,13 @@
                                                     <label class="required fs-6 fw-bold mb-2">اسم الصنف</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <select name="products" id="products"
+                                                    <select name="productCategories" id="productCategories"
                                                         class="form-select form-select-solid fw-bolder"
                                                         data-kt-select2="true" data-placeholder="أختر...">
                                                         <option></option>
-                                                        <% products.forEach(product=> { %>
-                                                            <% if (!product.price) { %>
-                                                                <option value="<%= product.serialNumber  %>">
-                                                                    <%= product.name %>
-                                                                </option>
-                                                                <% } else { %>
-                                                                    <option value="<%= product.serialNumber  %>">
-                                                                        <%= `${product.name} ( ${product.price} شيكل )`
-                                                                            %>
-                                                                    </option>
-                                                                    <% } %>
-
-                                                                        <% }) %>
-
-
+                                                        <% productCategories.forEach(catrgory => { %>
+                                                            <option value="<%= catrgory.serialNumber %>" ><%= `${catrgory.name} - ${catrgory.unit.title}` %></option>                                                       
+                                                        <% }) %>
                                                     </select>
 
                                                     <!--end::Input-->
@@ -384,7 +353,7 @@
                                             <div class="col-md-6">
                                                 <div class="fv-row mb-7 fv-plugins-icon-container">
                                                     <!--begin::Label-->
-                                                    <label class="required fs-6 fw-bold mb-2">الخصم</label>
+                                                    <label class="required fs-6 fw-bold mb-2">خصم المورد</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <input type="number" value="0" name="new_discount" id="new_discount"
@@ -397,7 +366,7 @@
                                             <div class="col-md-6">
                                                 <div class="fv-row mb-7 fv-plugins-icon-container">
                                                     <!--begin::Label-->
-                                                    <label class="required fs-6 fw-bold mb-2">المبلغ المدفوع</label>
+                                                    <label class="required fs-6 fw-bold mb-2">دفعتي</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <input type="number" value="0" id="new_paid_amount" name="new_paid_amount"
@@ -409,29 +378,31 @@
                                             </div>
 
                                         </div>
-                                        <div class="scroll-y" id="table" id="kt_modal_add_order_scroll"
+                                        <div class="scroll-y" id="table" id="kt_modal_add_import_scroll"
                                             data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}"
                                             data-kt-scroll-max-height="auto"
-                                            data-kt-scroll-dependencies="#kt_modal_add_order_header"
-                                            data-kt-scroll-wrappers="#kt_modal_add_order_scroll"
+                                            data-kt-scroll-dependencies="#kt_modal_add_import_header"
+                                            data-kt-scroll-wrappers="#kt_modal_add_import_scroll"
                                             data-kt-scroll-offset="300px" style="max-height: 647px;">
                                             <!--begin::Table-->
                                             <table class="text-center table align-middle table-row-dashed fs-6 gy-5"
-                                                id="order_table">
+                                                id="import_table">
                                                 <!--begin::Table head-->
                                                 <thead>
                                                     <!--begin::Table row-->
                                                     <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th>المنتج</th>
-                                                        <th style="width: 20%;">الكمية</th>
-                                                        <th style="width: 20%;">السعر</th>
+                                                        <th>الصنف</th>
+                                                        <th style="width: 15%;">الكمية</th>
+                                                        <th style="width: 15%;">سعر التكلفة</th>
+                                                        <th style="width: 15%;">سعر البيع</th> 
+
                                                         <th>المجموع</th>
                                                         <th>خيارات</th>
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
                                                 <!--end::Table head-->
-                                                <tbody id="orderTbody">
+                                                <tbody id="import_tbody">
 
                                                 </tbody>
 
@@ -461,7 +432,7 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th class="fs-5 left-td text-danger">الخصم</th>
+                                            <th class="fs-5 left-td text-danger">خصم المورد</th>
                                             <th class="text-danger" id="new_discount_amount_result">0 شيكل</th>
                                         </tr>
 
@@ -469,21 +440,21 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th class="fs-5 left-td text-success">مطلوب للدفع</th>
+                                            <th class="fs-5 left-td text-success">مطلوب مني للدفع</th>
                                             <th class="text-success" id="new_total_amount_result">0 شيكل</th>
                                         </tr>
                                         <tr class="align-top fw-bolder text-gray-700">
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th class="fs-5 left-td">المدفوع</th>
+                                            <th class="fs-5 left-td">دفعتي</th>
                                             <th id="new_paid_amount_result">0 شيكل</th>
                                         </tr>
                                         <tr class="align-top fw-bolder text-gray-700">
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            <th class="fs-5 left-td">المسترد</th>
+                                            <th class="fs-5 left-td">مسترد المورد</th>
                                             <th id="new_paid_amount_back_result">0 شيكل</th>
                                         </tr>
                                         <style>
@@ -498,11 +469,11 @@
                                 <div class="modal-footer flex-center">
 
                                     <!--begin::Button-->
-                                    <button type="reset" id="kt_modal_add_order_cancel"
+                                    <button type="reset" id="kt_modal_add_import_cancel"
                                         class="btn btn-light me-3">إلغاء</button>
                                     <!--end::Button-->
                                     <!--begin::Button-->
-                                    <button type="submit" id="kt_modal_add_order_submit" class="btn btn-primary">
+                                    <button type="submit" id="kt_modal_add_import_submit" class="btn btn-primary">
                                         <span class="indicator-label">حفظ</span>
                                         <span class="indicator-progress">الرجاء الإنتظار...
                                             <span
@@ -538,7 +509,7 @@
 <!--end::Global Javascript Bundle-->
 
 <!--begin::Page Custom Javascript(used by this page)-->
-<script src="/assets/js/myScripts/order/new.js"></script>
-<script src="/assets/js/myScripts/order/edit.js"></script>
+<script src="/assets/js/myScripts/import/new.js"></script>
+<script src="/assets/js/myScripts/import/edit.js"></script>
 
 <!--end::Page Custom Javascript-->

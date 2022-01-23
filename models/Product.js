@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose;
 const SerialNumber = require('./serialNumber')
+const moment = require('moment')
+
 const {killogramUnitID} = require('../configs/constants')
 
 const productSchema = new Schema({
@@ -34,7 +36,12 @@ const productSchema = new Schema({
             }
             return [true, 'سعر البيع مطلوب.']
         }
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
+
 
 
 

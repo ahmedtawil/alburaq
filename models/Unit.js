@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose;
+const moment = require('moment')
+
 const unitSchema = new Schema({
     title: {
         type: String,
@@ -14,7 +16,12 @@ const unitSchema = new Schema({
     weight: {
         type: Number,
         required: [true, 'القيمة الوزنية للوحدة مطلوبة'],
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
+
    
   
   

@@ -64,7 +64,7 @@ var KTStockList = function () {
                     }
                 },
                 {
-                    data: 'productCategory.costPrice',
+                    data: 'productCategory.sellingPrice',
                     render:function (data, type, doc) {
                         return `${data.toFixed(2)} شيكل`
                     }

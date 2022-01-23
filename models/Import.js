@@ -3,15 +3,13 @@ const { Schema } = mongoose;
 const SerialNumber = require('./serialNumber')
 const moment = require('moment')
 
-const orderSchema = new Schema({
-    customer: { type: Schema.Types.ObjectId, ref: 'Customer' },
+const importSchema = new Schema({
+    supplier: { type: Schema.Types.ObjectId, ref: 'Supplier' },
     serialNumber:{
         type:String
     },
-
-  
-    products: [{
-        _id: { type: Schema.Types.ObjectId, ref: 'Product' },
+    productCategories: [{
+        _id: { type: Schema.Types.ObjectId, ref: 'ProductCategory' },
         name: {
             type: String,
             required: true
@@ -20,20 +18,20 @@ const orderSchema = new Schema({
             type: Number,
             required: true
         },
-        price: {
+        costPrice: {
             type: Number,
             required: true
         },
-        Totalprice: {
+        sellingPrice: {
             type: Number,
             required: true
         },
-        manualPrice: {
-            type: Boolean,
-            default: false
+        totalPrice: {
+            type: Number,
+            required: true
         }
     }],
-    totalProductsPrice: {
+    totalProductCategoriesPrice: {
         type: Number,
         required: true
     },
@@ -61,25 +59,25 @@ const orderSchema = new Schema({
 
     
 })
-orderSchema.pre('save', async function (next) {
+importSchema.pre('save', async function (next) {
     if(!this.serialNumber){
         if (this.isNew) {
-            const counter = await SerialNumber.newOrder()
+            const counter = await SerialNumber.newImport()
             this.serialNumber = counter
         }
     }
     next()
 })
 
-orderSchema.virtual('productsData',{
+importSchema.virtual('productsData',{
     ref: 'Product',
     localField: 'products._id',
     foreignField: '_id',
 });
 
 
-orderSchema.set('toObject', { virtuals: true });
-orderSchema.set('toJSON', { virtuals: true });
+importSchema.set('toObject', { virtuals: true });
+importSchema.set('toJSON', { virtuals: true });
 
 
-module.exports = mongoose.model('Order', orderSchema)
+module.exports = mongoose.model('Import', importSchema)

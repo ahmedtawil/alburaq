@@ -125,6 +125,14 @@ exports.getProductCategoryUnit = catchAsyncErrors(async (req, res , next) => {
 
     res.json(unit)
 })
+exports.getProductCategoryByQuery = catchAsyncErrors(async (req, res , next) => {
+
+  const query = req.query
+  const productCategory = await ProductCategory.findOne(query).populate('unit')
+  res.send({success:true , productCategory})
+
+})
+
 
 exports.editProductCategory = catchAsyncErrors(async (req, res , next) => {
   if (req.access.can(req.user.role).updateAny('program').granted) {

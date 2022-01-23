@@ -1,17 +1,22 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose;
 const SerialNumber = require('./serialNumber')
+const moment = require('moment')
 const invoiceSchema = new Schema({
     serialNumber:{
         type:String
     },
-    InvoiceType: {
+    InvoiceType:{
         type: String,
-        enum: ['Order', 'Import', 'Patch']
+        enum: ['order', 'import', 'batch' , 'return' , 'extra' , 'exchange']
+    },
+    ObjType: {
+        type: String,
+        enum: ['Order', 'Import']
     },
     data: {
         type: Schema.Types.ObjectId,
-        refPath: 'InvoiceType'
+        refPath: 'ObjType'
     },
 
     forType: {
@@ -34,18 +39,17 @@ const invoiceSchema = new Schema({
     
     createdAt: {
         type: Date,
-        default: new Date()
-    }
+        default: Date.now
+        }
 
     
 })
 invoiceSchema.pre('save', async function (next) {
-    if(!this.serialNumber){
         if (this.isNew) {
             const counter = await SerialNumber.newInvoice()
             this.serialNumber = counter
         }
-    }
+    
     next()
 })
 

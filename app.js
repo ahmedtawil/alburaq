@@ -15,6 +15,8 @@ const unit = require('./components/unit/route')
 const productCategory = require('./components/productCategory/route')
 const product = require('./components/product/route')
 const stock = require('./components/stock/route')
+const invoice = require('./components/invoice/route')
+const importRoute = require('./components/import/route')
 
 const home = require('./components/order/route')
 
@@ -40,6 +42,10 @@ app.use('/', unit)
 app.use('/', productCategory)
 app.use('/', product)
 app.use('/', stock)
+app.use('/', importRoute)
+
+app.use('/', invoice)
+
 
 
 
