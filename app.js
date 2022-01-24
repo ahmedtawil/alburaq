@@ -17,6 +17,7 @@ const product = require('./components/product/route')
 const stock = require('./components/stock/route')
 const invoice = require('./components/invoice/route')
 const importRoute = require('./components/import/route')
+const authRoute = require('./components/auth/route')
 
 const home = require('./components/order/route')
 
@@ -29,6 +30,12 @@ app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }))
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
+app.use('/' , authRoute)
+app.use(isAuthenticatedUser)
+app.use(async(req, res, next) => {
+    res.locals.user = req.user
+    next()
+})
 
 app.get('/', (req,res)=>{
     res.redirect('/order/new')

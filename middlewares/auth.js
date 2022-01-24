@@ -3,7 +3,7 @@
 const jwt = require("jsonwebtoken");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("./catchAsyncErrors");
-
+const User = require('../models/User')
 // Checks if user is authenticated or not
 exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
 
@@ -13,12 +13,12 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
     }
 
     const decoded = await jwt.verify(token, process.env.JWT_SECRET)
-    const employee = await Employee.findById(decoded.id);
-    if(!employee)  {
+    const user = await User.findById(decoded.id);
+    if(!user)  {
         
         return next(new ErrorHandler('user not found!.', 401))
 
     }
-    req.user = employee   
+    req.user = user   
     next()
 })
