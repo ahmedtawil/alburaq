@@ -138,15 +138,12 @@ exports.newOrder = catchAsyncErrors(async (req, res) => {
       qtyToMin = (qty * ratioPerUnit) / unitWeight
     }
     const productCategoryInStock = await Stock.findOne({ productCategory })
+    console.log(productCategoryInStock.qty , qtyToMin);
     productCategoryInStock.qty -= qtyToMin
     return productCategoryInStock.save()
   })
 
   Promise.all(promises).then(async result => {
-    console.log('---------------');
-
-
-
     newOrder.save()
     const invoiceData = {
       InvoiceType: 'order',
@@ -266,19 +263,19 @@ exports.editOrder = catchAsyncErrors(async (req, res) => {
         if (existOrder.moneyBack > newOrder.moneyBack) {
           invoiceData.InvoiceType = 'extra'
           const debit = newOrder.moneyBack - existOrder.moneyBack
-          console.log(debit);
-          invoiceData.amount = (debit <=0) ? Math.abs(debit) : 0
+
+          invoiceData.amount = 0
           invoiceData.oldBalance = customer.debt
-          invoiceData.newBalance = invoiceData.oldBalance + invoiceData.amount
+          invoiceData.newBalance = invoiceData.oldBalance + ((debit <=0) ? Math.abs(debit) : 0)
           customer.debt = invoiceData.newBalance
 
         } else if (existOrder.moneyBack < newOrder.moneyBack) {
           invoiceData.InvoiceType = 'return'
           const debit = newOrder.moneyBack - existOrder.moneyBack
-          invoiceData.amount = debit
+          invoiceData.amount = 0
 
           invoiceData.oldBalance = customer.debt
-          invoiceData.newBalance = invoiceData.oldBalance - invoiceData.amount
+          invoiceData.newBalance = invoiceData.oldBalance - debit
           customer.debt = invoiceData.newBalance
 
         } else {

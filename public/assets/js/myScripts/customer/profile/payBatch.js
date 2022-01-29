@@ -58,7 +58,7 @@ var KTModalPayBatch = function () {
                         const payload = {
                             for: customerID,
                             forType:'Customer',
-                            InvoiceType:'Batch',
+                            InvoiceType:'batch',
                             ObjType:'Order',
                       
                             amount: $("input[name=batch_amount]").val()

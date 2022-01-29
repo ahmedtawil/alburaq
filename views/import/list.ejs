@@ -2,38 +2,38 @@
 <link href="/assets/plugins/custom/datatables/datatables.bundle.rtl.css" rel="stylesheet" type="text/css" />
 <!--end::Page Vendor Stylesheets-->
 
+<!--begin::Toolbar-->
+<div class="toolbar py-2" id="kt_toolbar">
+    <!--begin::Container-->
+    <div id="kt_toolbar_container" class="container-fluid d-flex align-items-center">
+        <!--begin::Page title-->
+        <div class="flex-grow-1 flex-shrink-0 me-5">
+            <!--begin::Page title-->
+            <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                <!--begin::Title-->
+                <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">التورييد
+                    <!--begin::Separator-->
+                    <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
+                    <!--end::Separator-->
+                    <!--begin::Description-->
+                    <small class="text-muted fs-7 fw-bold my-1 ms-1">التوريدات</small>
+                    <!--end::Description-->
+                </h1>
+                <!--end::Title-->
+            </div>
+            <!--end::Page title-->
+        </div>
+        <!--end::Page title-->
+
+
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Toolbar-->
 
 <!--begin::Content-->
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-    <!--begin::Toolbar-->
-    <div class="toolbar py-2" id="kt_toolbar">
-        <!--begin::Container-->
-        <div id="kt_toolbar_container" class="container-fluid d-flex align-items-center">
-            <!--begin::Page title-->
-            <div class="flex-grow-1 flex-shrink-0 me-5">
-                <!--begin::Page title-->
-                <div class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                    <!--begin::Title-->
-                    <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">المبيعات
-                        <!--begin::Separator-->
-                        <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
-                        <!--end::Separator-->
-                        <!--begin::Description-->
-                        <small class="text-muted fs-7 fw-bold my-1 ms-1">المبيعات</small>
-                        <!--end::Description-->
-                    </h1>
-                    <!--end::Title-->
-                </div>
-                <!--end::Page title-->
-            </div>
-            <!--end::Page title-->
 
-
-        </div>
-        <!--end::Container-->
-    </div>
-    <!--end::Toolbar-->
-      
     <!--begin::Post-->
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!--begin::Container-->
@@ -58,8 +58,8 @@
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
-                            <input type="text" data-kt-orders-table-filter="search"
-                                class="form-control form-control-solid w-250px ps-15" placeholder="البخث عن طلبية.." />
+                            <input type="text" data-kt-imports-table-filter="search"
+                                class="form-control form-control-solid w-250px ps-15" placeholder="البحث عن طلبية تووريد.." />
                         </div>
                         <!--end::Search-->
                     </div>
@@ -67,7 +67,7 @@
                     <!--begin::Card toolbar-->
                     <div class="card-toolbar">
                         <!--begin::Toolbar-->
-                        <div class="d-flex justify-content-end" data-kt-orders-table-toolbar="base">
+                        <div class="d-flex justify-content-end" data-kt-imports-table-toolbar="base">
 
                             <!--begin::Filter-->
                             <button type="button" class="btn btn-light-primary me-3" data-kt-menu-trigger="click"
@@ -95,13 +95,19 @@
                                 <div class="separator border-gray-200"></div>
                                 <!--end::Separator-->
                                 <!--begin::Content-->
-                                <div class="px-7 py-5" data-kt-orders-table-filter="form">
+                                <div class="px-7 py-5" data-kt-imports-table-filter="form">
                                     <!--begin::Input group-->
                                     <div class="mb-6">
-                                        <label class="form-label fs-6 fw-bold">الزبون</label>
-                                        <select name="" id="">
-
-                                        </select>
+                                        <label class="form-label fs-6 fw-bold">التاريخ</label>
+                                        <input class="form-control form-control-solid" style="direction: rtl;"
+                                            id="createdAt" placeholder="أختر فاصل زمني.." name="date" readonly />
+                                        <style>
+                                            .daterangepicker,
+                                            .ranges {
+                                                font-family: inherit !important;
+                                                text-align: right !important;
+                                            }
+                                        </style>
 
                                     </div>
                                     <!--end::Input group-->
@@ -112,10 +118,11 @@
                                     <div class="d-flex justify-content-end">
                                         <button type="reset"
                                             class="btn btn-light btn-active-light-primary fw-bold me-2 px-6"
-                                            data-kt-menu-dismiss="true" data-kt-orders-table-filter="reset">مسح</button>
+                                            data-kt-menu-dismiss="true"
+                                            data-kt-imports-table-filter="reset">مسح</button>
                                         <button type="submit" class="btn btn-primary fw-bold px-6"
                                             data-kt-menu-dismiss="true"
-                                            data-kt-orders-table-filter="filter">تطبيق</button>
+                                            data-kt-imports-table-filter="filter">تطبيق</button>
                                     </div>
                                     <!--end::Actions-->
                                 </div>
@@ -125,9 +132,9 @@
                             <!--end::Filter-->
 
 
-                            <!--begin::Add orders-->
-                            <a type="button" class="btn btn-primary" href="/order/new">طلبية جديدة</a>
-                            <!--end::Add orders-->
+                            <!--begin::Add imports-->
+                            <a type="button" class="btn btn-primary"  href="/import/new">طلبية توريد جديدة</a>
+                            <!--end::Add imports-->
                         </div>
                         <!--end::Toolbar-->
 
@@ -138,19 +145,20 @@
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
                     <!--begin::Table-->
-                    <table class="text-center table align-middle table-row-dashed fs-6 gy-5" id="kt_orders_table">
+                    <table class="text-center table align-middle table-row-dashed fs-6 gy-5"
+                        id="kt_imports_table">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th>المسلسل</th>
-                                <th>الزبون</th>
+                                <th>التاجر</th>
                                 <th>عدد المنتجات</th>
                                 <th>الإجمالي</th>
                                 <th>الخصم</th>
-                                <th>مطلوب للدفع</th>
-                                <th>المدفوع</th>
-                                <th>المسترد</th>
+                                <th>إجمالي الدفع</th>
+                                <th>مدفوع للمورد</th>
+                                <th>مسترد للمورد</th>
                                 <th>الخيارات</th>
                             </tr>
                             <!--end::Table row-->
@@ -166,7 +174,7 @@
             <!--begin::Modals-->
 
             <!--begin::Modal - Customers - Add-->
-
+           
             <!--end::Modals-->
         </div>
         <!--end::Container-->
@@ -187,9 +195,9 @@
 <!--end::Page Vendors Javascript-->
 
 <!--begin::Page Custom Javascript(used by this page)-->
-<script src="/assets/js/myScripts/order/todayList.js"></script>
+<script src="/assets/js/myScripts/import/list.js"></script>
 <!--
-<script src="/assets/js/myScripts/orders/new.js"></script>
+<script src="/assets/js/myScripts/imports/new.js"></script>
 
 -->
 

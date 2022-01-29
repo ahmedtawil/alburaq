@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--begin::Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap"
+        rel="stylesheet">
+    <!--end::Fonts-->
+
+    <!--begin::Page Vendor Stylesheets(used by this page)-->
+    <link href="/assets/plugins/custom/datatables/datatables.bundle.rtl.css" rel="stylesheet" type="text/css">
+
+    <!--end::Page Vendor Stylesheets-->
+
+    <!--begin::Global Stylesheets Bundle(used by all pages)-->
+    <link href="/assets/plugins/global/plugins.bundle.rtl.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/style.bundle.rtl.css" rel="stylesheet" type="text/css" />
+    <!--end::Global Stylesheets Bundle-->
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .title {
+            background-color: darkgray;
+            border-radius: 30px;
+            font-weight: bolder;
+        }
+
+        html,
+        body {
+            background-color: white !important;
+        }
+
+        #celBorder1 , #celBorder2 {
+            border: 0 !important;
+            border-right: 1px solid rgb(255, 255, 255) !important;
+            border-bottom: 1px solid rgb(255, 255, 255) !important;
+        }
+        span{
+            font-weight: bolder;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-10 align-items-center text-center mx-auto p-4">
+                <h1 class="p-5">شكراً لإختياركم مطحنة البراق</h1>
+                <h1 class="p-5 title">فاتورة</h1>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-12 align-items-center text-center">
+                <table class="table fs-2" style="font-weight:500">
+                   <tbody>
+                    <tr>
+                        <td>السيد/ة : <span><%= invoice.for.name %></span></td>
+                        <td>نوع الفاتورة : <span>بيع</span></td>
+                    </tr>
+                    <tr>
+                        <td>رقم الفاتورة : <span><%= invoice.serialNumber %></span></td>
+                        <td>رقم الطلبية : <span><%= invoice.data.serialNumber %></span></td>
+                    </tr>
+                   </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row  align-items-center">
+            <div class="col-12 align-items-center">
+                <table class="h2 text-center table align-middle table-row-dashed fs-3">
+                    <thead class="border border-dark" style="background-color: darkgray;">
+                        <tr>
+                            <th>المنتج</th>
+                            <th>الكمية</th>
+                            <th>السعر</th>
+                            <th>المجموع</th>
+                        </tr>
+                    </thead>
+                    <tbody class="border border-dark">
+                        <% invoice.data.products.forEach(product=> { %>
+                            <tr>
+                                <td>
+                                    <%= product.name %>
+                                </td>
+                                <td>
+                                    <%= `${(product.manualPrice) ? '-' : product.qty}` %>
+                                </td>
+                                <td>
+                                    <%= product.price %>
+                                </td>
+                                <td>
+                                    <%= product.Totalprice %>
+                                </td>
+
+                            </tr>
+                            <% }) %>
+                                <tr>
+                                    <td id="celBorder1" rowspan="7"></td>
+                                    <td id="celBorder2" rowspan="7"></td>
+                                    <td>الإجمالي</th>
+                                    <td><%= invoice.data.totalProductsPrice  %></td>
+                                </tr>
+                                <tr>
+                                    <td>الخصم</td>
+                                    <td><%= invoice.data.discount  %></td>
+                                </tr>
+
+                                <tr style="background-color: beige;font-weight: bolder;">
+                                    <td>للدفع</td>
+                                    <td><%= invoice.data.totalPrice  %></td>
+                                </tr>
+                                <tr >
+                                    <td>المدفوع</td>
+                                    <td><%= invoice.data.paidAmount  %></td>
+                                </tr>
+                                <tr>
+                                    <td>المسترد</td>
+                                    <td><%= invoice.data.moneyBack  %></td>
+                                </tr>
+                                <% if (invoice.for.type !== 'public') { %>
+                                    <tr style="background-color: gainsboro;">
+                                        <td>قديم</td>
+                                        <td><%= invoice.oldBalance  %></td>
+                                    </tr>
+                                    <tr style="background-color: gainsboro;">
+                                        <td>جديد</td>
+                                        <td><%= invoice.newBalance  %></td>
+                                    </tr>
+                                <% } %>
+                                
+
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -308,3 +308,46 @@ exports.getSupplierImportsData = catchAsyncErrors(async (req, res , next) => {
 
 
 })
+
+
+exports.getImportsPage = catchAsyncErrors(async (req, res, next) => {
+  res.render('import/list')
+
+})
+
+exports.getImportsData = catchAsyncErrors(async (req, res, next) => {
+  const query = req.query
+
+
+  const queryValue = (req.query.search.value == '') ? {} : JSON.parse(query.search.value)
+  let queryObj = {}
+
+  if (queryValue.filter) {
+    queryObj.$and = [queryValue.filter]
+  }
+
+  if (queryValue.search) {
+    let val = queryValue.search
+    const qu = {
+      $regex: val,
+      $options: 'i'
+    }
+    const suppliersIDs = await Supplier.find({ name: qu }, { _id: 1 })
+    const searchQuery = { $or: [{ serialNumber: qu }, { supplier: { $in: suppliersIDs } }] }
+    if (queryValue.filter) {
+      queryObj.$and.push(searchQuery)
+    } else {
+      queryObj = searchQuery
+    }
+  }
+
+  const importsCount = await Import.countDocuments()
+  const imports = await Import.find(queryObj).sort({ createdAt: -1 }).limit(parseInt(query.length)).skip(parseInt(query.start)).populate('supplier')
+  return res.json({
+    recordsTotal: importsCount,
+    recordsFiltered: imports.length,
+    imports
+  })
+
+})
+ 

@@ -44,6 +44,31 @@ var KTOrdersList = function () {
                 "dataSrc": 'invoices',
                 "dataFilter": function (res) {
                     dataRes = JSON.parse(res)
+                    const {invoicesStatistics} = dataRes
+                    const {
+                        totalInvoicesCount,
+                        totalOrderInvoicesCount,
+                        totalExtraInvoicesCount,
+                        totalReturendInvoicesCount,
+                        totalBatchInvoicesCount,
+
+                        totalOrderInvoicesAmount,
+                        totalExtraInvoicesAmount,
+                        totalBatchInvoicesAmount,
+                        totalReturendInvoicesAmount,
+
+                        } = invoicesStatistics[0]
+                    $('#totalInvoicesCount').html(totalInvoicesCount)
+                    const paidInvoicesCount = totalOrderInvoicesCount + totalExtraInvoicesCount + totalBatchInvoicesCount
+                    $('#totalPaidInvoicesCount').html(paidInvoicesCount)
+
+                    $('#totalReturnedInvoicesCount').html(totalReturendInvoicesCount)
+                    const paidInvoicesAmount = totalOrderInvoicesAmount + totalExtraInvoicesAmount + totalBatchInvoicesAmount
+                    $('#totalPaidInvoices').html(paidInvoicesAmount)
+                    $('#totalReturnedInvoices').html(totalReturendInvoicesAmount)
+                    $('#totalInvoicesAmount').html(paidInvoicesAmount - totalReturendInvoicesAmount)
+
+                    
                     return res
                 }
             },
@@ -103,11 +128,14 @@ var KTOrdersList = function () {
 
                     }
                 },
-                { data: 'data.serialNumber' },
+                { data: 'data.serialNumber',
+                render: function (data, type, doc) {
+                    return `${data || '-'}`
+
+                } },
                 {
                     data: 'for',
                     render: function (data, type, doc) {
-                        console.log(doc);
                         return `<span class="badge badge-light-info fw-bolder my-2">${data.name}</span>`
 
                     }
@@ -170,6 +198,11 @@ var KTOrdersList = function () {
                         data-kt-menu="true">
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
+                         <a href="#" class="menu-link px-3 printInvoice" invoiceID="${doc._id}">طباعة الفاتورة</a>
+
+                        </div>
+                        <!--begin::Menu item-->
+                        <div class="menu-item px-3">
                          <a href="#" class="menu-link px-3">حذف</a>
 
                         </div>
@@ -190,6 +223,8 @@ var KTOrdersList = function () {
         datatable.on('draw', function () {
             KTMenu.createInstances();
             handleDeleteRows();
+            linkPrintInvoiceEventTrigger()
+
         });
       
 
@@ -332,9 +367,6 @@ var KTOrdersList = function () {
             handleSearchDatatable();
             handleDeleteRows();
             handleFilter();
-
-             datatable.search(JSON.stringify(tableQuery)).draw();
-
         }
     }
 }();
