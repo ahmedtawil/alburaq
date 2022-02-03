@@ -63,6 +63,18 @@ var KTModalOrderAdd = function () {
         submitButton.addEventListener('click', function (e) {
             e.preventDefault();
 
+            if (importData.productCategories.length == 0) {
+                return Swal.fire({
+                    text: "الطلبية فارغة.!",
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "حسنا",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+            }
+
             // Validate form before submit
             if (validator) {
                 validator.validate().then(function (status) {
@@ -78,7 +90,7 @@ var KTModalOrderAdd = function () {
                             ...importData
                         }
 
-                        $.post('/import/new', { payload: JSON.stringify(payload) }).then(recipientID => {
+                        $.post('/import/new', { payload: JSON.stringify(payload) }).then(invoice => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
@@ -95,7 +107,8 @@ var KTModalOrderAdd = function () {
 
                                     // Enable submit button after loading
                                     submitButton.disabled = false;
-                                    window.location = '/import/new'
+                                    printInvoice(this, {_id:invoice._id})
+
 
                                 }
                             })
@@ -181,7 +194,7 @@ var KTModalOrderAdd = function () {
             const existIndex = importData.productCategories.findIndex(prod => prod._id == productCategory._id)
             if (existIndex >= 0) {
                 importData.productCategories[existIndex].qty++
-                importData.productCategories[existIndex].totalPrice += productCategory.costPrice 
+                importData.productCategories[existIndex].totalPrice += productCategory.costPrice
                 updateRow(existIndex)
                 return
             }
@@ -190,10 +203,10 @@ var KTModalOrderAdd = function () {
                 name: `${productCategory.name} - ${productCategory.unit.title}`,
                 qty: 1,
                 costPrice: productCategory.costPrice,
-                sellingPrice:productCategory.sellingPrice,
+                sellingPrice: productCategory.sellingPrice,
                 totalPrice: productCategory.costPrice,
             }
-            
+
             importData.productCategories.push(newProductCategory)
             updateImportResult()
 
@@ -220,7 +233,7 @@ var KTModalOrderAdd = function () {
             form.querySelector('#import_tbody').appendChild(tr);
 
 
-            $('.productCategoryQty').on('change keyup', async function (event) { 
+            $('.productCategoryQty').on('change keyup', async function (event) {
                 const val = $(this).val().trim()
                 const id = $(this).attr("id").split('-')[1]
                 const productCategoryIndex = importData.productCategories.findIndex(productCategory => productCategory._id == id)
@@ -245,13 +258,13 @@ var KTModalOrderAdd = function () {
                 importData.productCategories[productCategoryIndex].sellingPrice = Number(val)
             })
 
-          
+
             deleteCustomField()
 
         }
 
         const getProuctBySerialNumber = async (serialNumber = 00000000) => {
-            const res = await fetch(`/productCategory/get?serialNumber=${serialNumber}`) 
+            const res = await fetch(`/productCategory/get?serialNumber=${serialNumber}`)
             const data = await res.json()
             return data.productCategory
         }
@@ -262,7 +275,16 @@ var KTModalOrderAdd = function () {
                 const val = $(this).val().trim()
                 const productCategory = await getProuctBySerialNumber(val)
                 if (!productCategory) {
-                    return
+                    $(this).val('')
+                    return Swal.fire({
+                        text: "لم يتم العثور على الصنف!",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "حسنا",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
                 }
                 addProductCategory(productCategory)
                 $(this).val('')
@@ -390,7 +412,7 @@ var KTModalOrderAdd = function () {
             validate: function (input) {
                 const value = input.value;
 
-                if ( value > importData.totalPrice) {
+                if (value > importData.totalPrice) {
                     return {
                         valid: false,
                     };

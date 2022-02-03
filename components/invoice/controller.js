@@ -101,7 +101,8 @@ exports.newInvoice = catchAsyncErrors(async (req, res, next) => {
     forType,
     ObjType,
     InvoiceType,
-    amount: parseInt(amount)
+    amount: parseInt(amount),
+    createdBy: req.user._id
   }
   const newInvoice = new Invoice(invoiceData)
 
@@ -347,7 +348,18 @@ exports.getInvoicesData = catchAsyncErrors(async (req, res, next) => {
 
 exports.getInvoiceToPrint = catchAsyncErrors(async (req, res, next) => {
   const query = req.query
+  console.log(query);
 
-  const invoiceData = await Invoice.findOne(query).populate('for').populate('data')
-  res.render('invoice/print/orderInvoice'   , {invoice:invoiceData ,layout:false})
+  const invoiceData = await Invoice.findOne(query).populate('for').populate('data').populate('createdBy')
+  switch (invoiceData.ObjType) {
+    case 'Order':
+      res.render('invoice/print/orderInvoice', { invoice: invoiceData, layout: false })
+
+      break;
+    case 'Import':
+      res.render('invoice/print/importInvoice', { invoice: invoiceData, layout: false })
+
+      break;
+
+  }
 })

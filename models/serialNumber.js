@@ -38,7 +38,6 @@ serialNumberSchema.statics.newInvoice = async function () {
 
 serialNumberSchema.statics.newOrder = async function () {
     const orderCounter =  await mongoose.model('SerialNumber').findOne({uid:'orders'})
-    console.log(await mongoose.model('SerialNumber').find());
 
     orderCounter.counter++
     await orderCounter.save()
@@ -47,7 +46,6 @@ serialNumberSchema.statics.newOrder = async function () {
 
 serialNumberSchema.statics.newImport = async function () {
     const orderCounter =  await mongoose.model('SerialNumber').findOne({uid:'imports'})
-    console.log(await mongoose.model('SerialNumber').find());
 
     orderCounter.counter++
     await orderCounter.save()

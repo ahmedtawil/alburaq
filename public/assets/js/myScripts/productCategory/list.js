@@ -45,6 +45,7 @@ var KTproductCategorysList = function () {
 
             columns: [
                 { data: 'name' },
+                { data: 'serialNumber' },
                 { 
                      data: 'unit',
                      render:function (data, type, doc) {

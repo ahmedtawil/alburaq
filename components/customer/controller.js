@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Customer = require('../../models/Customer')
 const ErrorHandler = require('../../utils/errorHandler');
 const catchAsyncErrors = require('../../middlewares/catchAsyncErrors');
-
+const _ = require('lodash')
 // get new Program page 
 
 exports.newCustomerPage = catchAsyncErrors(async (req, res) => {
@@ -65,29 +65,28 @@ exports.newCustomer = catchAsyncErrors(async (req, res) => {
 // post editPage 
 
 exports.editCustomer = catchAsyncErrors(async (req, res) => {
-  if (req.access.can(req.user.role).updateAny('program').granted) {
-
-    let program = null
+console.log('----------');
+    let customer = null
     const id = req.params.id
 
     if (!mongoose.isValidObjectId(id)) return next(new ErrorHandler('', 404))
-    program = await Program.findById(id)
-    if (!program) return next(new ErrorHandler('', 404))
+    customer = await Customer.findById(id)
+    if (!customer) return next(new ErrorHandler('', 404))
 
     let data = JSON.parse(req.body.payload)
-    _.assign(program, data)
-    await program.save()
-    res.send(program)
-  } else {
-    next(new ErrorHandler('unauthrized!', 403))
-  }
+    _.assign(customer, data)
+    await customer.save()
+    console.log(customer);
+    res.send(customer)
 
 })
 
-exports.checkIFformalIDisExist = catchAsyncErrors(async (req, res) => {
+exports.checkIFformalIDisExist = catchAsyncErrors(async (req, res) => { 
+  const existCustomerID = req.query.customerID
   const formalID = req.params.formalID
   const found = await Customer.findOne({ formalID })
   if (!found) return res.status(200).json({ isExisted: false })
+  if(found._id == existCustomerID) return res.status(200).json({ isExisted: false })
   return res.status(200).json({ isExisted: true })
 
 })

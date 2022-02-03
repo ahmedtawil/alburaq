@@ -121,7 +121,7 @@ var KTModalOrderEdit = function () {
                             ...orderData
                         }
 
-                        $.post(`/order/edit/${orderID}`, { payload: JSON.stringify(payload) }).then(recipientID => {
+                        $.post(`/order/edit/${orderID}`, { payload: JSON.stringify(payload) }).then(invoice => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
@@ -138,7 +138,8 @@ var KTModalOrderEdit = function () {
 
                                     // Enable submit button after loading
                                     submitButton.disabled = false;
-                                    window.location = '/order/new'
+                                    printInvoice(this, {_id:invoice._id})
+
 
                                 }
                             })
@@ -215,7 +216,16 @@ var KTModalOrderEdit = function () {
                 const val = $(this).val().trim()
                 const product = await getProuctBySerialNumber(val)
                 if (!product) {
-                    return
+                    $(this).val('')
+                    return  Swal.fire({
+                        text: "لم يتم العثور على المنتج!",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "حسنا",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
                 }
                 addProduct(product)
                 $(this).val('')

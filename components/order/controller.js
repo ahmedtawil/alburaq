@@ -109,6 +109,8 @@ exports.getOrdersForCustomer = catchAsyncErrors(async (req, res, next) => {
 
 exports.newOrder = catchAsyncErrors(async (req, res) => {
   const data = JSON.parse(req.body.payload)
+  data.createdBy = req.user._id
+
   let customerID = data.customer
   if (customerID == 'public') {
     const publicCustomer = await Customer.findOne({ type: customerID })
@@ -152,6 +154,8 @@ exports.newOrder = catchAsyncErrors(async (req, res) => {
       forType: 'Customer',
       for: data.customer,
       amount: newOrder.totalPrice,
+      createdBy:req.user._id
+
     }
     if (customerID !== 'public') {
       customer = await Customer.findById(newOrder.customer)
@@ -170,7 +174,7 @@ exports.newOrder = catchAsyncErrors(async (req, res) => {
     const invoice = new Invoice(invoiceData)
     await invoice.save()
 
-    res.end()
+    res.json(invoice)
 
   })
 })
@@ -179,6 +183,8 @@ exports.newOrder = catchAsyncErrors(async (req, res) => {
 
 exports.editOrder = catchAsyncErrors(async (req, res) => {
   const data = JSON.parse(req.body.payload)
+  data.updatedBy = req.user._id
+
   let customerObj = data.customer
 
   //
@@ -241,6 +247,8 @@ exports.editOrder = catchAsyncErrors(async (req, res) => {
         forType: 'Customer',
         for: newOrder.customer._id,
         amount: newOrder.totalPrice,
+        createdBy:req.user._id,
+
       }
       if (customerObj.type == 'public') {
         console.log('--------');
@@ -288,7 +296,7 @@ exports.editOrder = catchAsyncErrors(async (req, res) => {
       const invoice = new Invoice(invoiceData)
       await invoice.save()
 
-      res.end()
+      res.json(invoice)
 
     })
 

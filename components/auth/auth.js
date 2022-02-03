@@ -19,14 +19,14 @@ exports.postLoginPage = catchAsyncErrors(async (req, res, next) => {
 
     // Checks if email and password is entered by user
     if (!email || !password) {
-        return next(new ErrorHandler('الرجاء إدخال رقم الهوية وكلمة المرور.', 400))
+        return next(new ErrorHandler('الرجاء إدخال البريد الإلكتروني وكلمة المرور.', 400))
     }
 
     // Finding user in database
     const user = await User.findOne({ email , password })
 
     if (!user) {
-        return next(new ErrorHandler('خطأ في رقم الهوية أو كلمة المرور.', 400));
+        return next(new ErrorHandler('خطأ في البريد الإلكتروني أو كلمة المرور.', 400));
     }
 
     sendToken(user, 200, res)

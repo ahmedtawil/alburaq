@@ -117,4 +117,16 @@ exports.getProductCategoryForProduct = catchAsyncErrors(async (req, res) => {
 })
 
 
+exports.checkIfSerialNumberExist = catchAsyncErrors(async (req, res) => {
+  const existSerialNumber = req.query.SerialNumber
+  const SerialNumber = req.params.SerialNumber
+  const found = await Product.findOne({ serialNumber: SerialNumber})
+  if (!found) return res.status(200).json({ isExisted: false })
+  if(found._id == existSerialNumber) return res.status(200).json({ isExisted: false })
+  return res.status(200).json({ isExisted: true })
+
+
+})
+
+
 

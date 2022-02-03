@@ -90,11 +90,60 @@ var KTModalProductCategoryAdd = function () {
                 },
             };
         };
+        const checkIfProductSerialNumberExist = function () {
+            return {
+                validate: function (input) {
+                    const value = input.value;
+                    if (!internalProductSerialNumber) {
+                        return $.get(`/product/checkSerialNumber/${value}`).then((data, statusCode) => {
+        
+                            if (data.isExisted) {
+                                return {
+                                    valid: false,
+                                };
+                            } else {
+                                return {
+                                    valid: true,
+                                };
+                            }
+        
+                        }).catch(console.log)
+                    }
+        
+                },
+            };
+        };
+        const checkIfProductCategorySerialNumberExist = function () {
+            return {
+                validate: function (input) {
+                    const value = input.value;
+                    if (!internalProductCategorySerialNumber) {
+                        return $.get(`/productCategory/checkSerialNumber/${value}`).then((data, statusCode) => {
+        
+                            if (data.isExisted) {
+                                return {
+                                    valid: false,
+                                };
+                            } else {
+                                return {
+                                    valid: true,
+                                };
+                            }
+        
+                        }).catch(console.log)
+                    }
+        
+                },
+            };
+        };
+
 
 
         FormValidation.validators.checkIfProductCategorySerialNumberRequired = checkIfProductCategorySerialNumberRequired;
         FormValidation.validators.checkIfProductSerialNumberRequired = checkIfProductSerialNumberRequired;
         FormValidation.validators.checkIfProductSellingPriceRequired = checkIfProductSellingPriceRequired;
+        FormValidation.validators.checkIfProductSerialNumberExist = checkIfProductSerialNumberExist;
+        FormValidation.validators.checkIfProductCategorySerialNumberExist = checkIfProductCategorySerialNumberExist;
 
 
         validator = FormValidation.formValidation(
@@ -128,6 +177,9 @@ var KTModalProductCategoryAdd = function () {
                         validators: {
                             checkIfProductCategorySerialNumberRequired: {
                                 message: 'السيريال نمبر للصنف مطلوب.'
+                            },
+                            checkIfProductCategorySerialNumberExist:{
+                                message: 'هذا الصنف أو السيريال نمبر موجود مسبقاً'
                             }
 
                         }
@@ -162,6 +214,9 @@ var KTModalProductCategoryAdd = function () {
                         validators: {
                             checkIfProductSerialNumberRequired: {
                                 message: 'السيريال نمبر للمنتج مطلوب.'
+                            },
+                            checkIfProductSerialNumberExist:{
+                                message: 'هذا المنتج أو السيريال نمبر موجود مسبقاً'
                             }
                         }
                     },

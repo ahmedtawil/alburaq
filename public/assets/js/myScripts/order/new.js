@@ -62,6 +62,17 @@ var KTModalOrderAdd = function () {
         // Action buttons
         submitButton.addEventListener('click', function (e) {
             e.preventDefault();
+            if(orderData.products.length == 0){
+                return  Swal.fire({
+                    text: "الطلبية فارغة.!",
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: "حسنا",
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+            }
 
             // Validate form before submit
             if (validator) {
@@ -78,7 +89,7 @@ var KTModalOrderAdd = function () {
                             ...orderData
                         }
 
-                        $.post('/order/new', { payload: JSON.stringify(payload) }).then(recipientID => {
+                        $.post('/order/new', { payload: JSON.stringify(payload) }).then(invoice => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
@@ -95,7 +106,7 @@ var KTModalOrderAdd = function () {
 
                                     // Enable submit button after loading
                                     submitButton.disabled = false;
-                                    window.location = '/order/new'
+                                    printInvoice(this, {_id:invoice._id})
 
                                 }
                             })
@@ -265,7 +276,16 @@ var KTModalOrderAdd = function () {
                 const val = $(this).val().trim()
                 const product = await getProuctBySerialNumber(val)
                 if (!product) {
-                    return
+                    $(this).val('')
+                    return  Swal.fire({
+                        text: "لم يتم العثور على المنتج!",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "حسنا",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
                 }
                 addProduct(product)
                 $(this).val('')
@@ -455,7 +475,7 @@ var KTModalOrderAdd = function () {
 $(document).ready(function () {
     $('#productSerialNumber').focus()
     $(window).keydown(function (event) {
-        if (event.keyCode == 13) {
+        if (event.keyCode == 13 || event.keyCode == 27) {
             event.preventDefault();
             return false;
         }

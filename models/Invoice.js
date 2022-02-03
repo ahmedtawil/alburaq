@@ -3,12 +3,12 @@ const { Schema } = mongoose;
 const SerialNumber = require('./serialNumber')
 const moment = require('moment')
 const invoiceSchema = new Schema({
-    serialNumber:{
-        type:String
+    serialNumber: {
+        type: String
     },
-    InvoiceType:{
+    InvoiceType: {
         type: String,
-        enum: ['order', 'import', 'batch' , 'return' , 'extra' , 'exchange']
+        enum: ['order', 'import', 'batch', 'return', 'extra', 'exchange']
     },
     ObjType: {
         type: String,
@@ -36,20 +36,22 @@ const invoiceSchema = new Schema({
     newBalance: {
         type: Number,
     },
-    
+    createdBy:{ type: Schema.Types.ObjectId, ref: 'User' },
+    updatedBy:{ type: Schema.Types.ObjectId, ref: 'User' },
+
     createdAt: {
         type: Date,
         default: Date.now
-        }
+    }
 
-    
+
 })
 invoiceSchema.pre('save', async function (next) {
-        if (this.isNew) {
-            const counter = await SerialNumber.newInvoice()
-            this.serialNumber = counter
-        }
-    
+    if (this.isNew) {
+        const counter = await SerialNumber.newInvoice()
+        this.serialNumber = counter
+    }
+
     next()
 })
 

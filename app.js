@@ -6,6 +6,7 @@ const errorMiddleware = require('./middlewares/errors')
 const ErrorHandler = require('./utils/errorHandler');
 const {isAuthenticatedUser} = require('./middlewares/auth')
 const expressLayouts = require('express-ejs-layouts');
+const moment = require('moment')
 
 
 const customerRoute = require('./components/customer/route')
@@ -20,6 +21,7 @@ const importRoute = require('./components/import/route')
 const authRoute = require('./components/auth/route')
 
 const home = require('./components/order/route')
+const util = require('./components/util/route')
 
 
 const app = express();
@@ -34,6 +36,7 @@ app.use('/' , authRoute)
 app.use(isAuthenticatedUser)
 app.use(async(req, res, next) => {
     res.locals.user = req.user
+    res.locals.moment = moment
     next()
 })
 
@@ -52,6 +55,8 @@ app.use('/', stock)
 app.use('/', importRoute)
 
 app.use('/', invoice)
+app.use('/', util)
+
 
 
 

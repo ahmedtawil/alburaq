@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Supplier = require('../../models/Supplier')
 const ErrorHandler = require('../../utils/errorHandler');
 const catchAsyncErrors = require('../../middlewares/catchAsyncErrors');
-
+const _ = require('lodash')
 // get new Program page 
 
 exports.newSupplierPage = catchAsyncErrors(async (req, res) => {
@@ -64,29 +64,29 @@ exports.newSupplier = catchAsyncErrors(async (req, res) => {
 // post editPage 
 
 exports.editSupplier = catchAsyncErrors(async (req, res) => {
-  if (req.access.can(req.user.role).updateAny('program').granted) {
 
-    let program = null
+    let supplier = null
     const id = req.params.id
 
     if (!mongoose.isValidObjectId(id)) return next(new ErrorHandler('', 404))
-    program = await Program.findById(id)
-    if (!program) return next(new ErrorHandler('', 404))
+    supplier = await Supplier.findById(id)
+    if (!supplier) return next(new ErrorHandler('', 404))
 
     let data = JSON.parse(req.body.payload)
-    _.assign(program, data)
-    await program.save()
-    res.send(program)
-  } else {
-    next(new ErrorHandler('unauthrized!', 403))
-  }
+    _.assign(supplier, data)
+    await supplier.save()
+    res.end()
 
 })
 
-exports.checkIFformalIDisExist = catchAsyncErrors(async (req, res) => {
+exports.checkIFformalIDisExist = catchAsyncErrors(async (req, res) => { 
+  const existSupplierID = req.query.supplierID
+
   const formalID = req.params.formalID
   const found = await Supplier.findOne({ formalID })
   if (!found) return res.status(200).json({ isExisted: false })
+  if(found._id == existSupplierID) return res.status(200).json({ isExisted: false })
+
   return res.status(200).json({ isExisted: true })
 
 })

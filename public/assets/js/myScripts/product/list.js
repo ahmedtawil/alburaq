@@ -87,6 +87,10 @@ var KTproductsList = function () {
                         data-kt-menu="true">
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
+                        <a href="#" class="menu-link px-3 edit" id="${doc._id}">تعديل</a>
+
+                       </div>
+                        <div class="menu-item px-3">
                          <a href="#" class="menu-link px-3">حذف</a>
 
                         </div>
@@ -105,6 +109,7 @@ var KTproductsList = function () {
         // Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
         datatable.on('draw', function () {
             KTMenu.createInstances();
+            linkEventsTriggers()
             handleDeleteRows();
         });
     }

@@ -23,43 +23,60 @@ var searchObject;
 // Private functions
 var processs = function (search) {
 
-    $.get(`/recipients/search/${search.getQuery()}`, data => {
-        const partial = `<% if (items.length>0) { %>
-            <% items.forEach(recipient => { %>
-             <!--begin::Item-->
-            <a href="/recipient/profile/<%= recipient._id %>"
-            class="d-flex text-dark text-hover-primary align-items-center mb-5">
-            <!--begin::Symbol-->
-            <div class="symbol symbol-40px me-4">
-                <img src="/assets/media/avatars/150-1.jpg" alt="" />
-            </div>
-            <!--end::Symbol-->
-            <!--begin::Title-->
-            <div
-                class="d-flex flex-column justify-content-start fw-bold">
-                <span class="fs-6 fw-bold"><%= recipient.fullName %></span>
-                <span class="fs-7 fw-bold text-muted"><%= recipient.formalID %></span>
-            </div>
-            <!--end::Title-->
-           </a>
-           <!--end::Item-->
-            <% }) %>
-            <% } else { %>
-        <% } %>
-    `
-   
-    
+    $.get(`/utils/search/${search.getQuery()}`, data => {
 
-       mainElement.classList.add('d-none');
+        let partial = data.map(obj => {
+            /*
+            return `<!--begin::Item-->
+        <a href="/${obj.type}/profile/get/${obj._id}"
+        class="d-flex text-dark text-hover-primary align-items-center mb-5">
+        <!--begin::Symbol-->
+        <div class="symbol symbol-40px me-4">
+            <img src="/assets/media/avatars/150-2.jpg" alt="" />
+        </div>
+        <!--end::Symbol-->
+        <!--begin::Title-->
+        <div
+            class="d-flex flex-column justify-content-start fw-bold">
+            <span class="fs-6 fw-bold">${obj.name} </span> 
+            <span class="fs-7 fw-bold text-muted">${obj.formalID}</span>
+        </div>
+        <!--end::Title-->
+       </a>
+       <!--end::Item-->`
+*/
+                return `<a class="text-black" href="/${obj.type}/profile/get/${obj._id}">
+                <div class="menu-item ">
+       <div class="menu-content d-flex align-items-center">
+           <!--begin::Avatar-->
+           <div class="symbol symbol-50px me-5">
+               <img alt="Logo" src="/assets/media/avatars/150-26.jpg">
+           </div>
+           <!--end::Avatar-->
+           <!--begin::Username-->
+           <div class="d-flex flex-column">
+               <div class="fw-bolder d-flex align-items-center fs-5">${obj.name} ${(obj.type == 'customer') ? '<span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">زبون</span>' : '<span class="badge badge-light-warning fw-bolder fs-8 px-2 py-1 ms-2">مورد</span>'}
+               </div>
+               <a href="#" class="fw-bold text-muted text-hover-primary fs-7">${obj.formalID}</a>
+               
+           </div>
+           <!--end::Username-->
+       </div>
+   </div>
+                </a>`
+        }).join(' ')
+
+
+
+        mainElement.classList.add('d-none');
         if (data.length == 0) {
             // Hide results
             resultsElement.classList.add('d-none');
             // Show empty message 
             emptyElement.classList.remove('d-none');
         } else {
-            const html = ejs.render(partial , {items:data})
-            $('.content-search').html(html)
-        
+            $('.content-search').html(partial)
+
             // Show results
             resultsElement.classList.remove('d-none');
             // Hide empty message 

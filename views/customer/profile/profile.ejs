@@ -80,7 +80,9 @@
                                 <!--end::Stats-->
                                 <!--begin::Stats-->
                                 <div class="border border-gray-300 border-dashed rounded py-3 px-3 mx-4 mb-3">
-                                    <div class="fs-4 fw-bolder text-gray-700 text-center"><%= customer.debt %></div>
+                                    <div class="fs-4 fw-bolder text-gray-700 text-center">
+                                        <%= customer.debt %>
+                                    </div>
                                     <div class="fw-bold text-muted">المستحق</div>
                                 </div>
                                 <!--end::Stats-->
@@ -126,9 +128,9 @@
                                     <!--end::Svg Icon-->
                                 </span>
                             </div>
-                            <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="Edit customer details">
+                            <span data-bs-toggle="tooltip" data-bs-trigger="hover" title="تعديل الزبون">
                                 <a href="#" class="btn btn-sm btn-light-primary" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_update_customer">تعديل</a>
+                                data-bs-target="#kt_modal_edit_customer">تعديل</a>
                             </span>
                         </div>
                         <!--end::Details toggle-->
@@ -205,7 +207,7 @@
                             <!--begin::Menu item-->
                             <div class="menu-item px-5">
                                 <a href="#" class="menu-link px-5" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_pay_batch" >تسديد دفعة</a>
+                                    data-bs-target="#kt_modal_pay_batch">تسديد دفعة</a>
                             </div>
                             <!--end::Menu item-->
 
@@ -243,21 +245,25 @@
                                     <div class="card-body">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
                                         <span class="svg-icon svg-icon-primary svg-icon-3x ms-n1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none">
                                                 <rect x="8" y="9" width="3" height="10" rx="1.5" fill="black"></rect>
-                                                <rect opacity="0.5" x="13" y="5" width="3" height="14" rx="1.5" fill="black"></rect>
+                                                <rect opacity="0.5" x="13" y="5" width="3" height="14" rx="1.5"
+                                                    fill="black"></rect>
                                                 <rect x="18" y="11" width="3" height="8" rx="1.5" fill="black"></rect>
                                                 <rect x="3" y="13" width="3" height="6" rx="1.5" fill="black"></rect>
                                             </svg>
                                         </span>
                                         <!--end::Svg Icon-->
-                                        <div class="text-gray-900 fw-bolder fs-2 mb-2 mt-5"><%= customer.debt %> ₪</div>
+                                        <div class="text-gray-900 fw-bolder fs-2 mb-2 mt-5">
+                                            <%= customer.debt %> ₪
+                                        </div>
                                         <div class="fw-bold text-gray-400">الرصيد المستحق</div>
                                     </div>
                                     <!--end::Body-->
                                 </a>
                                 <!--end::Statistics Widget 5-->
-                            </div>                    
+                            </div>
                         </div>
 
 
@@ -429,7 +435,7 @@
                                         <!--end::Svg Icon-->
                                         <input type="text" data-kt-customer-invoices-table-filter="search"
                                             class="form-control form-control-solid w-250px ps-15"
-                                            placeholder="البخث عن طلبية.." />
+                                            placeholder="البحث عن طلبية.." />
                                     </div>
                                     <!--end::Search-->
                                 </div>
@@ -555,6 +561,133 @@
         </div>
         <!--end::Layout-->
         <!--begin::Modals-->
+        <!--begin::Modal - Customers - Edit-->
+        <div class="modal fade" id="kt_modal_edit_customer"   aria-hidden="true">
+
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-450px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Form-->
+                    <form class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#"
+                        id="kt_modal_edit_customer_form"  autocomplete="off">
+                        <!--begin::Modal header-->
+                        <div class="modal-header" id="kt_modal_edit_customer_header">
+                            <!--begin::Modal title-->
+                            <h2 class="fw-bolder">تعديل الزبون</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div id="kt_modal_edit_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
+                                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                            transform="rotate(-45 6 17.3137)" fill="black"></rect>
+                                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                            transform="rotate(45 7.41422 6)" fill="black"></rect>
+                                    </svg>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-10 px-lg-17" id="kt">
+                            <!--begin::Scroll-->
+                            <div class="scroll-y me-n7 pe-7" id="kt_modal_edit_customer_scroll" data-kt-scroll="true"
+                                data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto"
+                                data-kt-scroll-dependencies="#kt_modal_edit_customer_header"
+                                data-kt-scroll-wrappers="#kt_modal_edit_customer_scroll" data-kt-scroll-offset="300px"
+                                style="max-height: 647px;">
+                                <!--begin::Input group-->
+                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">اسم الزبون</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder=""
+                                        name="name" value="<%= customer.name %>">
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+                                <div id="select" class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">نوع الزبون</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="type" aria-label="اختار الزبون" data-control="select2" id="type2"
+                                        data-placeholder="نوع الزبون" data-hide-search="true"
+                                        class="form-select form-select-solid fw-bolder">
+                                        <% if (customer.type == 'credit') { %>
+                                            <option value="credit" selected>زبون دين</option>
+                                            <option value="wholesaler">زبون جملة</option>
+                                            <% } else { %>
+                                             <option value="credit">زبون دين</option>
+                                             <option value="wholesaler" selected>زبون جملة</option>
+                                        <% } %>
+                                    </select>
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">رقم الهوية</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder=""
+                                        name="formalID" maxlength="10" value="<%= customer.formalID %>">
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">رقم الجوال</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder=""
+                                        name="phoneNumber" maxlength="10" value="<%= customer.phoneNumber %>">
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+                                <div class="fv-row mb-7 fv-plugins-icon-container">
+                                    <!--begin::Label-->
+                                    <label class="required fs-6 fw-bold mb-2">العنوان</label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" placeholder=""
+                                        name="address" value="<%= customer.address %>">
+                                    <!--end::Input-->
+                                    <div class="fv-plugins-message-container invalid-feedback"></div>
+                                </div>
+
+                            </div>
+                            <!--end::Scroll-->
+                        </div>
+                        <!--end::Modal body-->
+                        <!--begin::Modal footer-->
+                        <div class="modal-footer flex-center">
+                            <!--begin::Button-->
+                            <button type="reset" id="kt_modal_edit_customer_cancel"
+                                class="btn btn-light me-3">إلغاء</button>
+                            <!--end::Button-->
+                            <!--begin::Button-->
+                            <button type="submit" id="kt_modal_edit_customer_submit" class="btn btn-primary">
+                                <span class="indicator-label">حفظ</span>
+                                <span class="indicator-progress">الرجاء الإنتظار...
+                                    <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                            </button>
+                            <!--end::Button-->
+                        </div>
+                        <!--end::Modal footer-->
+                        <div></div>
+                    </form>
+                    <!--end::Form-->
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="kt_modal_pay_batch" tabindex="-1" aria-hidden="true">
 
             <!--begin::Modal dialog-->
@@ -562,8 +695,8 @@
                 <!--begin::Modal content-->
                 <div class="modal-content">
                     <!--begin::Form-->
-                    <form class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#" id="kt_modal_pay_batch_form"
-                         autocomplete="off">
+                    <form class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#"
+                        id="kt_modal_pay_batch_form" autocomplete="off">
                         <!--begin::Modal header-->
                         <div class="modal-header" id="kt_modal_pay_batch_header">
                             <!--begin::Modal title-->
@@ -600,7 +733,8 @@
                                     <label class="required fs-6 fw-bold mb-2">قيمة الدفعة</label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input class="form-control form-control-solid" placeholder="القيمة" min="1" type="number" name="batch_amount" id="batch_amount">
+                                    <input class="form-control form-control-solid" placeholder="القيمة" min="1"
+                                        type="number" name="batch_amount" id="batch_amount">
                                     <!--end::Input-->
                                     <div class="fv-plugins-message-container invalid-feedback"></div>
                                 </div>
@@ -612,7 +746,8 @@
                         <!--begin::Modal footer-->
                         <div class="modal-footer flex-center">
                             <!--begin::Button-->
-                            <button type="reset" id="kt_modal_pay_batch_cancel" class="btn btn-light me-3">إلغاء</button>
+                            <button type="reset" id="kt_modal_pay_batch_cancel"
+                                class="btn btn-light me-3">إلغاء</button>
                             <!--end::Button-->
                             <!--begin::Button-->
                             <button type="submit" id="kt_modal_pay_batch_submit" class="btn btn-primary">
@@ -648,6 +783,7 @@
 <script>
     const customerID = $('#kt_content').attr('root-customer-id')
 </script>
+<script src="/assets/js/myScripts/customer/edit.js"></script>
 <script src="/assets/js/myScripts/customer/profile/purchases.js"></script>
 <script src="/assets/js/myScripts/customer/profile/invoices.js"></script>
 <script src="/assets/js/myScripts/customer/profile/payBatch.js"></script>

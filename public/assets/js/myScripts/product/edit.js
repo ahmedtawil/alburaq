@@ -1,12 +1,13 @@
 "use strict";
 // Class definition
-var KTModalProductCategoryAdd = function () {
+var KTModalProductCategoryEdit = function () {
     var submitButton;
     var cancelButton;
     var closeButton;
     var validator;
     var form;
     var modal;
+    let productID
 
     let isWeightUnit = false
     let internalProductSerialNumber = false
@@ -15,28 +16,28 @@ var KTModalProductCategoryAdd = function () {
     // Init form inputs
     var handleForm = function () {
         // Init form validation rules. For more info check the FormValidation plugin's official documentation:https://formvalidation.io/
-    
+
         const checkIfProductSerialNumberRequired = function () {
             return {
                 validate: function (input) {
                     const value = input.value;
-                    if(!addProduct){
+                    if (!addProduct) {
                         return {
                             valid: true,
                         };
-                    }else if (internalProductSerialNumber) {
+                    } else if (internalProductSerialNumber) {
                         return {
                             valid: true,
                         };
-                    } else if (value.length > 0){
+                    } else if (value.length > 0) {
                         return {
                             valid: true,
                         };
-                    }else{
+                    } else {
                         return {
                             valid: false,
                         };
-                    }     
+                    }
                 },
             };
         };
@@ -45,54 +46,30 @@ var KTModalProductCategoryAdd = function () {
             return {
                 validate: function (input) {
                     const value = input.value;
-                    if(!addProduct){
+                    if (!addProduct) {
                         return {
                             valid: true,
                         };
-                    }else if (isWeightUnit) {
+                    } else if (isWeightUnit) {
                         return {
                             valid: true,
                         };
-                    } else if (value.length > 0){
+                    } else if (value.length > 0) {
                         return {
                             valid: true,
                         };
-                    }else{
+                    } else {
                         return {
                             valid: false,
                         };
-                    }     
-                },
-            };
-        };
-        const checkIfSerialNumberExist = function () {
-            return {
-                validate: function (input) {
-                    const value = input.value;
-                    if (!internalProductSerialNumber) {
-                        return $.get(`/product/checkSerialNumber/${value}`).then((data, statusCode) => {
-        
-                            if (data.isExisted) {
-                                return {
-                                    valid: false,
-                                };
-                            } else {
-                                return {
-                                    valid: true,
-                                };
-                            }
-        
-                        }).catch(console.log)
                     }
-        
                 },
             };
         };
-                
+
 
         FormValidation.validators.checkIfProductSerialNumberRequired = checkIfProductSerialNumberRequired;
         FormValidation.validators.checkIfProductSellingPriceRequired = checkIfProductSellingPriceRequired;
-        FormValidation.validators.checkIfSerialNumberExist = checkIfSerialNumberExist;
 
 
         validator = FormValidation.formValidation(
@@ -109,7 +86,7 @@ var KTModalProductCategoryAdd = function () {
                     'productCategory': {
                         validators: {
                             notEmpty: {
-                                message:'اسم الصنف مطلوب.'
+                                message: 'اسم الصنف مطلوب.'
                             }
 
                         }
@@ -118,9 +95,6 @@ var KTModalProductCategoryAdd = function () {
                         validators: {
                             checkIfProductCategorySerialNumberRequired: {
                                 message: 'السيريال نمبر للصنف مطلوب.'
-                            },
-                            checkIfSerialNumberExist:{
-                                message: 'هذا المنتج أو السيريال نمبر موجود مسبقاً'
                             }
 
                         }
@@ -128,7 +102,7 @@ var KTModalProductCategoryAdd = function () {
                     'ratioPerUnit': {
                         validators: {
                             notEmpty: {
-                                message:'القيمة الوزنية للمنتج بالنسبة للوحدة مطلوب.'
+                                message: 'القيمة الوزنية للمنتج بالنسبة للوحدة مطلوب.'
                             }
 
                         }
@@ -180,16 +154,16 @@ var KTModalProductCategoryAdd = function () {
                             productSerialNumber: $("input[name=productSerialNumber]").val(),
 
                             ratioPerUnit: $("input[name=ratioPerUnit]").val(),
-                            price:$("input[name=price]").val(),
+                            price: $("input[name=price]").val(),
 
-                            configs:{
+                            configs: {
                                 internalProductSerialNumber,
                                 isWeightUnit
                             }
 
                         }
 
-                        $.post('/product/new', {payload:JSON.stringify(payload)}).then(recipientID => {
+                        $.post('/product/new', { payload: JSON.stringify(payload) }).then(recipientID => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
@@ -311,8 +285,8 @@ var KTModalProductCategoryAdd = function () {
             });
         })
 
-      
-       
+
+    
 
         $('#productSerialNumberBtn').on('change', function (e) {
             if (this.checked) {
@@ -324,11 +298,11 @@ var KTModalProductCategoryAdd = function () {
             }
         })
 
-        $('#addProduct').on('click',async function (e) {
+        $('#addProduct').on('click', async function (e) {
             const productCategoryLabel = $('#productCategoryUnitSmallTitle')
-            const getProductCategoryUnit = async (productCategoryID)=>{
+            const getProductCategoryUnit = async (productCategoryID) => {
                 const res = await fetch(`/productCategory/unit/get/${productCategoryID}`)
-                return  await res.json()
+                return await res.json()
             }
             const unit = await getProductCategoryUnit($('#productCategory').find('option:selected').val())
 
@@ -337,13 +311,13 @@ var KTModalProductCategoryAdd = function () {
 
 
 
-            $('#productCategory').on('change',async function (e) {
-                const selectedProductCategoryID  = $(this).find('option:selected').val()
+            $('#productCategory').on('change', async function (e) {
+                const selectedProductCategoryID = $(this).find('option:selected').val()
                 const unit = await getProductCategoryUnit(selectedProductCategoryID)
 
                 productCategoryLabel.text(unit.smallTitle)
             })
-    
+
         })
 
 
@@ -354,16 +328,18 @@ var KTModalProductCategoryAdd = function () {
 
     }
 
+
+
     return {
         // Public functions
         init: function () {
             // Elements
-            modal = new bootstrap.Modal(document.querySelector('#kt_modal_add_product'));
+            modal = new bootstrap.Modal(document.querySelector('#kt_modal_edit_product'));
 
-            form = document.querySelector('#kt_modal_add_product_form');
-            submitButton = form.querySelector('#kt_modal_add_product_submit');
-            cancelButton = form.querySelector('#kt_modal_add_product_cancel');
-            closeButton = form.querySelector('#kt_modal_add_product_close');
+            form = document.querySelector('#kt_modal_edit_product_form');
+            submitButton = form.querySelector('#kt_modal_edit_product_submit');
+            cancelButton = form.querySelector('#kt_modal_edit_product_cancel');
+            closeButton = form.querySelector('#kt_modal_edit_product_close');
 
 
 
@@ -373,12 +349,26 @@ var KTModalProductCategoryAdd = function () {
 }();
 
 
+const linkEventsTriggers = ()=>{
+    $('.edit').on('click', async function (e) {
+        e.preventDefault()
+        const id = e.target.id
+        const res = await fetch(`/product/get?_id=${id}`)
+        const {product} = await res.json()
+        $('#editPrductTitle').val(product.name)
+        $('#editProductCategory').val(product.productCategory).change();
+        $('#editProductSerialNumber').val(product.serialNumber)
+        $('#kt_modal_edit_product').modal('show');
+
+    })
+
+}
 
 
 
 // On document ready
 KTUtil.onDOMContentLoaded(function () {
 
-    KTModalProductCategoryAdd.init();
+    KTModalProductCategoryEdit.init();
 });
 

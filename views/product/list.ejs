@@ -329,6 +329,165 @@
                 </div>
             </div>
 
+             <!--begin::Modal - Customers - Edit -->
+             <div class="modal fade" id="kt_modal_edit_product" tabindex="-1" aria-hidden="true">
+
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-450px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Form-->
+                        <form class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#"
+                            id="kt_modal_edit_product_form" data-kt-redirect="/product/new" autocomplete="off">
+                            <!--begin::Modal header-->
+                            <div class="modal-header" id="kt_modal_edit_product_header">
+                                <!--begin::Modal title-->
+                                <h2 class="fw-bolder">تعديل منتج</h2>
+                                <!--end::Modal title-->
+                                <!--begin::Close-->
+                                <div id="kt_modal_edit_product_close"
+                                    class="btn btn-icon btn-sm btn-active-icon-primary">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                                transform="rotate(-45 6 17.3137)" fill="black"></rect>
+                                            <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                                transform="rotate(45 7.41422 6)" fill="black"></rect>
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </div>
+                                <!--end::Close-->
+                            </div>
+                            <!--end::Modal header-->
+                            <!--begin::Modal body-->
+                            <div class="modal-body py-10 px-lg-17">
+                                <!--begin::Scroll-->
+                                <div class="scroll-y me-n7 pe-7" id="kt_modal_edit_product_scroll" data-kt-scroll="true"
+                                    data-kt-scroll-activate="{default: false, lg: true}"
+                                    data-kt-scroll-max-height="auto"
+                                    data-kt-scroll-dependencies="#kt_modal_edit_product_header"
+                                    data-kt-scroll-wrappers="#kt_modal_edit_product_scroll" data-kt-scroll-offset="300px"
+                                    style="max-height: 647px;">
+
+
+                                    <!--begin::Input group-->
+                                    <div class="fv-row mb-7 fv-plugins-icon-container">
+                                        <!--begin::Label-->
+                                        <label class="required fs-6 fw-bold mb-2">اسم المنتج</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" placeholder=""
+                                            name="name" id="editPrductTitle">
+                                        <!--end::Input-->
+                                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="fv-row mb-7 fv-plugins-icon-container">
+                                        <!--begin::Label-->
+                                        <label class="required fs-6 fw-bold mb-2">اسم الصنف</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select name="productCategory" id="editProductCategory"
+                                            class="form-select form-select-solid fw-bolder" data-kt-select2="true"
+                                            data-placeholder="أختر...">
+                                            <% productCategory.forEach(category=> { %>
+                                                <option value="<%= category._id  %>">
+                                                    <%= category.name %>
+                                                </option>
+                                                <% }) %>
+
+
+                                        </select>
+
+                                        <!--end::Input-->
+                                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                                    </div>
+
+                                    <div class="fv-row mb-4 fv-plugins-icon-container" id="editProductSerialNumberBlock">
+                                        <!--begin::Label-->
+                                        <label class="required fs-6 fw-bold mb-2">السيريال نمبر للمنتج</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="number" class="form-control form-control-solid" placeholder=""
+                                            name="productSerialNumber" id="editProductSerialNumber" min="0">
+                                        <!--end::Input-->
+                                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-check form-switch form-check-custom form-check-solid mb-5 me-10">
+                                        <input class="form-check-input h-20px w-30px" type="checkbox" value=""
+                                            id="editProductSerialNumberBtn">
+                                        <label class="form-check-label" for="flexSwitch20x30">
+                                            إستخدام سيريال نمبر داخلي
+                                        </label>
+                                    </div>
+
+                                    <div class="fv-row mb-7 fv-plugins-icon-container">
+                                        <!--begin::Label-->
+                                        <label class="required fs-6 fw-bold mb-2">النسبه للوحدة</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <div class="row p-0">
+                                            <div class="col-10">
+                                                <input type="number" class="form-control form-control-solid"
+                                                    placeholder="" name="ratioPerUnit" min="0" value="1">
+                                            </div>
+                                            <div class="col-2 px-1 ">
+                                                <label id="editProductCategoryUnitSmallTitle"
+                                                    class="fs-6 fw-bolder py-3 pl-3">قطعة</label>
+                                            </div>
+                                        </div>
+
+                                        <!--end::Input-->
+
+                                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                                    </div>
+
+
+
+
+
+                                    <div class="fv-row mb-7 fv-plugins-icon-container">
+                                        <!--begin::Label-->
+                                        <label class="required fs-6 fw-bold mb-2">السعر</label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="number" class="form-control form-control-solid" placeholder=""
+                                            name="price" min="1">
+                                        <!--end::Input-->
+                                        <div class="fv-plugins-message-container invalid-feedback"></div>
+                                    </div>
+
+
+
+                                </div>
+                                <!--end::Scroll-->
+                            </div>
+                            <!--end::Modal body-->
+                            <!--begin::Modal footer-->
+                            <div class="modal-footer flex-center">
+                                <!--begin::Button-->
+                                <button type="reset" id="kt_modal_edit_product_cancel"
+                                    class="btn btn-light me-3">إلغاء</button>
+                                <!--end::Button-->
+                                <!--begin::Button-->
+                                <button type="submit" id="kt_modal_edit_product_submit" class="btn btn-primary">
+                                    <span class="indicator-label">حفظ</span>
+                                    <span class="indicator-progress">الرجاء الإنتظار...
+                                        <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                                </button>
+                                <!--end::Button-->
+                            </div>
+                            <!--end::Modal footer-->
+                            <div></div>
+                        </form>
+                        <!--end::Form-->
+                    </div>
+                </div>
+            </div>
+
             <!--end::Modals-->
         </div>
         <!--end::Container-->
@@ -349,8 +508,11 @@
 <!--end::Page Vendors Javascript-->
 
 <!--begin::Page Custom Javascript(used by this page)-->
-<script src="/assets/js/myScripts/product/list.js"></script>
 <script src="/assets/js/myScripts/product/new.js"></script>
+<script src="/assets/js/myScripts/product/edit.js"></script>
+
+<script src="/assets/js/myScripts/product/list.js"></script>
+
 
 
 <!--end::Page Custom Javascript-->

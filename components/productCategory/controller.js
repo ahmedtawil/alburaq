@@ -69,7 +69,6 @@ exports.newProductCategory = catchAsyncErrors(async (req, res) => {
     sellingPrice: data.productCategorySellingPrice,
     supplier: data.supplier
   })
-  await newProductCategory.validate()
   await newProductCategory.save()
 
   const productCategory = await ProductCategory.findById(newProductCategory._id).populate({ path: 'unit' })
@@ -84,22 +83,27 @@ exports.newProductCategory = catchAsyncErrors(async (req, res) => {
   const product1 = new Product(productData)
   product1.save()
 
-  if(data.configs.addProduct){
+  if(data.configs.addProduct && data.configs.isWeightUnit != true){
     productData = {
-      name:`${productCategory.name} ${(data.configs.isWeightUnit)? `وزن` : `قطعة`}`,
+      name:`${productCategory.name} ${productCategory.unit.smallTitle}`,
       serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
       productCategory: productCategory._id,
-    }
-    if (!data.configs.isWeightUnit) {
-      productData = {
-        ...productData,
-        ratioPerUnit: 1,
-        price: data.productSellingPrice
-      }
+      ratioPerUnit: 1,
+      price: data.productSellingPrice
+
     }
   
     const product2 = new Product(productData)
-    product2.save()
+    await product2.save()
+  }
+  if(data.configs.isWeightUnit){
+    productData = {
+      name:`${productCategory.name} وزن`,
+      serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
+      productCategory: productCategory._id,
+    }
+    const product2 = new Product(productData)
+    await product2.save()
   }
   const stock = new Stock({ productCategory: productCategory._id, qty: data.qty })
   stock.save()
@@ -157,3 +161,13 @@ exports.editProductCategory = catchAsyncErrors(async (req, res , next) => {
 
 
 
+exports.checkIfSerialNumberExist = catchAsyncErrors(async (req, res) => {
+  const existSerialNumber = req.query.SerialNumber
+  const SerialNumber = req.params.SerialNumber
+  const found = await ProductCategory.findOne({ serialNumber: SerialNumber})
+  if (!found) return res.status(200).json({ isExisted: false })
+  if(found._id == existSerialNumber) return res.status(200).json({ isExisted: false })
+  return res.status(200).json({ isExisted: true })
+
+
+})

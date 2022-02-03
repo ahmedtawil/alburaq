@@ -147,7 +147,9 @@ exports.newImport = catchAsyncErrors(async (req, res, next) => {
       forType: 'Supplier',
       for: newImport.supplier,
       amount: newImport.paidAmount,
-      oldBalance: supplier.credit
+      oldBalance: supplier.credit,
+      createdBy:req.user._id,
+
     }
     if (newImport.moneyBack < 0) {
       supplier.credit += (newImport.totalPrice - newImport.paidAmount)
@@ -156,7 +158,8 @@ exports.newImport = catchAsyncErrors(async (req, res, next) => {
     invoiceData.newBalance = supplier.credit
     const invoice = new Invoice(invoiceData)
     await invoice.save()
-    res.end()
+    res.json(invoice)
+
 
   })
 })
@@ -211,6 +214,8 @@ exports.editImport = catchAsyncErrors(async (req, res , next) => {
         data: data._id,
         forType: 'Supplier',
         for: supplier._id,
+        createdBy:req.user._id,
+
       }
 
       let oldTotalImport = existImport.totalPrice - existImport.paidAmount
@@ -246,7 +251,7 @@ exports.editImport = catchAsyncErrors(async (req, res , next) => {
       const invoice = new Invoice(invoiceData)
       await invoice.save()
 
-      res.end()
+      res.json(invoice)
 
 
 

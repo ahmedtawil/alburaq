@@ -14,10 +14,10 @@ var KTSigninGeneral = function() {
 			form,
 			{
 				fields: {					
-					'formalID': {
+					'email': {
                         validators: {
 							notEmpty: {
-								message: 'رقم الهوية مطلوب.'
+								message: 'البريد الإلكتروني مطلوب.'
 							}
 						}
 					},

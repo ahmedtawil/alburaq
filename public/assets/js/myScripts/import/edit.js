@@ -122,7 +122,7 @@ var KTModalImportEdit = function () {
                         }
                         console.log(importData);
 
-                        $.post(`/import/edit/${importID}`, { payload: JSON.stringify(payload) }).then(recipientID => {
+                        $.post(`/import/edit/${importID}`, { payload: JSON.stringify(payload) }).then(invoice => {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
@@ -139,7 +139,8 @@ var KTModalImportEdit = function () {
 
                                     // Enable submit button after loading
                                     submitButton.disabled = false;
-                                    window.location = '/import/new'
+                                    printInvoice(this, {_id:invoice._id})
+
 
                                 }
                             })
@@ -216,7 +217,16 @@ var KTModalImportEdit = function () {
                 const val = $(this).val().trim()
                 const productCategory = await getProductCategoryBySerialNumber(val)
                 if (!productCategory) {
-                    return
+                    $(this).val('')
+                    return  Swal.fire({
+                        text: "لم يتم العثور على المنتج!",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "حسنا",
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
                 }
                 addProductCategory(productCategory)
                 $(this).val('')
