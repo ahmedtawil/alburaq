@@ -65,7 +65,6 @@ exports.newCustomer = catchAsyncErrors(async (req, res) => {
 // post editPage 
 
 exports.editCustomer = catchAsyncErrors(async (req, res) => {
-console.log('----------');
     let customer = null
     const id = req.params.id
 
@@ -76,7 +75,6 @@ console.log('----------');
     let data = JSON.parse(req.body.payload)
     _.assign(customer, data)
     await customer.save()
-    console.log(customer);
     res.send(customer)
 
 })

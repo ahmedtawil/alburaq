@@ -220,7 +220,6 @@ exports.editImport = catchAsyncErrors(async (req, res , next) => {
 
       let oldTotalImport = existImport.totalPrice - existImport.paidAmount
       let newTotalImport = data.totalPrice - data.paidAmount
-      console.log(oldTotalImport , newTotalImport);
 
 
       if (newTotalImport > oldTotalImport) {

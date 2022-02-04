@@ -45,8 +45,6 @@ var KTModalOrderEdit = function () {
                 validate: function (input) {
                     const value = input.value;
                     const customer = $('select[name="edit_customer"]').val()
-                    console.log('----------------------');
-                    console.log(value ,orderData.totalProductsPrice );
         
                     if (value > orderData.totalProductsPrice) {
                         return {

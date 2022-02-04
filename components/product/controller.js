@@ -53,8 +53,13 @@ exports.getProductsData = catchAsyncErrors(async (req, res) => {
 
   const productsCount = await Product.estimatedDocumentCount()
   const productsFillterCount = await Product.find(queryObj).countDocuments()
-  const products = await Product.find(queryObj).limit(parseInt(query.length)).skip(parseInt(query.start)).populate({ path: 'productCategory' ,select:{name:1}})
-
+  const productsFromD = await Product.find(queryObj).limit(parseInt(query.length)).skip(parseInt(query.start))
+  const promises = productsFromD.map(async product=>{
+    await product.populate('productCategory')
+    product.name = await product.getProductName()
+    return product
+  })
+  const products = await Promise.all(promises)
   return res.json({
     recordsTotal: productsCount,
     recordsFiltered: productsFillterCount,
@@ -104,7 +109,9 @@ exports.editProduct = catchAsyncErrors(async (req, res) => {
 
 exports.getProductByQuery = catchAsyncErrors(async (req, res) => {
   const query = req.query
-  const product = await Product.findOne(query)
+  let product = await Product.findOne(query)
+  let productName= await product.getProductName()
+  product.name = productName 
   res.send({success:true , product})
 })
 

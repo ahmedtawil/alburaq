@@ -24,8 +24,7 @@ License: For each use you must have a valid license purchased only from above li
 	<meta property="og:type" content="article" />
 
 	<!--begin::Fonts-->
-	<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap"
-		rel="stylesheet">
+	<!--<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap" rel="stylesheet">-->
 	<!--end::Fonts-->
 
 	<!--begin::Page Vendor Stylesheets(used by this page)-->
@@ -43,8 +42,14 @@ License: For each use you must have a valid license purchased only from above li
 		.page-item.previous {
 			display: none;
 		}
+
 		input[type=number] {
 			direction: rtl;
+		}
+
+		@font-face {
+			font-family: Cairo;
+			src: url("/fonts/Harlow_Solid_Italic.ttf");
 		}
 	</style>
 
@@ -68,7 +73,7 @@ License: For each use you must have a valid license purchased only from above li
 				<!--begin::Brand-->
 				<div class="aside-logo flex-column-auto" id="kt_aside_logo">
 					<!--begin::Logo-->
-					<a href="../../demo1/dist/index.html">
+					<a href="/">
 
 						<img alt="Logo" src="/assets/media/logos/logo2.png" class="h-50px logo" />
 					</a>
@@ -218,6 +223,14 @@ License: For each use you must have a valid license purchased only from above li
 
 								<div class="menu-sub menu-sub-accordion">
 									<div class="menu-item">
+										<a class="menu-link" href="/import/new">
+											<span class="menu-bullet">
+												<span class="bullet bullet-dot"></span>
+											</span>
+											<span class="menu-title">توريد جديد</span>
+										</a>
+									</div>
+									<div class="menu-item">
 										<a class="menu-link" href="/imports/page/get">
 											<span class="menu-bullet">
 												<span class="bullet bullet-dot"></span>
@@ -233,18 +246,11 @@ License: For each use you must have a valid license purchased only from above li
 											<span class="menu-title">المورديين</span>
 										</a>
 									</div>
-									<div class="menu-item">
-										<a class="menu-link" href="/import/new">
-											<span class="menu-bullet">
-												<span class="bullet bullet-dot"></span>
-											</span>
-											<span class="menu-title">توريد جديد</span>
-										</a>
-									</div>
+
 								</div>
 
 
-								
+
 							</div>
 
 							<div data-kt-menu-trigger="click" class="menu-item menu-accordion">
@@ -281,7 +287,7 @@ License: For each use you must have a valid license purchased only from above li
 											<span class="menu-title">مبيعات اليوم</span>
 										</a>
 									</div>
-									
+
 									<div class="menu-item">
 										<a class="menu-link" href="/invoices/page/today/get">
 											<span class="menu-bullet">
@@ -305,9 +311,13 @@ License: For each use you must have a valid license purchased only from above li
 												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
 												viewBox="0 0 24 24" version="1.1">
 												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<rect x="0" y="0" width="24" height="24"/>
-													<path d="M12,4.56204994 L7.76822128,9.6401844 C7.4146572,10.0644613 6.7840925,10.1217854 6.3598156,9.76822128 C5.9355387,9.4146572 5.87821464,8.7840925 6.23177872,8.3598156 L11.2317787,2.3598156 C11.6315738,1.88006147 12.3684262,1.88006147 12.7682213,2.3598156 L17.7682213,8.3598156 C18.1217854,8.7840925 18.0644613,9.4146572 17.6401844,9.76822128 C17.2159075,10.1217854 16.5853428,10.0644613 16.2317787,9.6401844 L12,4.56204994 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
-													<path d="M3.5,9 L20.5,9 C21.0522847,9 21.5,9.44771525 21.5,10 C21.5,10.132026 21.4738562,10.2627452 21.4230769,10.3846154 L17.7692308,19.1538462 C17.3034221,20.271787 16.2111026,21 15,21 L9,21 C7.78889745,21 6.6965779,20.271787 6.23076923,19.1538462 L2.57692308,10.3846154 C2.36450587,9.87481408 2.60558331,9.28934029 3.11538462,9.07692308 C3.23725479,9.02614384 3.36797398,9 3.5,9 Z M12,17 C13.1045695,17 14,16.1045695 14,15 C14,13.8954305 13.1045695,13 12,13 C10.8954305,13 10,13.8954305 10,15 C10,16.1045695 10.8954305,17 12,17 Z" fill="#000000"/>
+													<rect x="0" y="0" width="24" height="24" />
+													<path
+														d="M12,4.56204994 L7.76822128,9.6401844 C7.4146572,10.0644613 6.7840925,10.1217854 6.3598156,9.76822128 C5.9355387,9.4146572 5.87821464,8.7840925 6.23177872,8.3598156 L11.2317787,2.3598156 C11.6315738,1.88006147 12.3684262,1.88006147 12.7682213,2.3598156 L17.7682213,8.3598156 C18.1217854,8.7840925 18.0644613,9.4146572 17.6401844,9.76822128 C17.2159075,10.1217854 16.5853428,10.0644613 16.2317787,9.6401844 L12,4.56204994 Z"
+														fill="#000000" fill-rule="nonzero" opacity="0.3" />
+													<path
+														d="M3.5,9 L20.5,9 C21.0522847,9 21.5,9.44771525 21.5,10 C21.5,10.132026 21.4738562,10.2627452 21.4230769,10.3846154 L17.7692308,19.1538462 C17.3034221,20.271787 16.2111026,21 15,21 L9,21 C7.78889745,21 6.6965779,20.271787 6.23076923,19.1538462 L2.57692308,10.3846154 C2.36450587,9.87481408 2.60558331,9.28934029 3.11538462,9.07692308 C3.23725479,9.02614384 3.36797398,9 3.5,9 Z M12,17 C13.1045695,17 14,16.1045695 14,15 C14,13.8954305 13.1045695,13 12,13 C10.8954305,13 10,13.8954305 10,15 C10,16.1045695 10.8954305,17 12,17 Z"
+														fill="#000000" />
 												</g>
 											</svg>
 										</span>
@@ -420,15 +430,25 @@ License: For each use you must have a valid license purchased only from above li
 
 								<span class="menu-link">
 									<span class="menu-icon">
-										<span class="svg-icon svg-icon-2 "><!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Communication/RSS.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-											<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-												<rect x="0" y="0" width="24" height="24"/>
-												<path d="M4.00246329,12.2004927 L13,14 L13,4.06189375 C16.9463116,4.55399184 20,7.92038235 20,12 C20,16.418278 16.418278,20 12,20 C7.64874861,20 4.10886412,16.5261253 4.00246329,12.2004927 Z" fill="#000000" opacity="0.3"/>
-												<path d="M3.0603968,10.0120794 C3.54712466,6.05992157 6.91622084,3 11,3 L11,11.6 L3.0603968,10.0120794 Z" fill="#000000"/>
-											</g>
-										
-										</svg><!--end::Svg Icon--></span>
-										
+										<span class="svg-icon svg-icon-2 ">
+											<!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Communication/RSS.svg--><svg
+												xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px"
+												viewBox="0 0 24 24" version="1.1">
+												<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+													<rect x="0" y="0" width="24" height="24" />
+													<path
+														d="M4.00246329,12.2004927 L13,14 L13,4.06189375 C16.9463116,4.55399184 20,7.92038235 20,12 C20,16.418278 16.418278,20 12,20 C7.64874861,20 4.10886412,16.5261253 4.00246329,12.2004927 Z"
+														fill="#000000" opacity="0.3" />
+													<path
+														d="M3.0603968,10.0120794 C3.54712466,6.05992157 6.91622084,3 11,3 L11,11.6 L3.0603968,10.0120794 Z"
+														fill="#000000" />
+												</g>
+
+											</svg>
+											<!--end::Svg Icon-->
+										</span>
+
 									</span>
 									<span class="menu-title">التقارير</span>
 									<span class="menu-arrow"></span>
@@ -485,7 +505,7 @@ License: For each use you must have a valid license purchased only from above li
 						<!--end::Aside mobile toggle-->
 						<!--begin::Mobile logo-->
 						<div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0">
-							<a href="../../demo1/dist/index.html" class="d-lg-none">
+							<a href="/" class="d-lg-none">
 								<img alt="Logo" src="/assets/media/logos/logo2.png" class="h-30px" />
 							</a>
 						</div>
@@ -708,10 +728,13 @@ License: For each use you must have a valid license purchased only from above li
 													<!--end::Avatar-->
 													<!--begin::Username-->
 													<div class="d-flex flex-column">
-														<div class="fw-bolder d-flex align-items-center fs-5"><%= user.name %><span class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">أدمن</span>
+														<div class="fw-bolder d-flex align-items-center fs-5">
+															<%= user.name %><span
+																	class="badge badge-light-success fw-bolder fs-8 px-2 py-1 ms-2">أدمن</span>
 														</div>
-														<a href="#"
-															class="fw-bold text-muted text-hover-primary fs-7"><%= user.email %> </a>
+														<a href="#" class="fw-bold text-muted text-hover-primary fs-7">
+															<%= user.email %>
+														</a>
 													</div>
 													<!--end::Username-->
 												</div>
@@ -722,8 +745,7 @@ License: For each use you must have a valid license purchased only from above li
 											<!--end::Menu separator-->
 											<!--begin::Menu item-->
 											<div class="menu-item px-5">
-												<a href="#"
-													class="menu-link px-5">الملف الشخصي</a>
+												<a href="#" class="menu-link px-5">الملف الشخصي</a>
 											</div>
 											<!--end::Menu item-->
 
@@ -735,8 +757,7 @@ License: For each use you must have a valid license purchased only from above li
 
 											<!--begin::Menu item-->
 											<div class="menu-item px-5">
-												<a href="/logout"
-													class="menu-link px-5">تسجيل الخروج</a>
+												<a href="/logout" class="menu-link px-5">تسجيل الخروج</a>
 											</div>
 											<!--end::Menu item-->
 
@@ -822,12 +843,12 @@ License: For each use you must have a valid license purchased only from above li
 </body>
 <!--end::Body-->
 <script>
-	    $(window).keydown(function (event) {
-        if (event.keyCode == 13 || event.keyCode == 27) {
-            event.preventDefault();
-            return false;
-        }
-    });
+	$(window).keydown(function (event) {
+		if (event.keyCode == 13 || event.keyCode == 27) {
+			event.preventDefault();
+			return false;
+		}
+	});
 
 </script>
 

@@ -44,7 +44,6 @@ var KTModalProductCategoryAdd = function () {
             return {
                 validate: function (input) {
                     const value = input.value;
-                    console.log(addProduct);
                     if(!addProduct){
                         return {
                             valid: true,

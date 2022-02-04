@@ -12,7 +12,15 @@ const Invoice = require('../../models/Invoice')
 
 exports.newOrderPage = catchAsyncErrors(async (req, res, next) => {
   const customers = await Customer.find()
-  const products = await Product.find()
+  const productsFromD = await Product.find()
+
+  const promises = productsFromD.map(async product=>{
+    await product.populate('productCategory')
+    product.name = await product.getProductName()
+    return product
+  })
+  const products = await Promise.all(promises)
+
 
   res.render('order/cpanel', { customers, products, killogramUnitID })
 })
@@ -140,7 +148,6 @@ exports.newOrder = catchAsyncErrors(async (req, res) => {
       qtyToMin = (qty * ratioPerUnit) / unitWeight
     }
     const productCategoryInStock = await Stock.findOne({ productCategory })
-    console.log(productCategoryInStock.qty , qtyToMin);
     productCategoryInStock.qty -= qtyToMin
     return productCategoryInStock.save()
   })
@@ -251,7 +258,6 @@ exports.editOrder = catchAsyncErrors(async (req, res) => {
 
       }
       if (customerObj.type == 'public') {
-        console.log('--------');
         if (newOrder.totalPrice > existOrder.totalPrice) {
           invoiceData.InvoiceType = 'extra'
           invoiceData.amount = newOrder.totalPrice - existOrder.totalPrice

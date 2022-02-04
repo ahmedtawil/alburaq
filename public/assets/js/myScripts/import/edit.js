@@ -45,8 +45,6 @@ var KTModalImportEdit = function () {
                 validate: function (input) {
                     const value = input.value;
                     const supplier = $('select[name="edit_supplier"]').val()
-                    console.log('----------------------');
-                    console.log(value, importData.totalProductCategoriesPrice);
 
                     if (value > importData.totalProductCategoriesPrice) {
                         return {
@@ -120,7 +118,6 @@ var KTModalImportEdit = function () {
                         const payload = {
                             ...importData
                         }
-                        console.log(importData);
 
                         $.post(`/import/edit/${importID}`, { payload: JSON.stringify(payload) }).then(invoice => {
                             submitButton.removeAttribute('data-kt-indicator');
@@ -269,7 +266,6 @@ var KTModalImportEdit = function () {
 
             // Select parent row
             const row = e.target.closest('tr');
-            console.log(row);
 
             // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
 
@@ -288,7 +284,6 @@ var KTModalImportEdit = function () {
                 if (result.value) {
                     // Remove current row
                     const rowId = $(row).attr("id")
-                    console.log(rowId);
                     const index = rowId.split('-')[2]
 
                     importData.productCategories.splice(index, 1)
@@ -404,7 +399,6 @@ var KTModalImportEdit = function () {
         </span>
         <!--end::Svg Icon-->
         </button></td>`
-        console.log(form);
         form.querySelector('#edit_import_tbody').appendChild(tr);
 
         linkEventTrigger()
@@ -450,7 +444,6 @@ var KTModalImportEdit = function () {
             cancelButton = form.querySelector('#kt_modal_edit_import_cancel');
             const displayImport = (data) => {
                 const { importd } = data
-                console.log(importd);
                 importData = importd
                 const table = importData.productCategories.map((productCategories, index) => {
 

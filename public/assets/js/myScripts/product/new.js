@@ -99,13 +99,7 @@ var KTModalProductCategoryAdd = function () {
             form,
             {
                 fields: {
-                    'name': {
-                        validators: {
-                            notEmpty: {
-                                message: 'اسم المنتج مطلوب'
-                            }
-                        }
-                    },
+                  
                     'productCategory': {
                         validators: {
                             notEmpty: {
@@ -175,7 +169,6 @@ var KTModalProductCategoryAdd = function () {
                         // Disable submit button whilst loading
                         submitButton.disabled = true;
                         const payload = {
-                            name: $("input[name=name]").val(),
                             productCategory: $("select[name=productCategory]").val(),
                             productSerialNumber: $("input[name=productSerialNumber]").val(),
 

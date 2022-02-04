@@ -38,6 +38,7 @@ var KTproductsList = function () {
                 "dataSrc": 'products',
                 "dataFilter": function (res) {
                     dataRes = JSON.parse(res)
+                    console.log(dataRes);
                     return res
                 }
             },

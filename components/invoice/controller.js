@@ -203,7 +203,6 @@ exports.getInvoicesData = catchAsyncErrors(async (req, res, next) => {
 
   if (queryValue.search) {
     let val = queryValue.search
-    console.log(val);
     const qu = {
       $regex: val,
       $options: 'i'
@@ -215,7 +214,6 @@ exports.getInvoicesData = catchAsyncErrors(async (req, res, next) => {
       queryObj = searchQuery
     }
   }
-  console.log(queryObj);
 
   const invoicesCount = await Invoice.countDocuments(queryObj)
   const invoices = await Invoice.find(queryObj).sort({ createdAt: -1 }).limit(parseInt(query.length)).skip(parseInt(query.start)).populate('for').populate('data')
@@ -348,7 +346,6 @@ exports.getInvoicesData = catchAsyncErrors(async (req, res, next) => {
 
 exports.getInvoiceToPrint = catchAsyncErrors(async (req, res, next) => {
   const query = req.query
-  console.log(query);
 
   const invoiceData = await Invoice.findOne(query).populate('for').populate('data').populate('createdBy')
   switch (invoiceData.ObjType) {
