@@ -74,7 +74,7 @@ var KTModalUnitAdd = function () {
                         submitButton.disabled = true;
                         const payload = {
                             title: $("input[name=title]").val(),
-                            title: $("input[name=smallTitle]").val(),
+                            smallTitle: $("input[name=smallTitle]").val(),
                             weight: $("input[name=weight]").val(),
                         }
 
@@ -82,7 +82,7 @@ var KTModalUnitAdd = function () {
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
-                                text: "تم إضافة المورد بنجاح!",
+                                text: "تم إضافة الوحدة بنجاح!",
                                 icon: "success",
                                 buttonsStyling: false,
                                 confirmButtonText: "حسنا",
