@@ -60,7 +60,7 @@ var KTSigninGeneral = function() {
                     }
 
 
-                    $.post('/login', payload).then(recipientID=> {
+                    $.post('/login', payload).then(res=> {
                         submitButton.removeAttribute('data-kt-indicator');
 
                         Swal.fire({
@@ -83,7 +83,7 @@ var KTSigninGeneral = function() {
                         })
                     }).catch(err=> {
                         Swal.fire({
-                            text: errDisplay(err),
+                            text:'خطأ في البريد الإلكتروني أو كلمة المرور.',
                             icon: "error",
                             buttonsStyling: false,
                             confirmButtonText: "حسنا",

@@ -1,10 +1,12 @@
 const mongoose = require('mongoose')
 const ErrorHandler = require('../../utils/errorHandler');
 const catchAsyncErrors = require('../../middlewares/catchAsyncErrors');
-
+const _ = require('lodash')
 const ProductCategory = require('../../models/ProductCategory')
 const Supplier = require('../../models/Supplier')
 const Unit = require('../../models/Unit')
+const Order = require('../../models/Order')
+
 const Product = require('../../models/Product')
 const Stock = require('../../models/Stock')
 
@@ -34,7 +36,7 @@ exports.getProductCategoriesData = catchAsyncErrors(async (req, res) => {
       $regex: val,
       $options: 'i'
     }
-    const searchQuery = { $or: [{ formalID: qu }, { name: qu }, { phoneNumber: qu }] }
+    const searchQuery = { $or: [{ name: qu }] }
     if (queryValue.filter) {
       queryObj.$and.push(searchQuery)
     } else {
@@ -65,7 +67,7 @@ exports.newProductCategory = catchAsyncErrors(async (req, res) => {
     serialNumber: (data.configs.internalProductCategorySerialNumber) ? null : data.productCategorySerialNumber,
     name: data.name,
     unit: data.unit,
-    costPrice:data.productCategoryCostPrice,
+    costPrice: data.productCategoryCostPrice,
     sellingPrice: data.productCategorySellingPrice,
     supplier: data.supplier
   })
@@ -73,7 +75,6 @@ exports.newProductCategory = catchAsyncErrors(async (req, res) => {
 
   const productCategory = await ProductCategory.findById(newProductCategory._id).populate({ path: 'unit' })
   let productData = {
-    name: `${productCategory.name} ${productCategory.unit.title}`,
     serialNumber: productCategory.serialNumber,
     productCategory: productCategory._id,
     ratioPerUnit: productCategory.unit.weight,
@@ -83,24 +84,23 @@ exports.newProductCategory = catchAsyncErrors(async (req, res) => {
   const product1 = new Product(productData)
   product1.save()
 
-  if(data.configs.addProduct && data.configs.isWeightUnit != true){
+  if (data.configs.addProduct && data.configs.isWeightUnit != true) {
     productData = {
-      name:`${productCategory.name} ${productCategory.unit.smallTitle}`,
       serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
       productCategory: productCategory._id,
       ratioPerUnit: 1,
       price: data.productSellingPrice
 
     }
-  
+
     const product2 = new Product(productData)
     await product2.save()
   }
-  if(data.configs.isWeightUnit){
+  if (data.configs.isWeightUnit) {
     productData = {
-      name:`${productCategory.name} وزن`,
       serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
       productCategory: productCategory._id,
+      takePrice:false
     }
     const product2 = new Product(productData)
     await product2.save()
@@ -112,61 +112,149 @@ exports.newProductCategory = catchAsyncErrors(async (req, res) => {
 })
 // post editPage 
 
-exports.getProductCategoryUnit = catchAsyncErrors(async (req, res , next) => {
-    const id = req.params.id
-    if (!mongoose.isValidObjectId(id)) return next(new ErrorHandler('', 404))
+exports.getProductCategoryUnit = catchAsyncErrors(async (req, res, next) => {
+  const id = req.params.id
+  if (!mongoose.isValidObjectId(id)) return next(new ErrorHandler('', 404))
 
-    let productCategory = await ProductCategory.findById(id).populate({path:'unit'}).lean()
-    if (!productCategory) return next(new ErrorHandler('', 404))
+  let productCategory = await ProductCategory.findById(id).populate({ path: 'unit' }).lean()
+  if (!productCategory) return next(new ErrorHandler('', 404))
 
-    let unit = productCategory.unit
+  let unit = productCategory.unit
 
-    if(unit._id == killogramUnitID){
-      unit.isWeightUnit = true
-    }else{
-      unit.isWeightUnit = false
-    }
+  if (unit._id == killogramUnitID) {
+    unit.isWeightUnit = true
+  } else {
+    unit.isWeightUnit = false
+  }
 
-    res.json(unit)
+  res.json(unit)
 })
-exports.getProductCategoryByQuery = catchAsyncErrors(async (req, res , next) => {
+exports.getProductCategoryByQuery = catchAsyncErrors(async (req, res, next) => {
 
   const query = req.query
   const productCategory = await ProductCategory.findOne(query).populate('unit')
-  res.send({success:true , productCategory})
+  res.send({ success: true, productCategory })
 
 })
 
+exports.getEditProductCategoryData = catchAsyncErrors(async (req, res, next) => {
+  const productCategoryID = req.params.id
+  if (!mongoose.isValidObjectId(productCategoryID)) return next(new ErrorHandler('', 404))
+  const productCategory = await ProductCategory.findById(productCategoryID).lean()
+  const productCategoryInStock = await Stock.findOne({ productCategory: productCategory._id }).lean()
+  productCategory.qty = productCategoryInStock.qty
+  const product = await Product.findOne({ productCategory: productCategory._id, ratioPerUnit: 1 }).lean()
+  res.json({
+    productCategory, product, configs: {
+      addProduct: (product && productCategory.unit != killogramUnitID) ? true : false,
+      isWeightUnit: (productCategory.unit == killogramUnitID) ? true : false
+    }
+  })
 
-exports.editProductCategory = catchAsyncErrors(async (req, res , next) => {
-  if (req.access.can(req.user.role).updateAny('program').granted) {
+})
 
-    let program = null
-    const id = req.params.id
+exports.editProductCategory = catchAsyncErrors(async (req, res, next) => {
+  const productCategoryID = req.params.id
+  const data = JSON.parse(req.body.payload)
+  if (!mongoose.isValidObjectId(productCategoryID)) return next(new ErrorHandler('', 404))
 
-    if (!mongoose.isValidObjectId(id)) return next(new ErrorHandler('', 404))
-    program = await Program.findById(id)
-    if (!program) return next(new ErrorHandler('', 404))
+  const productCategoryFromDB = await ProductCategory.findById(productCategoryID).populate('unit')
+  const productCategoryFromDBUnit = productCategoryFromDB.unit
 
-    let data = JSON.parse(req.body.payload)
-    _.assign(program, data)
-    await program.save()
-    res.send(program)
-  } else {
-    next(new ErrorHandler('unauthrized!', 403))
+  if (!productCategoryFromDB) return next(new ErrorHandler('', 404))
+
+  const newProductCategoryObj = {
+    serialNumber: (data.configs.internalProductCategorySerialNumber) ? null : data.productCategorySerialNumber,
+    name: data.name,
+    unit: data.unit,
+    costPrice: data.productCategoryCostPrice,
+    sellingPrice: data.productCategorySellingPrice,
+    supplier: data.supplier
+  }
+  _.assign(productCategoryFromDB, newProductCategoryObj)
+  const newProductCategoryFromDB = await productCategoryFromDB.save()
+
+  const newUnit = await Unit.findById(newProductCategoryObj.unit)
+
+
+  await Product.updateOne({ productCategory: productCategoryID , ratioPerUnit: productCategoryFromDBUnit.weight} , {price:newProductCategoryObj.sellingPrice , serialNumber:newProductCategoryFromDB.serialNumber}) 
+
+
+  if(data.configs.addProduct && data.configs.isWeightUnit != true){
+    const newProductObj = {
+      serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
+      price: data.productSellingPrice
+    }
+    let product = await Product.findOne({ productCategory: productCategoryID , ratioPerUnit: 1})
+    _.assign(product, newProductObj)
+    await product.save()
+  
+  }else{
+    await Product.deleteOne({productCategory: productCategoryID , ratioPerUnit: 1})
+  }
+  if(productCategoryFromDBUnit._id != killogramUnitID && data.configs.isWeightUnit){
+    await Product.deleteMany({productCategory: productCategoryID })
+
+
+    let newProductData = {
+      serialNumber: newProductCategoryFromDB.serialNumber,
+      productCategory: newProductCategoryFromDB._id,
+      ratioPerUnit: 1000,
+      price: newProductCategoryFromDB.sellingPrice
+    }
+    const product1 = new Product(newProductData)
+    product1.save()
+
+    newProductData = {
+      serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
+      productCategory: newProductCategoryFromDB._id,
+      takePrice:false
+    }
+    const product2 = new Product(newProductData)
+    await product2.save()
   }
 
+  await Stock.updateOne({productCategory: productCategoryID} , {qty:data.qty})
+
+  res.end()
+
 })
 
+exports.deleteProductCategory = catchAsyncErrors(async (req, res , next) => {
+  const productCategoryID  = req.params.id
+  if (!mongoose.isValidObjectId(productCategoryID)) return next(new ErrorHandler('', 404))
+
+  const productCategory = await ProductCategory.findById(productCategoryID)
+  if (!productCategory) return next(new ErrorHandler('', 404))
+
+  const productCategoryProductsIDS = await Product.find({productCategory:productCategory._id}).distinct('_id')
+
+  const isProductCategoryUsed = await Order.exists({'products._id':{$in:productCategoryProductsIDS}})
+  if(isProductCategoryUsed) return next(new ErrorHandler('لا يمكن حذف الصنف لانه مستخدم في طلبات', 400))
+
+
+  await ProductCategory.deleteOne({_id:productCategory._id})
+  await Product.deleteMany({productCategory:productCategory._id})
+  await Stock.deleteOne({productCategory:productCategory._id})
+
+
+
+  res.json({
+    success:true
+  })
+
+
+})
 
 
 
 exports.checkIfSerialNumberExist = catchAsyncErrors(async (req, res) => {
-  const existSerialNumber = req.query.SerialNumber
+  const { productCategoryID } = req.query
   const SerialNumber = req.params.SerialNumber
-  const found = await ProductCategory.findOne({ serialNumber: SerialNumber})
+
+  const found = await ProductCategory.findOne({ serialNumber: SerialNumber })
   if (!found) return res.status(200).json({ isExisted: false })
-  if(found._id == existSerialNumber) return res.status(200).json({ isExisted: false })
+  if (found._id == productCategoryID) return res.status(200).json({ isExisted: false })
   return res.status(200).json({ isExisted: true })
 
 

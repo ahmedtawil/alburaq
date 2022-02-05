@@ -46,11 +46,11 @@ var KTproductCategorysList = function () {
             columns: [
                 { data: 'name' },
                 { data: 'serialNumber' },
-                { 
-                     data: 'unit',
-                     render:function (data, type, doc) {
-                         return `<span class="badge badge-light fw-bolder my-2">${data.title}</span>`
-                     }
+                {
+                    data: 'unit',
+                    render: function (data, type, doc) {
+                        return `<span class="badge badge-light fw-bolder my-2">${data.title}</span>`
+                    }
                 },
                 {
                     data: 'costPrice',
@@ -61,12 +61,12 @@ var KTproductCategorysList = function () {
                 {
                     data: 'supplier',
 
-                     render:function (data, type, doc) {
-                         return `<span class="badge badge-light-success fw-bolder my-2">${data.name}</span>`
-                     }
+                    render: function (data, type, doc) {
+                        return `<span class="badge badge-light-success fw-bolder my-2">${data.name}</span>`
+                    }
                 },
 
-                
+
                 {
                     data: '',
                     render: function (data, type, doc) {
@@ -89,7 +89,11 @@ var KTproductCategorysList = function () {
                         data-kt-menu="true">
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
-                         <a href="#" class="menu-link px-3">حذف</a>
+                         <a href="#" class="menu-link px-3 edit" id="${doc._id}">تعديل</a>
+
+                        </div>
+                        <div class="menu-item px-3">
+                         <a href="#" class="menu-link px-3 delete" id="${doc._id}">حذف</a>
 
                         </div>
                         <!--end::Menu item-->
@@ -108,6 +112,7 @@ var KTproductCategorysList = function () {
         datatable.on('draw', function () {
             KTMenu.createInstances();
             handleDeleteRows();
+            linkEventsTriggers()
         });
     }
 
@@ -219,60 +224,62 @@ var KTproductCategorysList = function () {
     });
     // Delete productCategory
     var handleDeleteRows = () => {
-        // Select all delete buttons
-        const deleteButtons = table.querySelectorAll('[data-kt-productCategory-table-filter="delete_row"]');
-
-        deleteButtons.forEach(d => {
-            // Delete button on click
-            d.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                // Select parent row
-                const parent = e.target.closest('tr');
-
-                // Get productCategory name
-                const productCategoryName = parent.querySelectorAll('td')[1].innerText;
-
-                // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
-                Swal.fire({
-                    text: "Are you sure you want to delete " + productCategoryName + "?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttonsStyling: false,
-                    confirmButtonText: "Yes, delete!",
-                    cancelButtonText: "No, cancel",
-                    customClass: {
-                        confirmButton: "btn fw-bold btn-danger",
-                        cancelButton: "btn fw-bold btn-active-light-primary"
-                    }
-                }).then(function (result) {
-                    if (result.value) {
+        $('.delete').on('click', async function (e) {
+            Swal.fire({
+                text: "هل تريد حذف الصنف ؟",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "نعم",
+                cancelButtonText: "لا",
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(async function (result) {
+                if (result.value) {
+                    const id = e.target.id
+                    const res = await fetch(`/productCategory/delete/${id}`)
+                    const { success , message} = await res.json()
+                    if(!success){
                         Swal.fire({
-                            text: "You have deleted " + productCategoryName + "!.",
-                            icon: "success",
-                            buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
-                            customClass: {
-                                confirmButton: "btn fw-bold btn-primary",
-                            }
-                        }).then(function () {
-                            // Remove current row
-                            datatable.row($(parent)).remove().draw();
-                        });
-                    } else if (result.dismiss === 'cancel') {
-                        Swal.fire({
-                            text: productCategoryName + " was not deleted.",
+                            text: message,
                             icon: "error",
                             buttonsStyling: false,
-                            confirmButtonText: "Ok, got it!",
+                            confirmButtonText: "حسنا",
                             customClass: {
-                                confirmButton: "btn fw-bold btn-primary",
+                                confirmButton: "btn btn-primary"
                             }
                         });
+                        submitButton.removeAttribute('data-kt-indicator');
+                    }else{
+                        Swal.fire({
+                            text: 'تم حذف الصنف بنجاحّ',
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "حسنا",
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                        submitButton.removeAttribute('data-kt-indicator');
+                        window.location = '/productCategories/page/get'
                     }
-                });
-            })
-        });
+                } else if (result.dismiss === 'cancel') {
+                    Swal.fire({
+                        text: "تم إلغاء عملية حذف الصنف",
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "حسنا",
+                        customClass: {
+                            confirmButton: "btn btn-primary",
+                        }
+                    });
+                }
+            });
+           
+
+        })   
     }
 
 

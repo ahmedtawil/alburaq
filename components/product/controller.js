@@ -43,7 +43,9 @@ exports.getProductsData = catchAsyncErrors(async (req, res) => {
       $regex: val,
       $options: 'i'
     }
-    const searchQuery = { $or: [{ formalID: qu }, { name: qu }, { phoneNumber: qu }] }
+    const productCategoriesIDS = await ProductCategory.find({name:qu}).distinct('_id')
+
+    const searchQuery = { $or: [{ productCategory: {$in:productCategoriesIDS} }] }
     if (queryValue.filter) {
       queryObj.$and.push(searchQuery)
     } else {
@@ -125,11 +127,11 @@ exports.getProductCategoryForProduct = catchAsyncErrors(async (req, res) => {
 
 
 exports.checkIfSerialNumberExist = catchAsyncErrors(async (req, res) => {
-  const existSerialNumber = req.query.SerialNumber
+  const {productCategoryID} = req.query
   const SerialNumber = req.params.SerialNumber
   const found = await Product.findOne({ serialNumber: SerialNumber})
   if (!found) return res.status(200).json({ isExisted: false })
-  if(found._id == existSerialNumber) return res.status(200).json({ isExisted: false })
+  if(found._id == productCategoryID) return res.status(200).json({ isExisted: false })
   return res.status(200).json({ isExisted: true })
 
 

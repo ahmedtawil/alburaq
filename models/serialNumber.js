@@ -3,53 +3,47 @@ const { Schema } = mongoose;
 const moment = require('moment')
 
 const serialNumberSchema = new Schema({
-    title: {
-        type: String,
-        trim: true
-    },
-    counter: {
+    productsCounter: {
         type: Number,
-        required: true,
-        default:1000000
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
+    invoicesCounter: {
+        type: Number,
+    },
+    ordersCounter: {
+        type: Number,
+    },
+    importsCounter: {
+        type: Number,
     }
-
-   
-  
-  
 })
 
 serialNumberSchema.statics.newProduct = async function () {
-    const productCounter = await mongoose.model('SerialNumber').findOne({uid:'products'})
-    productCounter.counter++
-    await productCounter.save()
-    return productCounter.counter
+    const serialNumbers = await this.findOne()
+    serialNumbers.productsCounter++
+    await serialNumbers.save()
+    return serialNumbers.productsCounter
 }
 
 serialNumberSchema.statics.newInvoice = async function () {
-    const invoiceCounter =  await mongoose.model('SerialNumber').findOne({uid:'invoices'})
-    invoiceCounter.counter++
-    await invoiceCounter.save()
-    return invoiceCounter.counter
+    const serialNumbers = await this.findOne()
+    serialNumbers.invoicesCounter++
+    await serialNumbers.save()
+    return serialNumbers.invoicesCounter
 }
 
 serialNumberSchema.statics.newOrder = async function () {
-    const orderCounter =  await mongoose.model('SerialNumber').findOne({uid:'orders'})
+    const serialNumbers = await this.findOne()
 
-    orderCounter.counter++
-    await orderCounter.save()
-    return orderCounter.counter
+    serialNumbers.ordersCounter++
+    await serialNumbers.save()
+    return serialNumbers.ordersCounter
 }
 
 serialNumberSchema.statics.newImport = async function () {
-    const orderCounter =  await mongoose.model('SerialNumber').findOne({uid:'imports'})
-
-    orderCounter.counter++
-    await orderCounter.save()
-    return orderCounter.counter
+    const serialNumbers = await this.findOne()
+    serialNumbers.importsCounter++
+    await serialNumbers.save()
+    return serialNumbers.importsCounter
 }
 
 

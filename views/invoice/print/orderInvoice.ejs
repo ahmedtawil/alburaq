@@ -41,6 +41,11 @@
             border-bottom: 1px solid rgb(255, 255, 255) !important;
         }
 
+        @font-face {
+                font-family: Cairo;
+                src: url("/assets/media/fonts/cairo/Cairo-VariableFont_wght.ttf");
+            }
+
         span {
             font-weight: bolder;
         }
@@ -49,6 +54,8 @@
             * {
                 font-weight: bolder !important;
             }
+
+            
         }
     </style>
 
@@ -173,7 +180,7 @@
                                             <%= invoice.data.paidAmount %>
                                         </td>
                                     </tr>
-                                    <tr >
+                                    <tr>
                                         <td>المسترد</td>
                                         <td>
                                             <%= invoice.data.moneyBack %>

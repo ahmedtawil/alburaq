@@ -19,6 +19,19 @@ const productSchema = new Schema({
         */
     },
     productCategory: { type: Schema.Types.ObjectId, ref: 'ProductCategory', required: [true, 'صنف المنتج مطلوب.'] },
+    takePrice:{
+        type:Boolean,
+        default:true
+     },
+     price: {
+        type: Number,
+        required: function (val) {
+            if (!this.ratioPerUnit) {
+                return false
+            }
+            return [true, 'سعر البيع مطلوب.']
+        }
+    },
     ratioPerUnit: {
         type: Number,
         /*
@@ -32,15 +45,7 @@ const productSchema = new Schema({
         */
     },
 
-    price: {
-        type: Number,
-        required: function (val) {
-            if (!this.ratioPerUnit) {
-                return false
-            }
-            return [true, 'سعر البيع مطلوب.']
-        }
-    },
+   
     createdAt: {
         type: Date,
         default: Date.now
@@ -52,11 +57,10 @@ const productSchema = new Schema({
 
 })
 productSchema.pre('save', async function (next) {
+
     if (!this.serialNumber) {
-        if (this.isNew) {
             const counter = await SerialNumber.newProduct()
             this.serialNumber = counter
-        }
     }
     next()
 })
@@ -65,9 +69,11 @@ productSchema.methods.getProductName = async function () {
     const productCategory = await mongoose.model('ProductCategory').findById(this.productCategory).populate('unit')
     if (productCategory.unit._id == killogramUnitID && typeof this.ratioPerUnit == 'undefined') {
         return `${productCategory.name} وزن`
-    } else if (this.serialNumber == productCategory.serialNumber && typeof ratioPerUnit != 'undefined') {
+    } else if (this.serialNumber == productCategory.serialNumber && typeof this.ratioPerUnit != 'undefined' && this.ratioPerUnit == productCategory.unit.weight) {
+        
         return `${productCategory.name} ${productCategory.unit.title}`
     }
+
     return `${productCategory.name} ${this.ratioPerUnit} ${productCategory.unit.smallTitle}`
 
 

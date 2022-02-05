@@ -36,10 +36,9 @@ const productCategorySchema = new Schema({
 })
 productCategorySchema.pre('save', async function (next) {
     if(!this.serialNumber){
-        if (this.isNew) {
             const counter = await SerialNumber.newProduct()
             this.serialNumber = counter
-        }
+   
     }
     next()
 })
