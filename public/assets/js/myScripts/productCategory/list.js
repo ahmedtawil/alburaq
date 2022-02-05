@@ -38,6 +38,7 @@ var KTproductCategorysList = function () {
                 "dataSrc": 'productCategories',
                 "dataFilter": function (res) {
                     dataRes = JSON.parse(res)
+                    console.log(dataRes);
                     return res
                 }
             },
@@ -62,7 +63,8 @@ var KTproductCategorysList = function () {
                     data: 'supplier',
 
                     render: function (data, type, doc) {
-                        return `<span class="badge badge-light-success fw-bolder my-2">${data.name}</span>`
+                        console.log(typeof data);
+                        return `<span class="badge badge-light-success fw-bolder my-2">${(data) ? data.name : '-' }</span>`
                     }
                 },
 
@@ -261,9 +263,12 @@ var KTproductCategorysList = function () {
                             customClass: {
                                 confirmButton: "btn btn-primary"
                             }
-                        });
-                        submitButton.removeAttribute('data-kt-indicator');
-                        window.location = '/productCategories/page/get'
+                        }).then(async function (result) {
+                            window.location = '/productCategories/page/get'
+
+                            submitButton.removeAttribute('data-kt-indicator');
+    
+                        })
                     }
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
@@ -275,6 +280,8 @@ var KTproductCategorysList = function () {
                             confirmButton: "btn btn-primary",
                         }
                     });
+                    window.location = '/productCategories/page/get'
+
                 }
             });
            

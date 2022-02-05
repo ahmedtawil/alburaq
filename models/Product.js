@@ -71,10 +71,10 @@ productSchema.methods.getProductName = async function () {
         return `${productCategory.name} وزن`
     } else if (this.serialNumber == productCategory.serialNumber && typeof this.ratioPerUnit != 'undefined' && this.ratioPerUnit == productCategory.unit.weight) {
         
-        return `${productCategory.name} ${productCategory.unit.title}`
+        return `${productCategory.name}`
     }
 
-    return `${productCategory.name} ${this.ratioPerUnit} ${productCategory.unit.smallTitle}`
+    return `${productCategory.name}`
 
 
 }

@@ -31,9 +31,7 @@ var KTModalCustomerEdit = function () {
 
                     'formalID': {
                         validators: {
-                            notEmpty: {
-                                message: 'رقم الهوية مطلوب'
-                            }, checkValidFormalID: {
+                          checkValidFormalID: {
                                 message: 'رقم الهوية غير صالح'
 
                             },

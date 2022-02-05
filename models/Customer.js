@@ -9,7 +9,6 @@ const customerSchema = new Schema({
     },
     formalID: {
         type: String,
-        required: [true, 'رقم هوية الزبون مطلوبة'],
         validate:
         [
             {
