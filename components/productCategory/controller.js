@@ -185,8 +185,15 @@ exports.editProductCategory = catchAsyncErrors(async (req, res, next) => {
       price: data.productSellingPrice
     }
     let product = await Product.findOne({ productCategory: productCategoryID , ratioPerUnit: 1})
-    _.assign(product, newProductObj)
-    await product.save()
+    if(!product){
+      newProductObj.productCategory = productCategoryID
+      newProductObj.ratioPerUnit = ratioPerUnit
+      product = new Product(newProductObj)
+      await product.save() 
+    }else{
+      _.assign(product, newProductObj)
+      await product.save()  
+    }
   
   }else{
     await Product.deleteOne({productCategory: productCategoryID , ratioPerUnit: 1})
