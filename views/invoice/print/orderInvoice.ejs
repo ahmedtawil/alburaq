@@ -4,11 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!--begin::Fonts-->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap"
-        rel="stylesheet">
-    <!--end::Fonts-->
-
     <!--begin::Page Vendor Stylesheets(used by this page)-->
     <link href="/assets/plugins/custom/datatables/datatables.bundle.rtl.css" rel="stylesheet" type="text/css">
 
@@ -42,20 +37,17 @@
         }
 
         @font-face {
-                font-family: Cairo;
-                src: url("/assets/media/fonts/cairo/Cairo-VariableFont_wght.ttf");
-            }
+            font-family: Cairo !important;
+            src: url("/assets/media/fonts/cairo/Cairo-VariableFont_wght.ttf");
+        }
 
         span {
             font-weight: bolder;
         }
 
-        @media print {
-            * {
-                font-weight: bolder !important;
-            }
-
-            
+        * {
+            font-weight: bolder !important;
+            font-family: 'Cairo' !important;
         }
     </style>
 

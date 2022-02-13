@@ -96,6 +96,8 @@ exports.newProductCategory = catchAsyncErrors(async (req, res) => {
     await product2.save()
   }
   if (data.configs.isWeightUnit) {
+    console.log('****************************************');
+
     productData = {
       serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
       productCategory: productCategory._id,

@@ -278,7 +278,7 @@ var KTModalProductCategoryAdd = function () {
                                 addProduct,
                                 internalProductSerialNumber,
                                 internalProductCategorySerialNumber,
-                                isWeightUnit
+                                isWeightUnit:($('#unit').find('option:selected').attr('unit') == 'weight') ? true : false
                             }
 
                         }

@@ -13,6 +13,10 @@ const unitSchema = new Schema({
         required: [true, 'اسم الوحدة الجزئية مطلوب.'],
         trim: true
     },
+    isWeightUnit:{
+        type: Number,
+        required: [true, 'القيمة الوزنية للوحدة مطلوبة'],
+    },
     weight: {
         type: Number,
         required: [true, 'القيمة الوزنية للوحدة مطلوبة'],
