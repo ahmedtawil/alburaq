@@ -239,7 +239,7 @@
                                                 class="form-select form-select-solid fw-bolder" data-kt-select2="true"
                                                 data-placeholder="أختر..." data-hide-search="true">
                                                 <% units.forEach(unit=> { %>
-                                                    <% if (unit._id==killogramUnitID) { %>
+                                                    <% if (unit.isWeightUnit) { %>
                                                         <option unit="weight" value="<%= unit._id %>">
                                                             <%= unit.title %>
                                                         </option>
@@ -467,7 +467,7 @@
                                                 class="form-select form-select-solid fw-bolder" data-kt-select2="true"
                                                 data-placeholder="أختر..." data-hide-search="true">
                                                 <% units.forEach(unit=> { %>
-                                                    <% if (unit._id==killogramUnitID) { %>
+                                                    <% if (unit.isWeightUnit) { %>
                                                         <option unit="weight" value="<%= unit._id %>">
                                                             <%= unit.title %>
                                                         </option>

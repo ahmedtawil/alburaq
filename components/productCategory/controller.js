@@ -10,14 +10,13 @@ const Order = require('../../models/Order')
 const Product = require('../../models/Product')
 const Stock = require('../../models/Stock')
 
-const { killogramUnitID } = require('../../configs/constants')
 
 
 exports.getProductCategoriesPage = catchAsyncErrors(async (req, res) => {
   const units = await Unit.find()
   const suppliers = await Supplier.find()
 
-  res.render('productCategory/list', { units, suppliers, killogramUnitID })
+  res.render('productCategory/list', { units, suppliers })
 })
 
 exports.getProductCategoriesData = catchAsyncErrors(async (req, res) => {
@@ -122,11 +121,6 @@ exports.getProductCategoryUnit = catchAsyncErrors(async (req, res, next) => {
 
   let unit = productCategory.unit
 
-  if (unit._id == killogramUnitID) {
-    unit.isWeightUnit = true
-  } else {
-    unit.isWeightUnit = false
-  }
 
   res.json(unit)
 })
@@ -141,14 +135,13 @@ exports.getProductCategoryByQuery = catchAsyncErrors(async (req, res, next) => {
 exports.getEditProductCategoryData = catchAsyncErrors(async (req, res, next) => {
   const productCategoryID = req.params.id
   if (!mongoose.isValidObjectId(productCategoryID)) return next(new ErrorHandler('', 404))
-  const productCategory = await ProductCategory.findById(productCategoryID).lean()
+  const productCategory = await ProductCategory.findById(productCategoryID).populate('unit').lean()
   const productCategoryInStock = await Stock.findOne({ productCategory: productCategory._id }).lean()
   productCategory.qty = productCategoryInStock.qty
   const product = await Product.findOne({ productCategory: productCategory._id, ratioPerUnit: 1 }).lean()
   res.json({
     productCategory, product, configs: {
-      addProduct: (product && productCategory.unit != killogramUnitID) ? true : false,
-      isWeightUnit: (productCategory.unit == killogramUnitID) ? true : false
+      addProduct: (product && productCategory.unit.isWeightUnit != true) ? true : false,
     }
   })
 
@@ -200,7 +193,7 @@ exports.editProductCategory = catchAsyncErrors(async (req, res, next) => {
   }else{
     await Product.deleteOne({productCategory: productCategoryID , ratioPerUnit: 1})
   }
-  if(productCategoryFromDBUnit._id != killogramUnitID && data.configs.isWeightUnit){
+  if(productCategoryFromDBUnit.isWeightUnit != true && data.configs.isWeightUnit){
     await Product.deleteMany({productCategory: productCategoryID })
 
 

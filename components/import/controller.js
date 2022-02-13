@@ -8,7 +8,6 @@ const ProductCategory = require('../../models/ProductCategory')
 
 const Stock = require('../../models/Stock')
 
-const { killogramUnitID } = require('../../configs/constants')
 
 const ErrorHandler = require('../../utils/errorHandler');
 const catchAsyncErrors = require('../../middlewares/catchAsyncErrors');
@@ -18,7 +17,7 @@ exports.newImportPage = catchAsyncErrors(async (req, res, next) => {
   const suppliers = await Supplier.find()
   const productCategories = await ProductCategory.find().populate('unit')
 
-  res.render('import/cpanel', { suppliers, productCategories, killogramUnitID })
+  res.render('import/cpanel', { suppliers, productCategories })
 })
 
 exports.getImportsPage = catchAsyncErrors(async (req, res, next) => {

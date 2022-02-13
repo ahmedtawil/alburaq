@@ -75,6 +75,7 @@ var KTModalUnitAdd = function () {
                         const payload = {
                             title: $("input[name=title]").val(),
                             smallTitle: $("input[name=smallTitle]").val(),
+                            isWeightUnit:$("#isWeightUnit").is(':checked'),
                             weight: $("input[name=weight]").val(),
                         }
 

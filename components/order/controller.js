@@ -4,7 +4,6 @@ const Customer = require('../../models/Customer')
 const Product = require('../../models/Product')
 const Stock = require('../../models/Stock')
 
-const { killogramUnitID } = require('../../configs/constants')
 
 const ErrorHandler = require('../../utils/errorHandler');
 const catchAsyncErrors = require('../../middlewares/catchAsyncErrors');
@@ -14,15 +13,20 @@ exports.newOrderPage = catchAsyncErrors(async (req, res, next) => {
   const customers = await Customer.find()
   const productsFromD = await Product.find()
 
-  const promises = productsFromD.map(async product=>{
-    await product.populate('productCategory')
+  const promises = productsFromD.map(async product => {
+    await product.populate({
+      path: 'productCategory',
+      populate: {
+        path: 'unit'
+      }
+    })
     product.name = await product.getProductName()
     return product
   })
   const products = await Promise.all(promises)
 
 
-  res.render('order/cpanel', { customers, products, killogramUnitID })
+  res.render('order/cpanel', { customers, products})
 })
 
 exports.getOrdersPage = catchAsyncErrors(async (req, res, next) => {
@@ -161,7 +165,7 @@ exports.newOrder = catchAsyncErrors(async (req, res) => {
       forType: 'Customer',
       for: data.customer,
       amount: newOrder.totalPrice,
-      createdBy:req.user._id
+      createdBy: req.user._id
 
     }
     if (customerID !== 'public') {
@@ -254,7 +258,7 @@ exports.editOrder = catchAsyncErrors(async (req, res) => {
         forType: 'Customer',
         for: newOrder.customer._id,
         amount: newOrder.totalPrice,
-        createdBy:req.user._id,
+        createdBy: req.user._id,
 
       }
       if (customerObj.type == 'public') {
@@ -280,7 +284,7 @@ exports.editOrder = catchAsyncErrors(async (req, res) => {
 
           invoiceData.amount = 0
           invoiceData.oldBalance = customer.debt
-          invoiceData.newBalance = invoiceData.oldBalance + ((debit <=0) ? Math.abs(debit) : 0)
+          invoiceData.newBalance = invoiceData.oldBalance + ((debit <= 0) ? Math.abs(debit) : 0)
           customer.debt = invoiceData.newBalance
 
         } else if (existOrder.moneyBack < newOrder.moneyBack) {

@@ -14,8 +14,9 @@ const unitSchema = new Schema({
         trim: true
     },
     isWeightUnit:{
-        type: Number,
-        required: [true, 'القيمة الوزنية للوحدة مطلوبة'],
+        type:Boolean,
+        default:false
+        
     },
     weight: {
         type: Number,

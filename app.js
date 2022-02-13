@@ -40,6 +40,9 @@ app.use(async(req, res, next) => {
     next()
 })
 
+app.get("/" ,async(req, res, next) => {
+  res.redirect('/order/new')
+})
 
 
 app.use('/', home)

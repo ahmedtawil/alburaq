@@ -6,7 +6,6 @@ const Supplier = require('../../models/Supplier')
 const Unit = require('../../models/Unit')
 const Stock = require('../../models/Stock')
 
-const { killogramUnitID } = require('../../configs/constants')
 
 
 exports.getStockPage = catchAsyncErrors(async (req, res) => {

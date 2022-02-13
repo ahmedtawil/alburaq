@@ -116,7 +116,7 @@
                                                         data-kt-select2="true" data-placeholder="أختر...">
                                                         <option></option>
                                                         <% products.forEach(product=> { %>
-                                                            <% if (!product.price) { %>
+                                                            <% if (!product.takePrice) { %> 
                                                                 <option value="<%= product.serialNumber  %>">
                                                                     <%= product.name %>
                                                                 </option>
@@ -357,7 +357,7 @@
                                                         data-kt-select2="true" data-placeholder="أختر...">
                                                         <option></option>
                                                         <% products.forEach(product=> { %>
-                                                            <% if (!product.price) { %>
+                                                            <% if (!product.takePrice) { %>
                                                                 <option value="<%= product.serialNumber  %>">
                                                                     <%= product.name %>
                                                                 </option>

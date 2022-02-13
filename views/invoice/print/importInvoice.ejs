@@ -40,20 +40,22 @@
             border-right: 1px solid rgb(255, 255, 255) !important;
             border-bottom: 1px solid rgb(255, 255, 255) !important;
         }
+
         @font-face {
-                font-family: Cairo;
-                src: url("/assets/media/fonts/cairo/Cairo-VariableFont_wght.ttf");
-            }
+            src: url('/assets/media/fonts/cairo/Cairo-VariableFont_wght.ttf');
+            font-family: Cairo;
+
+        }
 
         span {
             font-weight: bolder;
         }
-      
-        @media print {
-            * {
-                font-weight: bolder !important;
-            }
-            
+
+        * {
+            font-weight: bolder !important;
+        }
+        td{
+            padding: 3px !important;
         }
     </style>
 
@@ -61,7 +63,7 @@
 
 <body>
     <div class="container">
-        <div class="row align-items-center text-center mt-5">
+        <div class="row align-items-center text-center">
             <div class="col-12 align-items-center">
                 <img alt="Logo" src="/assets/media/logos/logo1-dark.png" class="h-150px" />
 

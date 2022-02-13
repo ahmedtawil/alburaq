@@ -4,7 +4,6 @@ const SerialNumber = require('./serialNumber')
 const moment = require('moment')
 const mongooseAsync = require('mongoose-async')
 
-const { killogramUnitID } = require('../configs/constants')
 const opts = { toJSON: { virtuals: true } };
 
 const productSchema = new Schema({
@@ -67,7 +66,7 @@ productSchema.pre('save', async function (next) {
 
 productSchema.methods.getProductName = async function () {
     const productCategory = await mongoose.model('ProductCategory').findById(this.productCategory).populate('unit')
-    if (productCategory.unit._id == killogramUnitID && typeof this.ratioPerUnit == 'undefined') {
+    if (productCategory.unit.isWeightUnit && this.takePrice == false) {
         return `${productCategory.name} وزن`
     } else if (this.serialNumber == productCategory.serialNumber && typeof this.ratioPerUnit != 'undefined' && this.ratioPerUnit == productCategory.unit.weight) {
         

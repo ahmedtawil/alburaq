@@ -9,7 +9,6 @@ const Supplier = require('../../models/Supplier')
 const Unit = require('../../models/Unit')
 const Stock = require('../../models/Stock')
 
-const { killogramUnitID } = require('../../configs/constants')
 
 
 exports.getProductsPage = catchAsyncErrors(async (req, res) => {
@@ -55,7 +54,7 @@ exports.getProductsData = catchAsyncErrors(async (req, res) => {
 
   const productsCount = await Product.estimatedDocumentCount()
   const productsFillterCount = await Product.find(queryObj).countDocuments()
-  const productsFromD = await Product.find(queryObj).limit(parseInt(query.length)).skip(parseInt(query.start))
+  const productsFromD = await Product.find(queryObj).sort({createdAt:-1}).limit(parseInt(query.length)).skip(parseInt(query.start))
   const promises = productsFromD.map(async product=>{
     await product.populate('productCategory')
     product.name = await product.getProductName()
@@ -111,6 +110,7 @@ exports.editProduct = catchAsyncErrors(async (req, res) => {
 
 exports.getProductByQuery = catchAsyncErrors(async (req, res) => {
   const query = req.query
+  console.log(query);
   let product = await Product.findOne(query)
   let productName= await product.getProductName()
   product.name = productName 
