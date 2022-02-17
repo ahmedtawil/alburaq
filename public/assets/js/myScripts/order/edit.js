@@ -355,7 +355,7 @@ var KTModalOrderEdit = function () {
     }
     const addProduct = (product) => {
         const existIndex = orderData.products.findIndex(prod => prod._id == product._id)
-        if (existIndex >= 0) {
+        if (!product.takePrice) {
             if (typeof product.price == 'undefined') {
                 return
             }
@@ -373,7 +373,7 @@ var KTModalOrderEdit = function () {
             manualPrice: false
 
         }
-        if (newProduct.price == 0) {
+        if (!product.takePrice) {
             newProduct.price = 1
             newProduct.Totalprice = 1
             newProduct.manualPrice = true
