@@ -35,7 +35,7 @@ exports.getProductCategoriesData = catchAsyncErrors(async (req, res) => {
       $regex: val,
       $options: 'i'
     }
-    const searchQuery = { $or: [{ name: qu }] }
+    const searchQuery = { $or: [{ name: qu } , {serialNumber:qu}] }
     if (queryValue.filter) {
       queryObj.$and.push(searchQuery)
     } else {
