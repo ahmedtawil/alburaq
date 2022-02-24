@@ -2,6 +2,7 @@ const ErrorHandler = require('../utils/errorHandler');
 const mongoMsgToArr = (err) => {
     return Object.values(err.errors).map(val => val.message)
 }
+const loger = require('../utils/loger')
 
 
 module.exports = (err, req, res, next) => {
@@ -42,6 +43,8 @@ module.exports = (err, req, res, next) => {
             }
     */
     console.log(error);
+
+    loger.info( JSON.stringify( error ))
     /*
     if (err.statusCode === 404) {
         return res.render('error/404', { layout: false })
