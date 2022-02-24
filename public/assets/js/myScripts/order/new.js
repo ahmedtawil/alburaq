@@ -450,7 +450,7 @@ var KTModalOrderAdd = function () {
         };
     };
 
-
+      
 
     return {
         // Public functions

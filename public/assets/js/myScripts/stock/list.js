@@ -45,39 +45,39 @@ var KTStockList = function () {
 
             columns: [
                 { data: 'productCategory.name' },
-                { 
-                     data: 'productCategory.unit',
-                     render:function (data, type, doc) {
-                         return `<span class="badge badge-light fw-bolder my-2">${data.title}</span>`
-                     }
+                {
+                    data: 'productCategory.unit',
+                    render: function (data, type, doc) {
+                        return `<span class="badge badge-light fw-bolder my-2">${data.title}</span>`
+                    }
                 },
-                { 
+                {
                     data: 'qty',
-                    render:function (data, type, doc) {
+                    render: function (data, type, doc) {
                         return `<span class="badge badge-light-${(data > 0) ? 'success' : 'danger'} fw-bolder my-2">${data.toFixed(2)}</span>`
                     }
-               },
+                },
                 {
                     data: 'productCategory.costPrice',
-                    render:function (data, type, doc) {
+                    render: function (data, type, doc) {
                         return `${data.toFixed(2)} شيكل`
                     }
                 },
                 {
                     data: 'productCategory.sellingPrice',
-                    render:function (data, type, doc) {
+                    render: function (data, type, doc) {
                         return `${data.toFixed(2)} شيكل`
                     }
                 },
                 {
                     data: 'productCategory.supplier',
 
-                     render:function (data, type, doc) {
-                         return `<span class="badge badge-light-info fw-bolder my-2">${data.name}</span>`
-                     }
+                    render: function (data, type, doc) {
+                        return `<span class="badge badge-light-info fw-bolder my-2">${(!data) ? 'مجهول' : data.name}</span>`
+                    }
                 },
 
-                
+
                 {
                     data: '',
                     render: function (data, type, doc) {
@@ -124,7 +124,7 @@ var KTStockList = function () {
 
     // Search Datatable --- official docs reference: https://datatables.net/reference/api/search()
     var handleSearchDatatable = () => {
-        const filterSearch = document.querySelector('[data-kt-productCategory-table-filter="search"]');
+        const filterSearch = document.querySelector('[data-kt-stock-table-filter="search"]');
         filterSearch.addEventListener('keyup', function (e) {
             tableQuery.search = e.target.value
             datatable.search(JSON.stringify(tableQuery)).draw();
@@ -133,9 +133,9 @@ var KTStockList = function () {
     // Filter Datatable
     var handleFilter = function () {
         // Select filter options
-        const filterForm = document.querySelector('[data-kt-productCategory-table-filter="form"]');
-        const filterButton = filterForm.querySelector('[data-kt-productCategory-table-filter="filter"]');
-        const resetButton = filterForm.querySelector('[data-kt-productCategory-table-filter="reset"]');
+        const filterForm = document.querySelector('[data-kt-stock-table-filter="form"]');
+        const filterButton = filterForm.querySelector('[data-kt-stock-table-filter="filter"]');
+        const resetButton = filterForm.querySelector('[data-kt-stock-table-filter="reset"]');
         const selectOptions = filterForm.querySelectorAll('select');
         const datepicker = filterForm.querySelector("[name=date]");
 
@@ -231,7 +231,7 @@ var KTStockList = function () {
     // Delete productCategory
     var handleDeleteRows = () => {
         // Select all delete buttons
-        const deleteButtons = table.querySelectorAll('[data-kt-productCategory-table-filter="delete_row"]');
+        const deleteButtons = table.querySelectorAll('[data-kt-stock-table-filter="delete_row"]');
 
         deleteButtons.forEach(d => {
             // Delete button on click

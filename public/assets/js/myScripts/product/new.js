@@ -341,6 +341,9 @@ var KTModalProductCategoryAdd = function () {
 
 
 
+        $("#productCategory").select2({
+            dropdownParent: $("#kt_modal_add_product")
+        });
 
 
 

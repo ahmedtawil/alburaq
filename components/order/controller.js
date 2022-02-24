@@ -13,20 +13,10 @@ exports.newOrderPage = catchAsyncErrors(async (req, res, next) => {
   const customers = await Customer.find()
   const productsFromD = await Product.find()
 
-  const promises = productsFromD.map(async product => {
-    await product.populate({
-      path: 'productCategory',
-      populate: {
-        path: 'unit'
-      }
-    })
-    product.name = await product.getProductName()
-    return product
-  })
-  const products = await Promise.all(promises)
+ 
 
 
-  res.render('order/cpanel', { customers, products})
+  res.render('order/cpanel', { customers})
 })
 
 exports.getOrdersPage = catchAsyncErrors(async (req, res, next) => {

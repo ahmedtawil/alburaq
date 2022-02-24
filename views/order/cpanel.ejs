@@ -63,13 +63,12 @@
                             <label class="required fs-6 fw-bold mb-2">رقم الفاتورة</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input  id="edit_order_serial_number"
-                                class="form-control form-control-solid" type="text">
+                            <input id="edit_order_serial_number" class="form-control form-control-solid" type="text">
                             <!--end::Input-->
                             <div class="fv-plugins-message-container invalid-feedback">
                             </div>
                         </div>
-                        <div  id="editOrder" class="d-none">
+                        <div id="editOrder" class="d-none">
                             <!--begin::Form-->
                             <form class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#"
                                 id="kt_modal_edit_order_form" autocomplete="off">
@@ -84,8 +83,8 @@
                                             <!--end::Label-->
                                             <!--begin::Input-->
                                             <input type="text" name="edit_customer" id="edit_customer"
-                                                        class="form-control form-control-solid" readonly>
-                                         
+                                                class="form-control form-control-solid" readonly>
+
                                             </select>
                                             <!--end::Input-->
                                             <div class="fv-plugins-message-container invalid-feedback"></div>
@@ -112,22 +111,9 @@
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <select name="edit_products" id="edit_products"
-                                                        class="form-select form-select-solid fw-bolder"
-                                                        data-kt-select2="true" data-placeholder="أختر...">
+                                                        class="form-select form-select-solid fw-bolder productsList"
+                                                        data-placeholder="أختر...">
                                                         <option></option>
-                                                        <% products.forEach(product=> { %>
-                                                            <% if (!product.takePrice) { %> 
-                                                                <option value="<%= product.serialNumber  %>">
-                                                                    <%= product.name %>
-                                                                </option>
-                                                                <% } else { %>
-                                                                    <option value="<%= product.serialNumber  %>">
-                                                                        <%= `${product.name} ( ${product.price} شيكل )`
-                                                                            %>
-                                                                    </option>
-                                                                    <% } %>
-
-                                                                        <% }) %>
 
 
                                                     </select>
@@ -146,8 +132,8 @@
                                                     <label class="required fs-6 fw-bold mb-2">الخصم</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <input type="number" value="0" id="edit_discount" name="edit_discount"
-                                                        class="form-control form-control-solid">
+                                                    <input type="number" value="0" id="edit_discount"
+                                                        name="edit_discount" class="form-control form-control-solid">
                                                     <!--end::Input-->
                                                     <div class="fv-plugins-message-container invalid-feedback">
                                                     </div>
@@ -159,8 +145,9 @@
                                                     <label class="required fs-6 fw-bold mb-2">المبلغ المدفوع</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <input type="number" value="0" id="edit_paid_amount" name="edit_paid_amount"
-                                                        class="form-control form-control-solid" readonly>
+                                                    <input type="number" value="0" id="edit_paid_amount"
+                                                        name="edit_paid_amount" class="form-control form-control-solid"
+                                                        readonly>
                                                     <!--end::Input-->
                                                     <div class="fv-plugins-message-container invalid-feedback">
                                                     </div>
@@ -353,22 +340,9 @@
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
                                                     <select name="products" id="products"
-                                                        class="form-select form-select-solid fw-bolder"
-                                                        data-kt-select2="true" data-placeholder="أختر...">
+                                                        class="form-select form-select-solid fw-bolder productsList"
+                                                        data-placeholder="أختر...">
                                                         <option></option>
-                                                        <% products.forEach(product=> { %>
-                                                            <% if (!product.takePrice) { %>
-                                                                <option value="<%= product.serialNumber  %>">
-                                                                    <%= product.name %>
-                                                                </option>
-                                                                <% } else { %>
-                                                                    <option value="<%= product.serialNumber  %>">
-                                                                        <%= `${product.name} ( ${product.price} شيكل )`
-                                                                            %>
-                                                                    </option>
-                                                                    <% } %>
-
-                                                                        <% }) %>
 
 
                                                     </select>
@@ -400,8 +374,8 @@
                                                     <label class="required fs-6 fw-bold mb-2">المبلغ المدفوع</label>
                                                     <!--end::Label-->
                                                     <!--begin::Input-->
-                                                    <input type="number" value="0" id="new_paid_amount" name="new_paid_amount"
-                                                        class="form-control form-control-solid">
+                                                    <input type="number" value="0" id="new_paid_amount"
+                                                        name="new_paid_amount" class="form-control form-control-solid">
                                                     <!--end::Input-->
                                                     <div class="fv-plugins-message-container invalid-feedback">
                                                     </div>
@@ -536,6 +510,33 @@
 <script src="/assets/plugins/global/plugins.bundle.js"></script>
 <script src="/assets/js/scripts.bundle.js"></script>
 <!--end::Global Javascript Bundle-->
+
+<script>
+    $('.productsList').select2({
+        ajax: {
+            url: '/products/all/data/get',
+            data: function (params) {
+                var query = {
+                    search: params.term,
+                    page: params.page || 1
+                }
+                // Query parameters will be ?search=[term]&page=[page]
+                return query;
+            },
+            processResults: function (data) {
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+                    results: data.results
+                };
+            }
+        }
+    });
+    $(document).on('select2:open', () => {
+        document.querySelector('.select2-search__field').focus();
+    });
+
+</script>
+
 
 <!--begin::Page Custom Javascript(used by this page)-->
 <script src="/assets/js/myScripts/invoice/print.js"></script>

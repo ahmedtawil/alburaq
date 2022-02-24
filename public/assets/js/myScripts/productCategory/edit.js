@@ -405,6 +405,9 @@ var KTModalProductCategoryEdit = function () {
             }
         })
 
+        $("#edit_unit , #edit_supplier").select2({
+            dropdownParent: $("#kt_modal_edit_productCategory")
+        });
 
 
 
@@ -444,7 +447,7 @@ const linkEventsTriggers = () => {
         productIDSerialNumber = (addProduct && !isWeightUnit) ? product.serialNumber : null
 
         $("input[name=edit_name]").val(productCategory.name)
-        $("select[name=edit_unit]").val(productCategory.unit).change()
+        $("#edit_unit").val(productCategory.unit._id).change()
         $("input[name=edit_qty]").val(productCategory.qty.toFixed(2))
         $("input[name=edit_productCategorySerialNumber]").val(productCategory.serialNumber)
         $("input[name=edit_costPrice]").val(productCategory.costPrice)

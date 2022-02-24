@@ -6,6 +6,7 @@ const Supplier = require('../../models/Supplier')
 const Unit = require('../../models/Unit')
 const Stock = require('../../models/Stock')
 
+const ProductCategory = require('../../models/ProductCategory')
 
 
 exports.getStockPage = catchAsyncErrors(async (req, res) => {
@@ -28,7 +29,8 @@ exports.getStockData = catchAsyncErrors(async (req, res) => {
       $regex: val,
       $options: 'i'
     }
-    const searchQuery = { $or: [{ formalID: qu }, { name: qu }, { phoneNumber: qu }] }
+    const productCategories = await ProductCategory.find({name:qu}).distinct('_id')
+    const searchQuery = { $or: [ { productCategory: productCategories }] }
     if (queryValue.filter) {
       queryObj.$and.push(searchQuery)
     } else {

@@ -236,12 +236,12 @@
                                             <!--end::Label-->
                                             <!--begin::Input-->
                                             <select name="unit" id="unit"
-                                                class="form-select form-select-solid fw-bolder" data-kt-select2="true"
-                                                data-placeholder="أختر..." data-hide-search="true">
+                                                class="form-select form-select-solid fw-bolder"
+                                                data-placeholder="أختر...">
                                                 <% units.forEach(unit=> { %>
                                                     <% if (unit.isWeightUnit) { %>
                                                         <option unit="weight" value="<%= unit._id %>">
-                                                            <%= unit.title %>
+                                                            <%= `${unit.title} ( وحدة وزن )` %>
                                                         </option>
                                                         <% } else { %>
                                                             <option value="<%= unit._id %>">
@@ -316,8 +316,8 @@
                                             <label class="required fs-6 fw-bold mb-2">المزود</label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <select name="supplier" class="form-select form-select-solid fw-bolder"
-                                                data-kt-select2="true" data-placeholder="أختر...">
+                                            <select name="supplier" id="supplier" class="form-select form-select-solid fw-bolder"
+                                                 data-placeholder="أختر...">
                                                 <% suppliers.forEach(supplier=> { %>
                                                     <option value="<%= supplier._id %>">
                                                         <%= supplier.name %>
@@ -400,8 +400,8 @@
             </div>
 
 
-             <!--begin::Modal - productCategory - Edit-->
-             <div class="modal fade" id="kt_modal_edit_productCategory" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal - productCategory - Edit-->
+            <div class="modal fade" id="kt_modal_edit_productCategory" tabindex="-1" aria-hidden="true">
 
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered mw-450px">
@@ -464,12 +464,12 @@
                                             <!--end::Label-->
                                             <!--begin::Input-->
                                             <select name="edit_unit" id="edit_unit"
-                                                class="form-select form-select-solid fw-bolder" data-kt-select2="true"
-                                                data-placeholder="أختر..." data-hide-search="true">
+                                                class="form-select form-select-solid fw-bolder" 
+                                                data-placeholder="أختر..." >
                                                 <% units.forEach(unit=> { %>
                                                     <% if (unit.isWeightUnit) { %>
                                                         <option unit="weight" value="<%= unit._id %>">
-                                                            <%= unit.title %>
+                                                            <%= `${unit.title} ( وحدة وزن )` %>
                                                         </option>
                                                         <% } else { %>
                                                             <option value="<%= unit._id %>">
@@ -544,8 +544,8 @@
                                             <label class="required fs-6 fw-bold mb-2">المزود</label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <select name="edit_supplier" class="form-select form-select-solid fw-bolder"
-                                                data-kt-select2="true" data-placeholder="أختر...">
+                                            <select name="edit_supplier" id="edit_supplier" class="form-select form-select-solid fw-bolder"
+                                                data-placeholder="أختر...">
                                                 <% suppliers.forEach(supplier=> { %>
                                                     <option value="<%= supplier._id %>">
                                                         <%= supplier.name %>
@@ -644,7 +644,6 @@
 <!--begin::Page Vendors Javascript(used by this page)-->
 <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
 <!--end::Page Vendors Javascript-->
-
 <!--begin::Page Custom Javascript(used by this page)-->
 <script src="/assets/js/myScripts/productCategory/new.js"></script>
 <script src="/assets/js/myScripts/productCategory/edit.js"></script>

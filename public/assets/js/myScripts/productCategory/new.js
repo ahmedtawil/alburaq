@@ -446,7 +446,9 @@ var KTModalProductCategoryAdd = function () {
             }
         })
 
-
+        $("#unit , #supplier").select2({
+            dropdownParent: $("#kt_modal_add_productCategory")
+        });
 
 
 

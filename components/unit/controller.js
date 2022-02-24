@@ -26,7 +26,7 @@ exports.getUnitsData = catchAsyncErrors(async (req, res) => {
       $regex: val,
       $options: 'i'
     }
-    const searchQuery = { $or: [{ title: qu }, { weight: qu }] }
+    const searchQuery = { $or: [{ title: qu }] }
     if (queryValue.filter) {
       queryObj.$and.push(searchQuery)
     } else {

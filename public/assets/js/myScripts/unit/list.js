@@ -44,12 +44,17 @@ var KTunitsList = function () {
 
 
             columns: [
-                { data: 'title' },
+                {
+                    data: 'title', render: function (data, type, doc) {
+                        return `${(doc.isWeightUnit) ? `${data} ( وحدة وزنية )` : data}`
+
+                    }
+                },
                 { data: 'smallTitle' },
                 {
                     data: 'weight',
                 },
-                
+
                 {
                     data: '',
                     render: function (data, type, doc) {
