@@ -14,3 +14,4 @@
 16:03:07.437 INFO  /product/get?serialNumber=6223000421154 : {"statusCode":500,"message":"Cannot read properties of null (reading 'getProductName')"} 
 16:03:10.006 INFO  /product/get?serialNumber=6223000421154 : {"statusCode":500,"message":"Cannot read properties of null (reading 'getProductName')"} 
 16:03:12.799 INFO  /product/get?serialNumber=6223000422335 : {"statusCode":500,"message":"Cannot read properties of null (reading 'getProductName')"} 
+23:23:11.453 INFO  /product/get?serialNumber=62901246 : {"statusCode":500,"message":"Cannot read properties of null (reading 'getProductName')"} 

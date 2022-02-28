@@ -76,12 +76,13 @@ exports.getProductsData = catchAsyncErrors(async (req, res) => {
 exports.newProduct = catchAsyncErrors(async (req, res) => {
   const data = JSON.parse(req.body.payload)
   const newProduct = new Product({
-    serialNumber: (data.configs.internalProductSerialNumber) ? null : data.ProductSerialNumber,
+    serialNumber: (data.configs.internalProductSerialNumber) ? null : data.productSerialNumber,
     name: data.name,
     productCategory: data.productCategory,
     ratioPerUnit: data.ratioPerUnit,
     price: data.price,
   })
+  console.log(newProduct);
   await newProduct.validate()
   await newProduct.save()
   res.end()
@@ -168,9 +169,7 @@ exports.getAllProductsData = catchAsyncErrors(async (req, res) => {
         'text': {
           '$cond': {
             'if': {
-              '$eq': [
-                '$takePrice', 'true'
-              ]
+              "$gt": ["$price", 0]
             }, 
             'then': '$productCategory.name', 
             'else': {

@@ -12,15 +12,18 @@ const printInvoice = (obj, params={_id:null , order:null , import:null}) => {
 
     var queryString = Object.keys(invoiceQuery).map(key => key + '=' + invoiceQuery[key]).join('&');
 
-    const newWindow = window.open(`/invoice/print?${queryString}`, 'hhgh', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0')
-    newWindow.addEventListener('load' , function () {
+    const newWindow = window.open(`${window.location.origin}/invoice/print?${queryString}`, 'hhgh', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+    newWindow.onload = function (e) {
+       setTimeout(function name(params) {
         newWindow.print()
-        newWindow.onafterprint = () => {
-            window.location = window.location.href
-            newWindow.close()
-        }
+       },1000)
     
-    }, false)
+    }
+    newWindow.onafterprint = () => {
+        newWindow.close()
+        window.location = window.location.href
+    }
+
 }
 
 const linkPrintInvoiceEventTrigger = () => {
