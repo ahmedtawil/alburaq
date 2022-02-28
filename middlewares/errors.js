@@ -44,7 +44,7 @@ module.exports = (err, req, res, next) => {
     */
     console.log(error);
 
-    loger.info( JSON.stringify( error ))
+    loger.info(`${req.url} : ${JSON.stringify( error )}`)
     /*
     if (err.statusCode === 404) {
         return res.render('error/404', { layout: false })

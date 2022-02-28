@@ -90,6 +90,7 @@ var KTModalOrderAdd = function () {
                         }
 
                         $.post('/order/new', { payload: JSON.stringify(payload) }).then(invoice => {
+                            console.log('1' , invoice);
                             submitButton.removeAttribute('data-kt-indicator');
 
                             Swal.fire({
@@ -106,7 +107,8 @@ var KTModalOrderAdd = function () {
 
                                     // Enable submit button after loading
                                     submitButton.disabled = false;
-                                    printInvoice(this, {_id:invoice._id})
+                                    console.log('2' , this);
+                                    printInvoice(this, {_id:invoice._id}) 
 
                                 }
                             })
