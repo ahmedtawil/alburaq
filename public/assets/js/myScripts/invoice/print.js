@@ -14,10 +14,13 @@ const printInvoice = (obj, params={_id:null , order:null , import:null}) => {
     var queryString = Object.keys(invoiceQuery).map(key => key + '=' + invoiceQuery[key]).join('&');
 
     const newWindow = window.open(`${window.location.origin}/invoice/print?${queryString}`, 'hhgh', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
-    newWindow.print()
-    newWindow.onafterprint = () => {
-        window.location = window.location.href
-        newWindow.close()
+    newWindow.onload = function (e) {
+        this.print()
+        this.onafterprint = () => {
+            window.location = window.location.href
+            newWindow.close()
+        }
+    
     }
 }
 
