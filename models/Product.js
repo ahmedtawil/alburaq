@@ -56,8 +56,7 @@ const productSchema = new Schema({
 
 })
 productSchema.pre('save', async function (next) {
-
-    if (!this.serialNumber) {
+    if (isNaN(this.serialNumber) || !this.serialNumber) {
             const counter = await SerialNumber.newProduct()
             this.serialNumber = counter
     }
